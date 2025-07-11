@@ -1,28 +1,15 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
-
-function App() {
+const App = () => {
   return (
     <>
-      <h1>HI</h1>
-      <Card>
-        <CardHeader>
-          <CardTitle>Card Title</CardTitle>
-          <CardDescription>Card Description</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Card Content</p>
-        </CardContent>
-        <CardFooter>
-          <p>Card Footer</p>
-        </CardFooter>
-      </Card>
+      <div className='min-h-screen flex flex-col items-center justify-center bg-background text-foreground'>
+        <h1 className='text-5xl font-playfair font-bold mb-4'>Bem-vindo!</h1>{' '}
+        <p className='text-lg font-tiktok'>
+          Esta é a sua nova aplicação React com backend e Tailwind.
+        </p>{' '}
+        <button className='bg-primary text-primary-foreground px-4 py-2 rounded-md mt-6'>
+          Começar
+        </button>
+      </div>
     </>
   )
 }
