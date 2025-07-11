@@ -7,6 +7,9 @@ import dotenv from 'dotenv'
 // Routes
 import authRoutes from './routes/authRoutes'
 
+//Middlewares
+import authMiddleware from './middleware/authMiddleware'
+
 // Load environment variables from .env file
 dotenv.config()
 
@@ -34,7 +37,7 @@ connectDB()
 // CORS is essential for frontend (http://localhost:5173) to connect to backend (http://localhost:5000)
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5173', // Frontend URL
+    origin: process.env.FRONTEND_URL,
     methods: ['GET', 'POST']
   }
 })
@@ -44,6 +47,19 @@ app.use(express.json())
 
 // All routes in authRoutes.ts will be prefixed with /api/auth
 app.use('/api/auth', authRoutes)
+
+// TODO: Remove test
+// NEW BLOCK: Protected Routes (using authMiddleware)
+// Example: A route that only authenticated users can access
+app.get('/api/protected', authMiddleware, (req, res) => {
+  // If we reach here, the user is authenticated, and req.user is populated
+  res.json({
+    msg: 'You have access to protected data!',
+    user: req.user, // The user data attached by the middleware
+    data: 'This is sensitive information.'
+  })
+})
+// END NEW BLOCK
 
 // Status routes
 app.get('/', (req, res) => {

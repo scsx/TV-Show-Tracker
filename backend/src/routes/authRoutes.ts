@@ -1,7 +1,10 @@
+// C:/DEV/TV-Show-Tracker/backend/src/routes/authRoutes.ts
+
 import { Router, Request, Response } from 'express'
 import User from '../models/User'
 import AccessToken from '../models/AccessToken'
 import crypto from 'crypto' // For generating secure tokens
+import authMiddleware from '../middleware/authMiddleware' // Import authMiddleware for protected routes
 
 const router = Router()
 
@@ -105,6 +108,40 @@ router.post('/login', async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error(error.message)
     res.status(500).send('Server Error')
+  }
+})
+
+// @route   POST /api/auth/logout
+// @desc    Invalidate current user's access token
+// @access  Private
+router.post('/logout', authMiddleware, async (req: Request, res: Response) => {
+  try {
+    // req.user will be populated by authMiddleware if the token is valid
+    if (!req.user) {
+      // This case should ideally not be reached if authMiddleware works, but good for type safety
+      return res.status(401).json({ msg: 'Not authenticated for logout' })
+    }
+
+    // The token used to authenticate this request is in req.header('Authorization')
+    const authHeader = req.header('Authorization')
+    if (!authHeader) {
+      return res.status(401).json({ msg: 'No token provided for logout' })
+    }
+    const token = authHeader.split(' ')[1]
+
+    // Find and delete the access token from the database
+    // Ensure we delete the token for the specific user to prevent accidental invalidation
+    const deletedToken = await AccessToken.findOneAndDelete({ token, userId: req.user.id })
+
+    if (!deletedToken) {
+      // This might happen if the token was already deleted, expired (by TTL), or never existed for this user
+      return res.status(400).json({ msg: 'Token already invalid or not found for this user' })
+    }
+
+    res.json({ msg: 'Logged out successfully' })
+  } catch (err: any) {
+    console.error('Logout error:', err.message)
+    res.status(500).json({ msg: 'Server Error during logout' })
   }
 })
 
