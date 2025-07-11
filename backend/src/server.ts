@@ -4,6 +4,9 @@ import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 
+// Routes
+import authRoutes from './routes/authRoutes'
+
 // Load environment variables from .env file
 dotenv.config()
 
@@ -39,7 +42,10 @@ const io = new Server(server, {
 // Express middleware
 app.use(express.json())
 
-// Example routes
+// All routes in authRoutes.ts will be prefixed with /api/auth
+app.use('/api/auth', authRoutes)
+
+// Status routes
 app.get('/', (req, res) => {
   res.send('Backend API is running and connected to MongoDB!')
 })
