@@ -13,7 +13,7 @@ import { tv } from 'tailwind-variants'
 // Extend a native <a>.
 type HyperlinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   children: ReactNode
-  variant?: 'default' | 'title' | 'icon' | 'unstyled'
+  variant?: 'yellow' | 'white' | 'unstyled'
   className?: string
   style?: CSSProperties
   external?: boolean
@@ -23,14 +23,13 @@ const linkStyles = tv({
   base: 'cursor-pointer transition-colors duration-200 ease-in-out',
   variants: {
     variant: {
-      default: 'text-primary hover:underline hover:underline-offset-4',
-      title: 'text-inherit hover:text-primary',
-      icon: ' text-muted-foreground hover:text-primary',
+      yellow: 'text-primary hover:underline hover:underline-offset-4',
+      white: 'text-white hover:text-primary',
       unstyled: '',
     },
   },
   defaultVariants: {
-    variant: 'default',
+    variant: 'yellow',
   },
 })
 
