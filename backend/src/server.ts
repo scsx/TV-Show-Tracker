@@ -3,6 +3,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import { getStatusPageHtml } from './utils/statusPageTemplate'
 
 // Routes
 import authRoutes from './routes/authRoutes'
@@ -50,7 +51,10 @@ app.use('/api/auth', authRoutes)
 
 // Status routes
 app.get('/', (req, res) => {
-  res.send('Backend API is running and connected to MongoDB!')
+  const mainMsg = 'Backend API is <span class="highlight">running</span>!'
+  const subMsg = 'And is <span class="highlight">connected to MongoDB</span>.'
+
+  res.send(getStatusPageHtml(mainMsg, subMsg))
 })
 
 app.get('/api/status', (req, res) => {
