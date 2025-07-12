@@ -1,16 +1,16 @@
-import { type CSSProperties, type ReactNode } from 'react';
+import { type CSSProperties, type ReactNode } from 'react'
 
-import { twMerge } from 'tailwind-merge';
-import { tv } from 'tailwind-variants';
+import { twMerge } from 'tailwind-merge'
+import { tv } from 'tailwind-variants'
 
 type TextProps = {
-  children: ReactNode;
-  variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'paragraph';
-  color?: 'foreground' | 'muted' | 'primary' | 'gray';
-  as?: 'p' | 'small' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span';
-  className?: string;
-  style?: CSSProperties;
-};
+  children: ReactNode
+  variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'paragraph'
+  color?: 'foreground' | 'muted' | 'primary' | 'gray'
+  as?: 'p' | 'small' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span'
+  className?: string
+  style?: CSSProperties
+}
 
 const textStyles = tv({
   base: 'text-foreground',
@@ -36,7 +36,7 @@ const textStyles = tv({
     variant: 'paragraph',
     color: 'foreground',
   },
-});
+})
 
 export default function Text({
   children,
@@ -46,14 +46,14 @@ export default function Text({
   className,
   style,
 }: TextProps) {
-  const Component = as;
+  const Component = as
   const combinedClasses = twMerge(
     textStyles({ variant, color }) + ' ' + className,
-  );
+  )
 
   return (
     <Component className={combinedClasses} style={style}>
       {children}
     </Component>
-  );
+  )
 }
