@@ -56,10 +56,10 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['TikTok Sans', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'sans-serif'],
         serif: ['Playfair Display', 'serif'],
         playfair: ['Playfair Display', 'serif'],
-        tiktok: ['TikTok Sans', 'sans-serif'],
+        jakarta: ['Plus Jakarta Sans', 'sans-serif'],
       },
     },
   },

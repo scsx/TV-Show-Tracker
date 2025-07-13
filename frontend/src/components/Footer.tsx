@@ -12,7 +12,7 @@ const Footer = () => {
         <div className="flex">
           <div className="w-1/4">
             <Logo />
-            <Text variant="h6" className="-mt-1">
+            <Text variant="h6" className="-mt-1 font-normal">
               TV Show Tracker
             </Text>
           </div>
@@ -73,6 +73,16 @@ const Footer = () => {
                 external
               >
                 Repo
+              </Hyperlink>
+            </Text>
+            <Text>
+              <Hyperlink variant="white" href="http://localhost:5000" external>
+                Backend status
+              </Hyperlink>
+            </Text>
+            <Text>
+              <Hyperlink variant="white" href="/kitchen-sink">
+                Kitchen Sink
               </Hyperlink>
             </Text>
           </div>

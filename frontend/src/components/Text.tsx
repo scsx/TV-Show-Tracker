@@ -20,9 +20,9 @@ const textStyles = tv({
       h2: 'text-3xl font-playfair font-bold',
       h3: 'text-2xl font-playfair font-bold',
       h4: 'text-xl font-playfair font-bold',
-      h5: 'text-lg font-playfair font-bold',
-      h6: 'uppercase text-sm tracking-wider font-tiktok font-bold',
-      paragraph: 'text-sm leading-normal font-tiktok',
+      h5: 'text-lg font-jakarta font-bold',
+      h6: 'uppercase text-sm tracking-wider font-jakarta font-bold',
+      paragraph: 'text-sm leading-normal font-jakarta',
       small: '',
     },
     color: {
