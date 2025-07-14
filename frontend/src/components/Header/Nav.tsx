@@ -1,13 +1,18 @@
+import { useNavigate } from 'react-router-dom'
+
+import { useAuth } from '@/context/AuthContext'
+
 import Hyperlink from '@/components/Hyperlink'
 import Text from '@/components/Text'
 
 // --- Menu data types ---
-interface DropdownLink {
+type DropdownLink = {
   title: string
-  href: string
+  href?: string
+  onClick?: () => void
 }
 
-interface DropdownContent {
+type DropdownContent = {
   intro?: {
     title: string
     description: string
@@ -15,72 +20,80 @@ interface DropdownContent {
   links: DropdownLink[]
 }
 
-interface MenuItem {
+type MenuItem = {
   label: string
   href?: string
   type: 'link' | 'dropdown'
   dropdownContent?: DropdownContent
 }
 
-// --- Menu data ---
-const customMenuItems: MenuItem[] = [
-  {
-    label: 'Latest',
-    type: 'link',
-    href: '/contact',
-  },
-  {
-    label: 'Shows',
-    type: 'dropdown',
-    dropdownContent: {
-      intro: {
-        title: 'My App',
-        description: 'Welcome to my personalized application!',
-      },
-      links: [
-        { title: 'Start', href: '/' },
-        {
-          title: 'Features',
-          href: '/features',
-        },
-        {
-          title: 'About',
-          href: '/about',
-        },
-      ],
-    },
-  },
-  {
-    label: 'Profile',
-    type: 'dropdown',
-    dropdownContent: {
-      intro: {
-        title: 'Your Area',
-        description: 'Manage your favorites and stuff',
-      },
-      links: [
-        {
-          title: 'Account',
-          href: '/profile',
-        },
-        {
-          title: 'Favorites',
-          href: '/profile/favorites',
-        },
-        {
-          title: 'Logout',
-          href: '/logout',
-        },
-      ],
-    },
-  },
-]
-
 export function Nav() {
+  const { logout } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
+
+  // --- Menu data ---
+  const menuItems: MenuItem[] = [
+    {
+      label: 'Latest',
+      type: 'link',
+      href: '/contact',
+    },
+    {
+      label: 'Shows',
+      type: 'dropdown',
+      dropdownContent: {
+        intro: {
+          title: 'My App',
+          description: 'Welcome to my personalized application!',
+        },
+        links: [
+          { title: 'Start', href: '/' },
+          {
+            title: 'Features',
+            href: '/features',
+          },
+          {
+            title: 'About',
+            href: '/about',
+          },
+        ],
+      },
+    },
+    {
+      label: 'Profile',
+      type: 'dropdown',
+      dropdownContent: {
+        intro: {
+          title: 'Your Area',
+          description: 'Manage your account and favorites',
+        },
+        links: [
+          {
+            title: 'Account',
+            href: '/profile',
+          },
+          {
+            title: 'Favorites',
+            href: '/profile/favorites',
+          },
+          {
+            title: 'Logout',
+            onClick: handleLogout,
+          },
+        ],
+      },
+    },
+  ]
+
   return (
     <nav className="relative">
       <ul className="flex items-center space-x-4">
-        {customMenuItems.map((item, index) => (
+        {menuItems.map((item, index) => (
           <li key={index} className="group">
             {item.type === 'link' ? (
               <Hyperlink
@@ -111,9 +124,18 @@ export function Nav() {
                     <ul className="flex flex-col space-y-2 text-right">
                       {item.dropdownContent?.links.map((link, linkIndex) => (
                         <li key={linkIndex}>
-                          <Hyperlink href={link.href} variant="white">
-                            {link.title}
-                          </Hyperlink>
+                          {link.href ? (
+                            <Hyperlink href={link.href} variant="white">
+                              {link.title}
+                            </Hyperlink>
+                          ) : (
+                            <button
+                              onClick={link.onClick}
+                              className="text-white hover:text-primary transition-colors duration-200 ease-in-out focus:outline-none bg-transparent border-none cursor-pointer p-0"
+                            >
+                              {link.title}
+                            </button>
+                          )}
                         </li>
                       ))}
                     </ul>

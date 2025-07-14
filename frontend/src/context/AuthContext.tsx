@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react'
 
-import type { TUser } from '@shared/types/user'
+import type { TUser } from '@/types'
 
 type AuthContextType = {
   user: TUser | null

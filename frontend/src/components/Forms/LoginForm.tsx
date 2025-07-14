@@ -1,5 +1,8 @@
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
+import { useAuth } from '@/context/AuthContext'
+import type { TUser } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -15,20 +18,20 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-// 1. Define the Zod schema for login form data.
 const loginFormSchema = z.object({
-  email: z.email('Invalid email address.'),
+  email: z.string().email('Invalid email address.'),
   password: z
     .string()
     .min(1, { message: 'Password is required.' })
     .min(6, { message: 'Password must be at least 6 characters.' }),
 })
 
-// Infer the TypeScript type from the schema.
 type LoginFormInputs = z.infer<typeof loginFormSchema>
 
 const LoginForm = () => {
-  // 2. Initialize useForm with the schema and resolver.
+  const navigate = useNavigate()
+  const { login } = useAuth()
+
   const form = useForm<LoginFormInputs>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -37,45 +40,53 @@ const LoginForm = () => {
     },
   })
 
-  // Dev function to autofill the form.
   const handleAutoFill = () => {
-    // TODO
+    form.setValue('email', import.meta.env.VITE_TEST_USER_EMAIL || '')
+    form.setValue('password', import.meta.env.VITE_TEST_USER_PASSWORD || '')
   }
 
-  // 3. Define the onSubmit function
   const onSubmit = async (data: LoginFormInputs) => {
-    // This function will only be called if validation is successful
-    console.log('Login data:', data)
-
     try {
-      // Simulate network delay
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        },
+      )
 
-      // Simulate a successful login
-      if (
-        data.email === 'test@example.com' &&
-        data.password === 'password123'
-      ) {
-        console.log('Login successful! Redirecting or setting auth state...')
+      const responseData = await response.json()
+
+      if (response.ok) {
+        const { token, user } = responseData
+        login(token, user as TUser)
+        navigate('/')
         form.reset()
       } else {
-        console.error('Login failed: Invalid email or password.')
+        const errorMessage =
+          responseData.message || 'Login failed. Please check your credentials.'
         form.setError('password', {
-          // Set a custom error for the password field
           type: 'manual',
-          message: 'Invalid email or password.',
+          message: errorMessage,
+        })
+        form.setError('root.apiError', {
+          type: 'manual',
+          message: 'An error occurred during login. Please try again.',
         })
       }
     } catch (error) {
-      console.error('An error occurred during login:', error)
+      console.error('An unexpected error occurred during login:', error)
       form.setError('root.apiError', {
         type: 'manual',
-        message: 'An unexpected error occurred. Please try again.',
+        message:
+          'A network error occurred. Please check your connection or try again.',
       })
     }
   }
 
-  // Get form submission status for button loading state
   const { isSubmitting } = form.formState
 
   return (
@@ -84,22 +95,25 @@ const LoginForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-6 p-6 border rounded-lg shadow-sm"
       >
-        {/* Email */}
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email or Username : TODO</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="you@example.com" {...field} type="email" />
+                <Input
+                  placeholder="you@example.com"
+                  {...field}
+                  type="email"
+                  autoComplete="email"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {/* Password */}
         <FormField
           control={form.control}
           name="password"
@@ -111,6 +125,7 @@ const LoginForm = () => {
                   placeholder="Enter your password"
                   {...field}
                   type="password"
+                  autoComplete="current-password"
                 />
               </FormControl>
               <FormMessage />
@@ -118,7 +133,6 @@ const LoginForm = () => {
           )}
         />
 
-        {/* Form errors */}
         {form.formState.errors.root?.apiError && (
           <p className="text-red-500 text-sm mt-1">
             {form.formState.errors.root.apiError.message}
@@ -141,7 +155,7 @@ const LoginForm = () => {
         </div>
 
         <Text color="muted">
-          * Autofill is a feature to help in dev and tests. It wouldn't be
+          * Autofill is a feature to help in dev and tests. It would not be
           available in production.
         </Text>
       </form>

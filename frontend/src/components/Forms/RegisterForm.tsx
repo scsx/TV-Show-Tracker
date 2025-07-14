@@ -126,7 +126,12 @@ const RegisterForm = () => {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="Choose a username" {...field} type="text" />
+                <Input
+                  placeholder="Choose a username"
+                  {...field}
+                  type="text"
+                  autoComplete="username"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -141,7 +146,12 @@ const RegisterForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="you@example.com" {...field} type="email" />
+                <Input
+                  placeholder="you@example.com"
+                  {...field}
+                  type="email"
+                  autoComplete="email"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -160,6 +170,7 @@ const RegisterForm = () => {
                   placeholder="Enter your password"
                   {...field}
                   type="password"
+                  autoComplete="current-password"
                 />
               </FormControl>
               <FormMessage />
@@ -189,7 +200,7 @@ const RegisterForm = () => {
           </Button>
         </div>
 
-        <Text color='muted'>
+        <Text color="muted">
           * Autofill is a feature to help in dev and tests. It wouldn't be
           available in production.
         </Text>
