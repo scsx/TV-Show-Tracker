@@ -1,6 +1,6 @@
 import { CiCircleInfo } from 'react-icons/ci'
 
-import LoginForm from '@/components/Forms/LoginForm'
+import RegisterForm from '@/components/Forms/RegisterForm'
 import Hyperlink from '@/components/Hyperlink'
 import PageLayout from '@/components/PageLayout'
 import Text from '@/components/Text'
@@ -11,8 +11,7 @@ const Register = () => {
     <PageLayout title="Register" wide={false}>
       <div className="w-full flex space-x-8">
         <div className="w-1/2">
-        {/* TODO: Replace form */}
-          <LoginForm />
+          <RegisterForm />
         </div>
         <div className="w-1/2">
           <Alert variant="default">

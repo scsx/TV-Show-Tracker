@@ -3,6 +3,7 @@ import http from 'http'
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import cors from 'cors'
 import { getStatusPageHtml } from './utils/statusPageTemplate'
 
 // Routes
@@ -20,6 +21,7 @@ const server = http.createServer(app)
 // Environment variables
 const PORT = process.env.BACKEND_URL_PORT || 5000
 const MONGO_URI = process.env.MONGO_URI! // Non-null assertion as it's expected to be defined
+const FRONTEND_URL = process.env.FRONTEND_URL
 
 // Connect to MongoDB
 const connectDB = async () => {
@@ -38,14 +40,21 @@ connectDB()
 // CORS is essential for frontend (http://localhost:5173) to connect to backend (http://localhost:5000)
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL,
+    origin: FRONTEND_URL,
     methods: ['GET', 'POST']
   }
 })
 
-// Express middleware
+// --- EXPRESS MIDDLEWARES ---
 app.use(express.json())
 
+app.use(
+  cors({
+    origin: FRONTEND_URL
+  })
+)
+
+// -------- ROUTES --------
 // All routes in authRoutes.ts will be prefixed with /api/auth
 app.use('/api/auth', authRoutes)
 

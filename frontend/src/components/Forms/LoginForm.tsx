@@ -16,10 +16,7 @@ import { Input } from '@/components/ui/input'
 
 // 1. Define the Zod schema for login form data.
 const loginFormSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: 'Email is required.' })
-    .email({ message: 'Invalid email address.' }),
+  email: z.email('Invalid email address.'),
   password: z
     .string()
     .min(1, { message: 'Password is required.' })
@@ -87,7 +84,7 @@ const LoginForm = () => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Email or Username : TODO</FormLabel>
               <FormControl>
                 <Input placeholder="you@example.com" {...field} type="email" />
               </FormControl>
