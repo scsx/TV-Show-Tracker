@@ -4,6 +4,55 @@ import Text from '@/components/Text'
 
 import { getCurrentYear } from '@/lib/date'
 
+const footerLinks = [
+  {
+    title: 'Quick Links',
+    links: [
+      {
+        label: 'themoviedb.org',
+        href: 'https://www.themoviedb.org',
+        external: true,
+      },
+      {
+        label: 'TMDB API',
+        href: 'https://developer.themoviedb.org/docs/getting-started',
+        external: true,
+      },
+    ],
+  },
+  {
+    title: 'The Movie Database',
+    links: [
+      {
+        label: 'themoviedb.org',
+        href: 'https://www.themoviedb.org',
+        external: true,
+      },
+      {
+        label: 'The Movie Database API',
+        href: 'https://developer.themoviedb.org/docs/getting-started',
+        external: true,
+      },
+    ],
+  },
+  {
+    title: 'Dev Tools',
+    links: [
+      {
+        label: 'Repo',
+        href: 'https://github.com/scsx/TV-Show-Tracker',
+        external: true,
+      },
+      {
+        label: 'Backend status',
+        href: 'http://localhost:5000',
+        external: true,
+      },
+      { label: 'Kitchen Sink', href: '/kitchen-sink', external: false },
+    ],
+  },
+]
+
 const Footer = () => {
   const currentYear = getCurrentYear()
   return (
@@ -16,82 +65,31 @@ const Footer = () => {
               TV Show Tracker
             </Text>
           </div>
-          <div className="w-1/4">
-            <Text variant="h5" className="mt-1 mb-2">
-              Quick Links
-            </Text>
-            <Text>
-              <Hyperlink
-                variant="white"
-                href="https://www.themoviedb.org"
-                external
-              >
-                themoviedb.org
-              </Hyperlink>
-            </Text>
-            <Text>
-              <Hyperlink
-                variant="white"
-                href="https://developer.themoviedb.org/docs/getting-started"
-                external
-              >
-                TMDB API
-              </Hyperlink>
-            </Text>
-          </div>
-          <div className="w-1/4">
-            <Text variant="h5" className="mt-1 mb-2">
-              The Movie Database
-            </Text>
-            <Text>
-              <Hyperlink
-                variant="white"
-                href="https://www.themoviedb.org"
-                external
-              >
-                themoviedb.org
-              </Hyperlink>
-            </Text>
-            <Text>
-              <Hyperlink
-                variant="white"
-                href="https://developer.themoviedb.org/docs/getting-started"
-                external
-              >
-                TMDB API
-              </Hyperlink>
-            </Text>
-          </div>
-          <div className="w-1/4">
-            <Text variant="h5" className="mt-1 mb-2">
-              Dev Tools
-            </Text>
-            <Text>
-              <Hyperlink
-                variant="white"
-                href="https://github.com/scsx/TV-Show-Tracker"
-                external
-              >
-                Repo
-              </Hyperlink>
-            </Text>
-            <Text>
-              <Hyperlink variant="white" href="http://localhost:5000" external>
-                Backend status
-              </Hyperlink>
-            </Text>
-            <Text>
-              <Hyperlink variant="white" href="/kitchen-sink">
-                Kitchen Sink
-              </Hyperlink>
-            </Text>
-          </div>
+
+          {footerLinks.map((col, colIndex) => (
+            <div key={colIndex} className="w-1/4 mb-8">
+              <Text variant="h5" className="mt-1 mb-2">
+                {col.title}
+              </Text>
+              {col.links.map((link, linkIndex) => (
+                <Text key={linkIndex}>
+                  <Hyperlink
+                    variant="white"
+                    href={link.href}
+                    external={link.external}
+                  >
+                    {link.label}
+                  </Hyperlink>
+                </Text>
+              ))}
+            </div>
+          ))}
         </div>
-        <div className="flex pt-16">
+        <div className="flex pt-8">
           <Text>
             &copy; {currentYear} by{' '}
             <Hyperlink variant="white" href="https://soucasaux.com" external>
-              SCSX
+              scsx
             </Hyperlink>
           </Text>
         </div>

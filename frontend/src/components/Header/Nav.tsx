@@ -1,211 +1,129 @@
-import * as React from 'react'
-
-import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from 'lucide-react'
-
 import Hyperlink from '@/components/Hyperlink'
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu'
+import Text from '@/components/Text'
 
-const components: { title: string; href: string; description: string }[] = [
+// --- Menu data types ---
+interface DropdownLink {
+  title: string
+  href: string
+}
+
+interface DropdownContent {
+  intro?: {
+    title: string
+    description: string
+  }
+  links: DropdownLink[]
+}
+
+interface MenuItem {
+  label: string
+  href?: string
+  type: 'link' | 'dropdown'
+  dropdownContent?: DropdownContent
+}
+
+// --- Menu data ---
+const customMenuItems: MenuItem[] = [
   {
-    title: 'Alert Dialog',
-    href: '/docs/primitives/alert-dialog',
-    description:
-      'A modal dialog that interrupts the user with important content and expects a response.',
+    label: 'Latest',
+    type: 'link',
+    href: '/contact',
   },
   {
-    title: 'Hover Card',
-    href: '/docs/primitives/hover-card',
-    description:
-      'For sighted users to preview content available behind a link.',
+    label: 'Shows',
+    type: 'dropdown',
+    dropdownContent: {
+      intro: {
+        title: 'My App',
+        description: 'Welcome to my personalized application!',
+      },
+      links: [
+        { title: 'Start', href: '/' },
+        {
+          title: 'Features',
+          href: '/features',
+        },
+        {
+          title: 'About',
+          href: '/about',
+        },
+      ],
+    },
   },
   {
-    title: 'Progress',
-    href: '/docs/primitives/progress',
-    description:
-      'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
-  },
-  {
-    title: 'Scroll-area',
-    href: '/docs/primitives/scroll-area',
-    description: 'Visually or semantically separates content.',
-  },
-  {
-    title: 'Tabs',
-    href: '/docs/primitives/tabs',
-    description:
-      'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
-  },
-  {
-    title: 'Tooltip',
-    href: '/docs/primitives/tooltip',
-    description:
-      'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
+    label: 'Profile',
+    type: 'dropdown',
+    dropdownContent: {
+      intro: {
+        title: 'Your Area',
+        description: 'Manage your favorites and stuff',
+      },
+      links: [
+        {
+          title: 'Account',
+          href: '/profile',
+        },
+        {
+          title: 'Favorites',
+          href: '/profile/favorites',
+        },
+        {
+          title: 'Logout',
+          href: '/logout',
+        },
+      ],
+    },
   },
 ]
 
 export function Nav() {
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Home</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <a
-                    className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-6 no-underline outline-hidden select-none focus:shadow-md"
-                    href="/"
-                  >
-                    <div className="mt-4 mb-2 text-lg font-medium">
-                      shadcn/ui
-                    </div>
-                    <p className="text-muted-foreground text-sm leading-tight">
-                      Beautifully designed components built with Tailwind CSS.
-                    </p>
-                  </a>
-                </NavigationMenuLink>
-              </li>
-              <ListItem href="/docs" title="Introduction">
-                Re-usable components built using Radix UI and Tailwind CSS.
-              </ListItem>
-              <ListItem href="/docs/installation" title="Installation">
-                How to install dependencies and structure your app.
-              </ListItem>
-              <ListItem href="/docs/primitives/typography" title="Typography">
-                Styles for headings, paragraphs, lists...etc
-              </ListItem>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-              {components.map((component) => (
-                <ListItem
-                  key={component.title}
-                  title={component.title}
-                  href={component.href}
-                >
-                  {component.description}
-                </ListItem>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Hyperlink href="/docs">Docs</Hyperlink>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>List</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[300px] gap-4">
-              <li>
-                <NavigationMenuLink asChild>
-                  <Hyperlink href="#">
-                    <div className="font-medium">Components</div>
-                    <div className="text-muted-foreground">
-                      Browse all components in the library.
-                    </div>
-                  </Hyperlink>
-                </NavigationMenuLink>
-                <NavigationMenuLink asChild>
-                  <Hyperlink href="#">
-                    <div className="font-medium">Documentation</div>
-                    <div className="text-muted-foreground">
-                      Learn how to use the library.
-                    </div>
-                  </Hyperlink>
-                </NavigationMenuLink>
-                <NavigationMenuLink asChild>
-                  <Hyperlink href="#">
-                    <div className="font-medium">Blog</div>
-                    <div className="text-muted-foreground">
-                      Read our latest blog posts.
-                    </div>
-                  </Hyperlink>
-                </NavigationMenuLink>
-              </li>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Simple</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[200px] gap-4">
-              <li>
-                <NavigationMenuLink asChild>
-                  <Hyperlink href="#">Components</Hyperlink>
-                </NavigationMenuLink>
-                <NavigationMenuLink asChild>
-                  <Hyperlink href="#">Documentation</Hyperlink>
-                </NavigationMenuLink>
-                <NavigationMenuLink asChild>
-                  <Hyperlink href="#">Blocks</Hyperlink>
-                </NavigationMenuLink>
-              </li>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>With Icon</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[200px] gap-4">
-              <li>
-                <NavigationMenuLink asChild>
-                  <Hyperlink href="#" className="flex-row items-center gap-2">
-                    <CircleHelpIcon />
-                    Backlog
-                  </Hyperlink>
-                </NavigationMenuLink>
-                <NavigationMenuLink asChild>
-                  <Hyperlink href="#" className="flex-row items-center gap-2">
-                    <CircleIcon />
-                    To Do
-                  </Hyperlink>
-                </NavigationMenuLink>
-                <NavigationMenuLink asChild>
-                  <Hyperlink href="#" className="flex-row items-center gap-2">
-                    <CircleCheckIcon />
-                    Done
-                  </Hyperlink>
-                </NavigationMenuLink>
-              </li>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
-  )
-}
+    <nav className="relative">
+      <ul className="flex items-center space-x-4">
+        {customMenuItems.map((item, index) => (
+          <li key={index} className="group">
+            {item.type === 'link' ? (
+              <Hyperlink
+                href={item.href}
+                className="px-0 py-0 h-auto bg-transparent rounded-none text-foreground hover:text-primary transition-colors duration-200 ease-in-out focus:outline-none"
+              >
+                {item.label}
+              </Hyperlink>
+            ) : (
+              <>
+                <div className="relative cursor-pointer pr-4 bg-transparent rounded-none text-foreground hover:text-primary transition-colors duration-200 ease-in-out focus:outline-none">
+                  {item.label}
+                  <div className="absolute right-0 top-2 block h-[6px] w-[6px] border-r border-b border-current transform rotate-45 transition duration-300 group-hover:rotate-[225deg] group-hover:top-2.5"></div>
+                </div>
 
-function ListItem({
-  title,
-  children,
-  href,
-  ...props
-}: React.ComponentPropsWithoutRef<'li'> & { href: string }) {
-  return (
-    <li {...props}>
-      <NavigationMenuLink asChild>
-        <Hyperlink href={href}>
-          <div className="text-sm leading-none font-medium">{title}</div>
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-            {children}
-          </p>
-        </Hyperlink>
-      </NavigationMenuLink>
-    </li>
+                <div className="absolute p-6 right-0 top-full z-50 w-[380px] bg-darkblue opacity-0 invisible transform scale-y-0 origin-top transition-all duration-300 ease-in-out group-hover:opacity-100 group-hover:visible group-hover:scale-y-100">
+                  <div className="w-full flex space-x-4">
+                    {item.dropdownContent?.intro && (
+                      <div className="grow">
+                        <Text as="h5" className="text-lg font-bold">
+                          {item.dropdownContent.intro.title}
+                        </Text>
+                        <Text className="mt-4 leading-tight text-muted-foreground">
+                          {item.dropdownContent.intro.description}
+                        </Text>
+                      </div>
+                    )}
+                    <ul className="flex flex-col space-y-2 text-right">
+                      {item.dropdownContent?.links.map((link, linkIndex) => (
+                        <li key={linkIndex}>
+                          <Hyperlink href={link.href} variant="white">
+                            {link.title}
+                          </Hyperlink>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
   )
 }

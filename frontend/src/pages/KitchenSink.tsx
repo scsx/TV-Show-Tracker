@@ -6,10 +6,7 @@ import { Button } from '@/components/ui/button'
 
 const KitchenSink = () => {
   return (
-    <PageLayout
-      title="Kitchen Sink"
-      subtitle="Component Test Page"
-    >
+    <PageLayout title="Kitchen Sink" subtitle="Component Test Page">
       {/* Btns */}
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Buttons</h2>
@@ -75,8 +72,8 @@ const KitchenSink = () => {
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Logo</h2>
         <div className="flex gap-8 items-center">
-          <Logo />
           <Logo large />
+          <Logo />
         </div>
       </section>
     </PageLayout>
