@@ -9,14 +9,14 @@ const footerLinks = [
     title: 'Quick Links',
     links: [
       {
-        label: 'themoviedb.org',
-        href: 'https://www.themoviedb.org',
-        external: true,
+        label: 'Login',
+        href: '/login',
+        external: false,
       },
       {
-        label: 'TMDB API',
-        href: 'https://developer.themoviedb.org/docs/getting-started',
-        external: true,
+        label: 'Register',
+        href: '/register',
+        external: false,
       },
     ],
   },
@@ -68,24 +68,26 @@ const Footer = () => {
 
           {footerLinks.map((col, colIndex) => (
             <div key={colIndex} className="w-1/4 mb-8">
-              <Text variant="h5" className="mt-1 mb-2">
+              <Text variant="h5" className="mt-1 mb-4">
                 {col.title}
               </Text>
-              {col.links.map((link, linkIndex) => (
-                <Text key={linkIndex}>
-                  <Hyperlink
-                    variant="white"
-                    href={link.href}
-                    external={link.external}
-                  >
-                    {link.label}
-                  </Hyperlink>
-                </Text>
-              ))}
+              <div className="flex flex-col space-y-2">
+                {col.links.map((link, linkIndex) => (
+                  <Text key={linkIndex}>
+                    <Hyperlink
+                      variant="white"
+                      href={link.href}
+                      external={link.external}
+                    >
+                      {link.label}
+                    </Hyperlink>
+                  </Text>
+                ))}
+              </div>
             </div>
           ))}
         </div>
-        <div className="flex pt-8">
+        <div className="flex pt-4">
           <Text>
             &copy; {currentYear} by{' '}
             <Hyperlink variant="white" href="https://soucasaux.com" external>

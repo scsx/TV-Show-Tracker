@@ -7,6 +7,7 @@ interface PageLayoutProps {
   subtitle?: string
   children: React.ReactNode
   containerClassName?: string
+  wide?: boolean
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({
@@ -14,15 +15,18 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   subtitle,
   children,
   containerClassName,
+  wide = true,
 }) => {
+  const containerClasse = wide ? 'container' : 'w-full max-w-[900px] mx-auto pt-16'
+
   return (
-    <div className={`container py-8 ${containerClassName || ''}`}>
-      <Text variant="h1">{title}</Text>
-      {subtitle && (
-        <Text variant="h3" className="mb-16">
-          {subtitle}
+    <div className={`${containerClasse} py-8 ${containerClassName || ''}`}>
+      <div className="pb-16">
+        <Text variant="h1" as="h1">
+          {title}
         </Text>
-      )}
+        {subtitle && <Text variant="h3">{subtitle}</Text>}
+      </div>
       {children}
     </div>
   )

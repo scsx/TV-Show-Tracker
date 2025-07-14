@@ -1,5 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 
+import Login from '@/pages/Login'
+import Register from '@/pages/Register'
 import NotFound from '@/pages/NotFound'
 
 import Footer from '@/components/Footer'
@@ -16,6 +18,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/kitchen-sink" element={<KitchenSink />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
