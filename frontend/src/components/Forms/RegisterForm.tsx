@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
+import Text from '@/components/Text'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -53,11 +54,6 @@ const RegisterForm = () => {
 
   // 3. Define the onSubmit function
   const onSubmit = async (data: RegisterFormInputs) => {
-    // TODO: Remove
-    console.log('Attempting registration with:', data)
-
-    // TODO: Implement your actual registration API call here
-    // For now, let's simulate an API call
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
@@ -187,10 +183,16 @@ const RegisterForm = () => {
             onClick={handleAutoFill}
             className="w-full"
             disabled={isSubmitting}
+            variant="outline"
           >
-            Auto-fill (DEV)
+            Autofill *
           </Button>
         </div>
+
+        <Text color='muted'>
+          * Autofill is a feature to help in dev and tests. It wouldn't be
+          available in production.
+        </Text>
       </form>
     </Form>
   )

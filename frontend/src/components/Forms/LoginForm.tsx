@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
+import Text from '@/components/Text'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -35,6 +36,11 @@ const LoginForm = () => {
       password: '',
     },
   })
+
+  // Dev function to autofill the form.
+  const handleAutoFill = () => {
+    // TODO
+  }
 
   // 3. Define the onSubmit function
   const onSubmit = async (data: LoginFormInputs) => {
@@ -119,9 +125,25 @@ const LoginForm = () => {
           </p>
         )}
 
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? 'Logging in...' : 'Login'}
-        </Button>
+        <div className="flex space-x-4">
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? 'Logging in...' : 'Login'}
+          </Button>
+          <Button
+            type="button"
+            onClick={handleAutoFill}
+            className="w-full"
+            disabled={isSubmitting}
+            variant="outline"
+          >
+            Autofill *
+          </Button>
+        </div>
+
+        <Text color="muted">
+          * Autofill is a feature to help in dev and tests. It wouldn't be
+          available in production.
+        </Text>
       </form>
     </Form>
   )

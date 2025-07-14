@@ -17,8 +17,6 @@ const generateToken = (): string => {
 // @desc    Register a new user
 // @access  Public
 router.post('/register', async (req: Request, res: Response) => {
-  // TODO: REMOVE
-  console.log('Dados recebidos no req.body para /register:', req.body)
   const { username, email, password } = req.body
 
   try {

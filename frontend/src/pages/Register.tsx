@@ -18,11 +18,11 @@ const Register = () => {
             <CiCircleInfo className="text-3xl" />
             <div className="!pl-12 pt-1">
               <Text variant="h5" as="h5" className="mb-2">
-                Not registered yet?
+                Already registered?
               </Text>
               <Text>
-                Already registered?{' '}
-                <Hyperlink href="/login">Login here.</Hyperlink>
+                You can{' '}
+                <Hyperlink href="/login">login here.</Hyperlink>
               </Text>
             </div>
           </Alert>
