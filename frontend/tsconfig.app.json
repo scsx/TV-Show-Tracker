@@ -30,5 +30,5 @@
       "@shared/types/*": ["../shared/types/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "__mocks__/vite-env.js"]
 }
