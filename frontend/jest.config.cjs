@@ -15,7 +15,7 @@ module.exports = {
   ],
 
   // Optional: Coverage.
-  // collectCoverage: true,
-  // coverageDirectory: "coverage",
-  // coverageReporters: ["json", "lcov", "text", "clover"],
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageReporters: ['json', 'lcov', 'text', 'clover'],
 }
