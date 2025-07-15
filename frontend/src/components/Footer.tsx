@@ -49,6 +49,7 @@ const footerLinks = [
         external: true,
       },
       { label: 'Kitchen Sink', href: '/kitchen-sink', external: false },
+      { label: 'Coverage', href: '/coverage', external: false },
     ],
   },
 ]

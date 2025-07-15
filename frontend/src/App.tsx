@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 
 import { AuthProvider } from '@/context/AuthContext'
+import Coverage from '@/pages/Coverage'
 import Login from '@/pages/Login'
 import NotFound from '@/pages/NotFound'
 import Profile from '@/pages/Profile'
@@ -23,6 +24,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/kitchen-sink" element={<KitchenSink />} />
+            <Route path="/coverage" element={<Coverage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
