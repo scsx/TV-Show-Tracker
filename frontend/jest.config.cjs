@@ -14,8 +14,16 @@ module.exports = {
     '<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}',
   ],
 
-  // Optional: Coverage.
+  // Coverage.
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
+
+  // Ignored by tests
+  coveragePathIgnorePatterns: [
+    '<rootDir>/node_modules/', // Should be already but just in case
+    '<rootDir>/src/components/ui/', // Shadcn components
+    '<rootDir>/src/pages/KitchenSink',
+    '<rootDir>/src/pages/Coverage',
+  ],
 }
