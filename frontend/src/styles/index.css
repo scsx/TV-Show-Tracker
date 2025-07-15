@@ -87,5 +87,5 @@ input:autofill {
 .u-toast-success {
   background-color: hsl(var(--primary)) !important;
   color: hsl(var(--darkblue)) !important;
-  border-color: gold !important;
+  border-color: #fbd85c !important;
 }

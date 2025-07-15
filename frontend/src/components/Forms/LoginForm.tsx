@@ -3,8 +3,11 @@ import { useForm } from 'react-hook-form'
 import { useAuth } from '@/context/AuthContext'
 import type { TUser } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 
+import {
+  type LoginFormInputs,
+  loginFormSchema,
+} from '@/components/Forms/zod-form-schemas'
 import Text from '@/components/Text'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,16 +21,6 @@ import {
 import { Input } from '@/components/ui/input'
 
 import { usePushNotification } from '@/hooks/usePushNotification'
-
-const loginFormSchema = z.object({
-  email: z.string().email('Invalid email address.'),
-  password: z
-    .string()
-    .min(1, { message: 'Password is required.' })
-    .min(6, { message: 'Password must be at least 6 characters.' }),
-})
-
-type LoginFormInputs = z.infer<typeof loginFormSchema>
 
 const LoginForm = () => {
   const { login } = useAuth()

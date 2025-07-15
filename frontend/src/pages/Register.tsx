@@ -1,6 +1,6 @@
 import { CiCircleInfo } from 'react-icons/ci'
 
-import RegisterForm from '@/components/Forms/RegisterForm'
+import RegisterForm from '@/components/Forms/RegisterForm/RegisterForm'
 import Hyperlink from '@/components/Hyperlink'
 import PageLayout from '@/components/PageLayout'
 import Text from '@/components/Text'
