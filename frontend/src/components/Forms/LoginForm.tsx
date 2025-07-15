@@ -1,5 +1,4 @@
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@/context/AuthContext'
 import type { TUser } from '@/types'
@@ -18,6 +17,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
+import { usePushNotification } from '@/hooks/usePushNotification'
+
 const loginFormSchema = z.object({
   email: z.string().email('Invalid email address.'),
   password: z
@@ -29,8 +30,8 @@ const loginFormSchema = z.object({
 type LoginFormInputs = z.infer<typeof loginFormSchema>
 
 const LoginForm = () => {
-  const navigate = useNavigate()
   const { login } = useAuth()
+  const { showSuccessToast } = usePushNotification()
 
   const form = useForm<LoginFormInputs>({
     resolver: zodResolver(loginFormSchema),
@@ -63,7 +64,15 @@ const LoginForm = () => {
       if (response.ok) {
         const { token, user } = responseData
         login(token, user as TUser)
-        navigate('/')
+
+        // Success message and redirect.
+        showSuccessToast({
+          title: 'Login OK',
+          description: 'Redirecting to homepage...',
+          redirectPath: '/',
+          redirectDelay: 3000,
+        })
+
         form.reset()
       } else {
         const errorMessage =

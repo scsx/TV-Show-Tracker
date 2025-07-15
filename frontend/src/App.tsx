@@ -9,6 +9,7 @@ import Register from '@/pages/Register'
 import AuthGuard from '@/components/AuthGuard'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header/Header'
+import { Toaster } from '@/components/ui/sonner'
 
 import HomePage from './pages/HomePage'
 import KitchenSink from './pages/KitchenSink'
@@ -32,6 +33,8 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
+        {/* Notifications using https://ui.shadcn.com/docs/components/sonner */}
+        <Toaster position="top-center" />
         <Footer />
       </div>
     </AuthProvider>

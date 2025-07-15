@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form'
 
+import { useAuth } from '@/context/AuthContext'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -14,6 +15,8 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+
+import { usePushNotification } from '@/hooks/usePushNotification'
 
 // 1. Define the Zod schema for registration form data.
 const registerFormSchema = z.object({
@@ -32,6 +35,9 @@ const registerFormSchema = z.object({
 type RegisterFormInputs = z.infer<typeof registerFormSchema>
 
 const RegisterForm = () => {
+  const { login } = useAuth()
+  const { showSuccessToast } = usePushNotification()
+
   // 2. Initialize useForm with the schema and resolver.
   const form = useForm<RegisterFormInputs>({
     resolver: zodResolver(registerFormSchema),
@@ -74,8 +80,24 @@ const RegisterForm = () => {
 
       if (response.ok) {
         console.log('Registration successful!', result)
-        // TODO: Guardar o token e dados do utilizador (result.token, result.user)
-        // TODO: Redirecionar para a página de login ou dashboard
+        // Login and save token.
+        if (result.token && result.user) {
+          login(result.token, result.user)
+          console.log('Token and user data saved successfully.')
+        } else {
+          console.warn(
+            'Registration successful but token or user data missing from response.',
+          )
+        }
+
+        // Success message and redirect.
+        showSuccessToast({
+          title: 'Registration and login OK',
+          description: 'Redirecting to homepage...',
+          redirectPath: '/',
+          redirectDelay: 3000,
+        })
+
         form.reset()
       } else {
         console.error('Registration failed:', result.msg)

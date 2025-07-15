@@ -63,10 +63,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsAuthenticated(false)
     localStorage.removeItem('token')
     localStorage.removeItem('user')
-    console.log(
-      'User logged out. Token and user data removed from localStorage.',
-    )
-    // TODO: Optionally redirect to login page after logout
   }
 
   const authContextValue = {
