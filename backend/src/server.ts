@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import { getStatusPageHtml } from './utils/statusPageTemplate'
+import ShowSummary from './models/ShowSummary'
 
 // Routes
 import authRoutes from './routes/auth.routes'
@@ -15,6 +16,7 @@ import authMiddleware from './middleware/auth.middleware'
 
 // Services
 import { tmdbService } from './services/tmdb.service'
+import { showUpdaterTask } from './services/showUpdater.service'
 
 // Load environment variables from .env file
 dotenv.config()
@@ -35,11 +37,7 @@ const PORT = process.env.BACKEND_URL_PORT || 5000
 const MONGO_URI = process.env.MONGO_URI! // Non-null assertion as it's expected to be defined
 const FRONTEND_URL = process.env.FRONTEND_URL
 
-// TODO: REMOVE
-console.log('FRONTEND_URL:', process.env.FRONTEND_URL)
-console.log('TMDB_API_KEY:', process.env.TMDB_API_KEY)
-
-// Connect to MongoDB
+// --- MONGO DB ---
 const connectDB = async () => {
   try {
     await mongoose.connect(MONGO_URI)
@@ -60,6 +58,30 @@ const io = new Server(server, {
     methods: ['GET', 'POST']
   }
 })
+
+// Get latest shows and populate DB.
+const populateDbOnStartup = async () => {
+  if (mongoose.connection.readyState !== 1) {
+    console.log(
+      'DB STARTUP: Waiting for MongoDB connection before checking database for population...'
+    )
+    await new Promise((resolve) => mongoose.connection.once('connected', resolve))
+  }
+
+  try {
+    const count = await ShowSummary.countDocuments()
+    if (count === 0) {
+      console.log('DB STARTUP: Database is empty, triggering initial population...')
+      await showUpdaterTask()
+    } else {
+      console.log(
+        `DB STARTUP: Database already contains ${count} show summaries. Skipping initial auto-population.`
+      )
+    }
+  } catch (error: any) {
+    console.error('DB STARTUP ERROR: During database auto-population on startup:', error.message)
+  }
+}
 
 // --- EXPRESS MIDDLEWARES ---
 app.use(express.json())
@@ -89,7 +111,7 @@ app.get('/api/status', (req, res) => {
   res.json({ message: 'API is healthy!', dbConnected: mongoose.connection.readyState === 1 })
 })
 
-// Socket.IO logic
+// -------- Socket.IO --------
 io.on('connection', (socket) => {
   console.log('A user connected via Socket.IO')
 
@@ -103,7 +125,11 @@ io.on('connection', (socket) => {
   }, 5000)
 })
 
-// Start the server
-server.listen(PORT, () => {
+// -------- Start server --------
+server.listen(PORT, async () => {
   console.log(`Backend server running on http://localhost:${PORT}`)
+
+  await populateDbOnStartup()
+  // TODO: cron here
+  // cron.schedule('*/2 * * * *', showUpdaterTask);
 })
