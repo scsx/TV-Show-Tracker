@@ -8,8 +8,10 @@ const KitchenSink = () => {
   return (
     <PageLayout title="Kitchen Sink" subtitle="Component Test Page">
       {/* Btns */}
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Buttons</h2>
+      <section className="mb-16">
+        <h2 className="text-2xl font-semibold mb-4">
+          Shadcn Buttons <small>(not used for links)</small>
+        </h2>
         <div className="flex flex-wrap gap-4 items-center">
           <Button>Default Button</Button>
           <Button variant="secondary">Secondary Button</Button>
@@ -40,22 +42,24 @@ const KitchenSink = () => {
         </div>
       </section>
       {/* Hyperlinks */}
-      <section className="mb-8">
+      <section className="mb-16">
         <h2 className="text-2xl font-semibold mb-4">Hyperlinks</h2>
         <div className="flex flex-wrap gap-4 items-center">
-          <Hyperlink href="#">Default Link</Hyperlink>
-          <Hyperlink href="#">Title Link (inherits color)</Hyperlink>
-          <Hyperlink href="#">Icon Link</Hyperlink>
-          <Hyperlink href="#" variant="unstyled">
+          <Hyperlink href="kitchen-sink">Default Link</Hyperlink>
+          <Hyperlink href="kitchen-sink" variant="white">
+            White Link
+          </Hyperlink>
+          <Hyperlink href="kitchen-sink" variant="unstyled">
             Unstyled Link
           </Hyperlink>
-          <Hyperlink href="https://google.com" external>
-            External Link
+
+          <Hyperlink href="kitchen-sink" variant="btnYellow">
+            Button (yellow) Link
           </Hyperlink>
         </div>
       </section>
       {/* Text */}
-      <section className="mb-8">
+      <section className="mb-16">
         <h2 className="text-2xl font-semibold mb-4">Texts</h2>
         <div>
           <Text variant="h1">Heading 1</Text>
@@ -69,7 +73,7 @@ const KitchenSink = () => {
         </div>
       </section>
       {/* Logo */}
-      <section className="mb-8">
+      <section className="mb-16">
         <h2 className="text-2xl font-semibold mb-4">Logo</h2>
         <div className="flex gap-8 items-center">
           <Logo large />

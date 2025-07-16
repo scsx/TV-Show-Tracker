@@ -17,7 +17,7 @@ const textStyles = tv({
   variants: {
     variant: {
       h1: 'text-6xl font-playfair font-bold',
-      h2: 'text-3xl font-playfair font-bold',
+      h2: 'text-4xl font-playfair font-bold',
       h3: 'text-2xl font-playfair font-bold',
       h4: 'text-xl font-playfair font-bold',
       h5: 'text-lg font-jakarta font-bold',

@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 
-import Text from '@/components/Text'
-import { Button } from '@/components/ui/button'
+import MosaicContent from '@/components/Homepage/MosaicContent'
 
-type GridImage = {
+import MosaicImageGrid from './MosaicImageGrid'
+
+export type TGridImage = {
   id: string
   src: string
   row: number
@@ -12,7 +13,7 @@ type GridImage = {
 
 const Mosaic = () => {
   const [posterList, setPosterList] = useState<string[]>([])
-  const [gridImages, setGridImages] = useState<GridImage[]>([])
+  const [gridImages, setGridImages] = useState<TGridImage[]>([])
 
   const numRows = 3
   const numCols = 9
@@ -45,7 +46,7 @@ const Mosaic = () => {
   useEffect(() => {
     if (posterList.length === 0) return
 
-    const initialGridImages: GridImage[] = []
+    const initialGridImages: TGridImage[] = []
     const allPossiblePositions: { row: number; col: number }[] = []
 
     for (let r = 1; r <= numRows; r++) {
@@ -147,7 +148,7 @@ const Mosaic = () => {
     }, 1000) // Change one image every 1 second
 
     return () => clearInterval(interval)
-  }, [posterList, gridImages]) // Depend on gridImages so the interval updates correctly
+  }, [posterList, gridImages])
 
   return (
     <div
@@ -158,45 +159,12 @@ const Mosaic = () => {
         gridTemplateColumns: `repeat(${numCols}, 1fr)`,
       }}
     >
-      {gridImages.length > 0 ? (
-        gridImages.map((image) => (
-          <img
-            key={image.id}
-            src={`/images/posters/${image.src}`}
-            alt="TV Show Poster"
-            className="w-full h-full object-cover"
-            style={{
-              gridRow: `${image.row} / span 1`,
-              gridColumn: `${image.col} / span 1`,
-            }}
-          />
-        ))
-      ) : (
-        <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500 col-span-full row-span-full">
-          Loading posters...
-        </div>
-      )}
-
-      <div
-        className="flex flex-col items-center justify-center p-4 bg-black bg-opacity-70 text-white z-10"
-        style={{
-          gridRow: `${emptyCellCoordinates[0].row} / span 1`,
-          gridColumn: `${emptyCellCoordinates[0].col} / span ${emptyCellCoordinates.length}`,
-          pointerEvents: 'auto',
-        }}
-      >
-        <Text
-          variant="h2"
-          as="h2"
-          className="text-center text-5xl font-bold mb-4"
-        >
-          Discover Your Next Obsession!
-        </Text>
-        <Text variant="paragraph" className="text-center text-lg">
-          Start exploring series and managing your watchlists.
-        </Text>
-        <a className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary font-bold text-primary-foreground shadow hover:bg-primary/90 h-10 rounded-md px-8">TODO: Button</a>
-      </div>
+      <MosaicImageGrid
+        gridImages={gridImages}
+        numRows={numRows}
+        numCols={numCols}
+      />
+      <MosaicContent emptyCellCoordinates={emptyCellCoordinates} />
     </div>
   )
 }
