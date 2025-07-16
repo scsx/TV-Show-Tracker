@@ -4,7 +4,7 @@ import { Router, Request, Response } from 'express'
 import User from '../models/User'
 import AccessToken from '../models/AccessToken'
 import crypto from 'crypto' // For generating secure tokens
-import authMiddleware from '../middleware/authMiddleware' // Import authMiddleware for protected routes
+import authMiddleware from '../middleware/auth.middleware' // Import authMiddleware for protected routes
 
 const router = Router()
 

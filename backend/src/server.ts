@@ -7,13 +7,25 @@ import cors from 'cors'
 import { getStatusPageHtml } from './utils/statusPageTemplate'
 
 // Routes
-import authRoutes from './routes/authRoutes'
+import authRoutes from './routes/auth.routes'
+import showRoutes from './routes/tmdb/show.routes'
 
 //Middlewares
-import authMiddleware from './middleware/authMiddleware'
+import authMiddleware from './middleware/auth.middleware'
+
+// Services
+import { tmdbService } from './services/tmdb.service'
 
 // Load environment variables from .env file
 dotenv.config()
+
+// Safely initializes the TMDb service by loading necessary API keys.
+try {
+  tmdbService.initialize()
+} catch (error: any) {
+  console.error('Failed to initialize TMDb Service:', error.message)
+  process.exit(1)
+}
 
 const app = express()
 const server = http.createServer(app)
@@ -22,6 +34,10 @@ const server = http.createServer(app)
 const PORT = process.env.BACKEND_URL_PORT || 5000
 const MONGO_URI = process.env.MONGO_URI! // Non-null assertion as it's expected to be defined
 const FRONTEND_URL = process.env.FRONTEND_URL
+
+// TODO: REMOVE
+console.log('FRONTEND_URL:', process.env.FRONTEND_URL)
+console.log('TMDB_API_KEY:', process.env.TMDB_API_KEY)
 
 // Connect to MongoDB
 const connectDB = async () => {
@@ -57,6 +73,9 @@ app.use(
 // -------- ROUTES --------
 // All routes in authRoutes.ts will be prefixed with /api/auth
 app.use('/api/auth', authRoutes)
+
+// All routes in show.routes.ts will be prefixed with /api/tmdb/shows
+app.use('/api/tmdb/shows', showRoutes)
 
 // Status routes
 app.get('/', (req, res) => {
