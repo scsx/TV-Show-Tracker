@@ -14,6 +14,7 @@ import { Toaster } from '@/components/ui/sonner'
 
 import HomePage from './pages/HomePage'
 import KitchenSink from './pages/KitchenSink'
+import Trending from '@/pages/Trending'
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
 
             <Route element={<AuthGuard />}>
+              <Route path="/trending" element={<Trending />} />
               <Route path="/profile" element={<Profile />} />
             </Route>
 

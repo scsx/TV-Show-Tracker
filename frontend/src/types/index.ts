@@ -8,3 +8,10 @@
 
 export type { TUser } from '@shared/types/user'
 export type { TAccessToken } from '@shared/types/access-token'
+export type { TTMDBGenre } from '@shared/types/genre'
+export type { TTMDBProductionCompany } from '@shared/types/production-company'
+export type {
+  TTMDBShow,
+  TTMDBShowSummary,
+  TShowSummaryModel,
+} from '@shared/types/show'

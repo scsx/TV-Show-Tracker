@@ -39,9 +39,9 @@ export function Nav() {
   // --- Menu data ---
   const menuItems: MenuItem[] = [
     {
-      label: 'Latest',
+      label: 'Trending',
       type: 'link',
-      href: '/contact',
+      href: '/trending',
     },
     {
       label: 'Shows',
