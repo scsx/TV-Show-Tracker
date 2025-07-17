@@ -1,5 +1,6 @@
 import React from 'react'
-import { FaHeart } from 'react-icons/fa'
+import { GoHeart } from 'react-icons/go'
+import { GoHeartFill } from 'react-icons/go'
 import { IoCalendarClearOutline } from 'react-icons/io5'
 import { MdOutlineStarOutline } from 'react-icons/md'
 
@@ -41,8 +42,6 @@ const ShowCard: React.FC<ShowCardProps> = ({ show, displayDetails = true }) => {
     await toggleFavorite(show)
   }
 
-  console.log(isShowFavorite)
-
   return (
     <Hyperlink
       href={`/shows/${show.tmdbId}`}
@@ -67,9 +66,9 @@ const ShowCard: React.FC<ShowCardProps> = ({ show, displayDetails = true }) => {
             }
           >
             {isShowFavorite ? (
-              <FaHeart className="h-6 w-6 text-red-500" />
+              <GoHeartFill className="h-6 w-6 text-red-500 hover:text-white" />
             ) : (
-              <FaHeart className="h-6 w-6" />
+              <GoHeart className="h-6 w-6" />
             )}
           </button>
         )}
