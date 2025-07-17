@@ -24,7 +24,7 @@ import { usePushNotification } from '@/hooks/usePushNotification'
 
 const LoginForm = () => {
   const { login } = useAuth()
-  const { showSuccessToast } = usePushNotification()
+  const { showToast } = usePushNotification()
 
   const form = useForm<LoginFormInputs>({
     resolver: zodResolver(loginFormSchema),
@@ -59,7 +59,7 @@ const LoginForm = () => {
         login(token, user as TUser)
 
         // Success message and redirect.
-        showSuccessToast({
+        showToast({
           title: 'Login OK',
           description: 'Redirecting to homepage...',
           redirectPath: '/',

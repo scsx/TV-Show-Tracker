@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { Server as SocketIOServer } from 'socket.io'
 import { showUpdaterTask } from '../services/showUpdater.service'
 import ShowSummary from '../models/ShowSummary'
 
@@ -7,11 +8,16 @@ import ShowSummary from '../models/ShowSummary'
  * This is the manual trigger for the update process.
  * @param {Request} req - Express request object.
  * @param {Response} res - Express response object.
+ * @param {SocketIOServer} io - The Socket.IO server instance.
  */
-export const fetchAndSaveTrendingShows = async (req: Request, res: Response): Promise<void> => {
+export const fetchAndSaveTrendingShows = async (
+  req: Request,
+  res: Response,
+  io: SocketIOServer
+): Promise<void> => {
   try {
     console.log('Manual trigger: Initiating fetch and save of trending shows...')
-    await showUpdaterTask()
+    await showUpdaterTask(io)
     res
       .status(200)
       .json({ message: 'Finished processing trending show summaries via manual trigger.' })

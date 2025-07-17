@@ -13,7 +13,7 @@ import { usePushNotification } from '@/hooks/usePushNotification'
 
 const RegisterForm = () => {
   const { login } = useAuth()
-  const { showSuccessToast } = usePushNotification()
+  const { showToast } = usePushNotification()
 
   // Initialize useForm with the imported schema and resolver.
   const form = useForm<RegisterFormInputs>({
@@ -68,7 +68,7 @@ const RegisterForm = () => {
         }
 
         // Success message and redirect.
-        showSuccessToast({
+        showToast({
           title: 'Registration and login OK',
           description: 'Redirecting to homepage...',
           redirectPath: '/',

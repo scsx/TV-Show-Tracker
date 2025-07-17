@@ -6,14 +6,14 @@ import Text from '@/components/Text'
 import { usePushNotification } from '@/hooks/usePushNotification'
 
 const Coverage = () => {
-  const { showSuccessToast } = usePushNotification()
+  const { showToast } = usePushNotification()
   const coverageReportPath = '/coverage/lcov-report/index.html'
   const commandToCopy = 'npm test --workspace=frontend -- --coverage'
 
   const handleCopyCommand = async () => {
     try {
       await navigator.clipboard.writeText(commandToCopy)
-      showSuccessToast({
+      showToast({
         title: 'Command copied',
         description: 'You can paste it in the terminal',
       })

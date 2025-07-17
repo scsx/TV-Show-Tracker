@@ -1,11 +1,12 @@
 import { tmdbService } from './tmdb.service'
 import ShowSummary from '../models/ShowSummary'
+import { Server as SocketIOServer } from 'socket.io'
 
 /**
  * @description Centralized function to fetch trending TV shows from TMDb and save/update them in the database.
  * This function handles both initial population and periodic updates (cron).
  */
-export const showUpdaterTask = async () => {
+export const showUpdaterTask = async (io?: SocketIOServer) => {
   console.log('--- TASK START: Fetching and saving trending shows... ---')
   try {
     const trendingData = await tmdbService.getTrendingTvShows('week', 1)
@@ -55,9 +56,17 @@ export const showUpdaterTask = async () => {
         errorCount++
       }
     }
+
     console.log(
       `--- TASK COMPLETE: Newly Saved: ${newlySavedCount}, Updated: ${updatedCount}, Errors: ${errorCount}. ---`
     )
+
+    // Emit Socket.IO event after task.
+    if (io) {
+      const message = `Shows updated: ${newlySavedCount} new, ${updatedCount} updated.`
+      io.emit('showsUpdated', { message, timestamp: new Date().toISOString() })
+      console.log(`Socket.IO emitted 'showsUpdated' event: ${message}`)
+    }
   } catch (error: any) {
     console.error('--- TASK FAILED: Error in updateShows ---', error.message)
   }

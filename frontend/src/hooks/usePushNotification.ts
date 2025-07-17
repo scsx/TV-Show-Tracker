@@ -16,7 +16,7 @@ type ToastOptions = {
 export const usePushNotification = () => {
   const navigate = useNavigate()
 
-  const showSuccessToast = ({
+  const showToast = ({
     title,
     description,
     redirectPath,
@@ -32,6 +32,7 @@ export const usePushNotification = () => {
       },
     })
 
+    // if redirectPath is not present the toaster fades out at default time.
     if (redirectPath) {
       setTimeout(() => {
         navigate(redirectPath)
@@ -40,5 +41,5 @@ export const usePushNotification = () => {
     }
   }
 
-  return { showSuccessToast }
+  return { showToast }
 }

@@ -4,8 +4,7 @@ import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import cors from 'cors'
-import { getStatusPageHtml } from './utils/statusPageTemplate'
-import ShowSummary from './models/ShowSummary'
+import cron from 'node-cron'
 
 // Routes
 import authRoutes from './routes/auth.routes'
@@ -17,6 +16,10 @@ import authMiddleware from './middleware/auth.middleware'
 // Services
 import { tmdbService } from './services/tmdb.service'
 import { showUpdaterTask } from './services/showUpdater.service'
+
+// Other
+import { getStatusPageHtml } from './utils/statusPageTemplate'
+import ShowSummary from './models/ShowSummary'
 
 // Load environment variables from .env file
 dotenv.config()
@@ -72,7 +75,7 @@ const populateDbOnStartup = async () => {
     const count = await ShowSummary.countDocuments()
     if (count === 0) {
       console.log('DB STARTUP: Database is empty, triggering initial population...')
-      await showUpdaterTask()
+      await showUpdaterTask(io)
     } else {
       console.log(
         `DB STARTUP: Database already contains ${count} show summaries. Skipping initial auto-population.`
@@ -97,7 +100,7 @@ app.use(
 app.use('/api/auth', authRoutes)
 
 // All routes in show.routes.ts will be prefixed with /api/tmdb/shows
-app.use('/api/tmdb/shows', showRoutes)
+app.use('/api/tmdb/shows', showRoutes(io)) // Pass io because controller can't access it.
 
 // Status routes
 app.get('/', (req, res) => {
@@ -129,7 +132,12 @@ io.on('connection', (socket) => {
 server.listen(PORT, async () => {
   console.log(`Backend server running on http://localhost:${PORT}`)
 
+  // Populate function DB,
   await populateDbOnStartup()
-  // TODO: cron here
-  // cron.schedule('*/2 * * * *', showUpdaterTask);
+
+  // Cron: run again every 2 minutes
+  cron.schedule('*/2 * * * *', () => {
+    console.log('--- CRON TRIGGER: Scheduled job to fetch trending shows. ---')
+    showUpdaterTask(io)
+  })
 })

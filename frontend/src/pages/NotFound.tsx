@@ -1,4 +1,3 @@
-// TODO: Design, use.
 import PageLayout from '@/components/PageLayout'
 import Text from '@/components/Text'
 

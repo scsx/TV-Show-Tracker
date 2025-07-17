@@ -6,17 +6,21 @@ import Login from '@/pages/Login'
 import NotFound from '@/pages/NotFound'
 import Profile from '@/pages/Profile'
 import Register from '@/pages/Register'
+import Trending from '@/pages/Trending'
 
 import AuthGuard from '@/components/AuthGuard'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header/Header'
 import { Toaster } from '@/components/ui/sonner'
 
+import { useSocketNotifications } from '@/hooks/useSocketNotifications'
+
 import HomePage from './pages/HomePage'
 import KitchenSink from './pages/KitchenSink'
-import Trending from '@/pages/Trending'
 
 const App = () => {
+  useSocketNotifications()
+
   return (
     <AuthProvider>
       <div className="flex flex-col min-h-screen">
