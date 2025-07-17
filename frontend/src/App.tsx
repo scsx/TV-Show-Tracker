@@ -1,11 +1,13 @@
 import { Route, Routes } from 'react-router-dom'
 
 import Coverage from '@/pages/Coverage'
+import Favorites from '@/pages/Favorites'
 import Login from '@/pages/Login'
 import NotFound from '@/pages/NotFound'
 import Profile from '@/pages/Profile'
 import Recommendations from '@/pages/Recommendations'
 import Register from '@/pages/Register'
+import Shows from '@/pages/Shows'
 import Trending from '@/pages/Trending'
 
 import AuthGuard from '@/components/AuthGuard'
@@ -36,10 +38,10 @@ const App = () => {
 
           <Route element={<AuthGuard />}>
             <Route path="/trending" element={<Trending />} />
-            {/* TODO: Update */}
-            <Route path="/shows" element={<Trending />} />
+            <Route path="/shows" element={<Shows />} />
             <Route path="/recommendations" element={<Recommendations />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/favorites" element={<Favorites />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

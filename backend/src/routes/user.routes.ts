@@ -3,7 +3,6 @@ import authMiddleware from '../middleware/auth.middleware' // Auth middleware fo
 import { toggleFavoriteShow, getUserFavorites } from '../controllers/user.controller' // User-related controllers
 
 const router = Router()
-
 // Route to get a user's favorite shows
 // Protected to ensure only authenticated users can access their favorites
 router.get('/:userId/favorites', authMiddleware, getUserFavorites)

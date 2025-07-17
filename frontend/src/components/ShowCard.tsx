@@ -41,6 +41,8 @@ const ShowCard: React.FC<ShowCardProps> = ({ show, displayDetails = true }) => {
     await toggleFavorite(show)
   }
 
+  console.log(isShowFavorite)
+
   return (
     <Hyperlink
       href={`/shows/${show.tmdbId}`}

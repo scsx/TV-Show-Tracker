@@ -10,6 +10,8 @@ import React, {
 
 import type { TShowSummaryModel, TUser } from '@/types'
 
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL
+
 type AuthContextType = {
   // Auth & login
   user: TUser | null
@@ -38,7 +40,37 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true)
   const [favoriteShowTmdbIds, setFavoriteShowTmdbIds] = useState<number[]>([])
 
+  // Fetch user's favorite TMDB IDs from the backend.
+  const fetchUserFavoriteTmdbIds = useCallback(async () => {
+    if (!user || !token || !user._id) {
+      setFavoriteShowTmdbIds([]) // Clear favorites if no user
+      return
+    }
+
+    try {
+      const response = await fetch(
+        `${BACKEND_BASE_URL}/api/users/${user._id}/favorites`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Use stored token for auth
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+
+      if (response.ok) {
+        const data = await response.json()
+        setFavoriteShowTmdbIds(data.favoriteTmdbIds || []) // Backend now sends { favoriteTmdbIds: [...] }
+      } else {
+        setFavoriteShowTmdbIds([])
+      }
+    } catch (error) {
+      setFavoriteShowTmdbIds([])
+    }
+  }, [user, token, BACKEND_BASE_URL])
+
   // Auth.
+  // Initial user data from localStorage.
   useEffect(() => {
     const loadAuthData = () => {
       const storedToken = localStorage.getItem('token')
@@ -50,9 +82,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setToken(storedToken)
           setUser(parsedUser)
           setIsAuthenticated(true)
-          console.log('Token and user loaded from localStorage.')
         } catch (error) {
-          console.error('Failed to parse user from localStorage:', error)
           // If parsing fails, clear invalid data
           logout()
         }
@@ -61,103 +91,64 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
 
     loadAuthData()
-  }, [])
+  }, []) 
 
-  // Fetch user's favorite TMDB IDs from the backend.
-  const fetchUserFavoriteTmdbIds = useCallback(async () => {
-    if (!user || !token || !user._id) {
-      // Ensure user and token exist
-      setFavoriteShowTmdbIds([]) // Clear favorites if no user
-      return
+  // useEffect for fetchUserFavoriteTmdbIds if valid user.
+  useEffect(() => {
+    if (isAuthenticated && user?._id && token) {
+      fetchUserFavoriteTmdbIds()
+    } else {
+      setFavoriteShowTmdbIds([]) 
     }
-
-    try {
-      const response = await fetch(`/api/users/${user._id}/favorites`, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Use stored token for auth
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setFavoriteShowTmdbIds(data.favoriteTmdbIds || []) // Backend now sends { favoriteTmdbIds: [...] }
-      } else {
-        console.error(
-          'Failed to fetch user favorite TMDB IDs:',
-          response.statusText,
-        )
-        setFavoriteShowTmdbIds([])
-      }
-    } catch (error) {
-      console.error('Error fetching user favorite TMDB IDs:', error)
-      setFavoriteShowTmdbIds([])
-    }
-  }, [user, token])
+  }, [isAuthenticated, user?._id, token, fetchUserFavoriteTmdbIds]) 
 
   // Toggle a show's favorite status
   const toggleFavorite = useCallback(
     async (show: TShowSummaryModel) => {
-      if (!user || !token || !user._id) {
+      if (!user || !token) {
         alert('You need to be logged in to favorite shows!')
         return
       }
 
-      const { tmdbId } = show // Get tmdbId from the show object
+      const { tmdbId } = show
 
-      // Optimistic UI update: immediately update frontend state
+      // Optimistic update.
+      // Save state if error.
+      const originalFavoriteShowTmdbIds = [...favoriteShowTmdbIds] 
       setFavoriteShowTmdbIds((prevIds) => {
         if (prevIds.includes(tmdbId)) {
-          return prevIds.filter((id) => id !== tmdbId) // Remove if already favorite
+          return prevIds.filter((id) => id !== tmdbId)
         } else {
-          return [...prevIds, tmdbId] // Add if not favorite
+          return [...prevIds, tmdbId]
         }
       })
 
       try {
-        const response = await fetch(
-          `/api/users/${user._id}/favorites/toggle`,
-          {
-            method: 'PATCH', // Use PATCH as defined in your backend route
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ tmdbId }), // Send only the tmdbId to backend
+        const url = `${BACKEND_BASE_URL}/api/users/${user._id}/favorites/toggle`
+        const response = await fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
-        )
+          body: JSON.stringify({ tmdbId }),
+        })
 
-        if (!response.ok) {
-          console.error(
-            'Failed to toggle favorite on backend:',
-            response.statusText,
-          )
-          // Revert optimistic update if backend call fails
-          setFavoriteShowTmdbIds((prevIds) => {
-            if (prevIds.includes(tmdbId)) {
-              return prevIds.filter((id) => id !== tmdbId)
-            } else {
-              return [...prevIds, tmdbId]
-            }
-          })
+        if (response.ok) {
+          const data = await response.json()
+          setFavoriteShowTmdbIds(data.favoriteTmdbIds || [])
+        } else {
+          // Revert if req fails
+          setFavoriteShowTmdbIds(originalFavoriteShowTmdbIds)
           alert('Failed to update favorites. Please try again.')
         }
-        // If response is OK, state is already updated optimistically.
-        // No need to fetch again unless you want to ensure perfect sync (might cause flicker).
       } catch (error) {
-        console.error('Error toggling favorite:', error)
-        // Revert optimistic update on network error
-        setFavoriteShowTmdbIds((prevIds) => {
-          if (prevIds.includes(tmdbId)) {
-            return prevIds.filter((id) => id !== tmdbId)
-          } else {
-            return [...prevIds, tmdbId]
-          }
-        })
+        // Revert if error
+        setFavoriteShowTmdbIds(originalFavoriteShowTmdbIds)
         alert('Network error. Failed to update favorites. Please try again.')
       }
     },
-    [user, token],
+    [user, token, favoriteShowTmdbIds, BACKEND_BASE_URL],
   )
 
   // Check if a show is favorite
@@ -169,23 +160,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   )
 
   // Login function: stores token and user in state and localStorage.
-  const login = (newToken: string, newUser: TUser) => {
+  const login = useCallback((newToken: string, newUser: TUser) => {
     setToken(newToken)
     setUser(newUser)
     setIsAuthenticated(true)
     localStorage.setItem('token', newToken)
     localStorage.setItem('user', JSON.stringify(newUser))
-    console.log('User logged in. Token and user data saved to localStorage.')
-  }
+  
+  }, [])
 
   // Logout function: clears token and user from state and localStorage.
-  const logout = () => {
+  const logout = useCallback(() => {
     setToken(null)
     setUser(null)
     setIsAuthenticated(false)
+    setFavoriteShowTmdbIds([])
     localStorage.removeItem('token')
     localStorage.removeItem('user')
-  }
+  }, []) 
 
   // useMemo for context value to prevent unnecessary re-renders
   const authContextValue = useMemo(

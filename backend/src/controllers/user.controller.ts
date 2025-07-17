@@ -1,16 +1,6 @@
 import { Request, Response } from 'express'
 import User from '../models/User'
 
-// Extend Express Request interface to include user from auth middleware
-declare module 'express-serve-static-core' {
-  interface Request {
-    user?: {
-      id: string
-      email: string
-    }
-  }
-}
-
 /**
  * @route PATCH /api/users/:userId/favorites/toggle
  * @desc Add or remove a show from a user's favorite list
@@ -31,42 +21,48 @@ export const toggleFavoriteShow = async (req: Request, res: Response) => {
   }
 
   try {
-    const user = await User.findById(userId)
+    // Fetch the user and ensure favoriteShowTmdbIds is initialized
+    const user = await User.findById(userId).select('username favoriteShowTmdbIds')
 
     if (!user) {
       return res.status(404).json({ msg: 'User not found.' })
     }
 
-    const tmdbIdNum = Number(tmdbId) // Ensure tmdbId is treated as a number
+    // Ensure the array exists (if not defaulted in the schema or read before being created)
+    if (!user.favoriteShowTmdbIds) {
+      user.favoriteShowTmdbIds = []
+    }
 
-    // Check if the show is currently in favorites
+    const tmdbIdNum = Number(tmdbId)
+
+    // Check if the show is currently in favorites based on the DB array
     const isCurrentlyFavorite = user.favoriteShowTmdbIds.includes(tmdbIdNum)
 
     let updateOperation
     let message: string
 
     if (isCurrentlyFavorite) {
-      // If already a favorite, remove it using $pull
+      // If already a favorite, remove it
       updateOperation = { $pull: { favoriteShowTmdbIds: tmdbIdNum } }
       message = 'Show removed from favorites.'
     } else {
-      // If not a favorite, add it using $addToSet (prevents duplicates)
-      updateOperation = { $addToSet: { favoriteShowTmdbIds: tmdbIdNum } } // $addToSet avoids duplicates
+      // If not a favorite, add it (using $addToSet to prevent duplicates)
+      updateOperation = { $addToSet: { favoriteShowTmdbIds: tmdbIdNum } }
       message = 'Show added to favorites.'
     }
 
-    // Update the user document in the database
+    // Perform the atomic update in the database
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       updateOperation,
-      { new: true } // Return the updated document
-    )
+      { new: true, runValidators: true } // 'new: true' returns the updated document; 'runValidators: true' ensures Mongoose schema validations are run
+    ).select('favoriteShowTmdbIds') // Select only the field we want to return, for optimization.
 
     if (!updatedUser) {
       return res.status(404).json({ msg: 'User not found after update attempt.' })
     }
 
-    // Return the updated list of favorite TMDB IDs
+    // Return the updated array of TMDB IDs to the frontend
     res.json({ msg: message, favoriteTmdbIds: updatedUser.favoriteShowTmdbIds })
   } catch (error: any) {
     console.error('Error toggling favorite show:', error.message)
