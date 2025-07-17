@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { Server as SocketIOServer } from 'socket.io'
 import { showUpdaterTask } from '../services/showUpdater.service'
+import axios from 'axios'
 import ShowSummary from '../models/ShowSummary'
 
 /**
@@ -43,5 +44,40 @@ export const getAllShowSummaries = async (req: Request, res: Response): Promise<
   } catch (error: any) {
     console.error('Error fetching all show summaries:', error.message)
     res.status(500).json({ error: 'Failed to retrieve show summaries.' })
+  }
+}
+
+/**
+ * @route GET /api/tmdb/shows/:tmdbId
+ * @description Fetches detailed information for a specific TV show from TMDb by its ID.
+ * @access Private (via auth middleware na rota)
+ */
+export const getShowDetailsByTmdbId = async (req: Request, res: Response) => {
+  const { tmdbId } = req.params
+
+  if (!tmdbId || isNaN(Number(tmdbId))) {
+    return res.status(400).json({ msg: 'A valid TMDB show ID is required.' })
+  }
+
+  try {
+    const TMDB_API_KEY = process.env.TMDB_API_KEY
+    const TMDB_BASE_URL = process.env.TMDB_BASE_URL
+    const tmdbIdNum = Number(tmdbId)
+
+    const response = await axios.get(`${TMDB_BASE_URL}/tv/${tmdbIdNum}`, {
+      params: {
+        api_key: TMDB_API_KEY
+      }
+    })
+
+    const showDetails = response.data
+
+    res.json(showDetails)
+  } catch (error: any) {
+    console.error(`Error fetching TV show details for TMDB ID ${tmdbId}:`, error.message)
+    if (error.response && error.response.status === 404) {
+      return res.status(404).json({ msg: 'TV show not found on TMDb.' })
+    }
+    res.status(500).send('Server Error while fetching TV show details.')
   }
 }

@@ -5,31 +5,42 @@ import { IoCalendarClearOutline } from 'react-icons/io5'
 import { MdOutlineStarOutline } from 'react-icons/md'
 
 import { useAuth } from '@/context/AuthContext'
-import { type TShowSummaryModel } from '@/types'
+import { type TTMDBShow, type TTMDBShowSummaryModel } from '@/types'
 
 import Hyperlink from '@/components/Hyperlink'
+import {
+  isTTMDBFullShow,
+  mapFullShowToSummary,
+} from '@/components/ShowCard/mapFullShowToSummary'
 import Text from '@/components/Text'
 
 import { getYearFromDateString } from '@/lib/date'
 
 type ShowCardProps = {
-  show: TShowSummaryModel
-  displayDetails?: boolean
+  show: TTMDBShow | TTMDBShowSummaryModel
 }
 
-const ShowCard: React.FC<ShowCardProps> = ({ show, displayDetails = true }) => {
+const ShowCard: React.FC<ShowCardProps> = ({ show }) => {
   const {
     isAuthenticated,
     isFavorite,
     toggleFavorite,
     loading: authLoading,
   } = useAuth()
-  const imageUrl = show.poster_path
-    ? `https://image.tmdb.org/t/p/w500${show.poster_path}`
-    : 'https://via.placeholder.com/500x750?text=No+Poster'
-  const releaseYear = getYearFromDateString(show.first_air_date)
 
-  const isShowFavorite = isFavorite(show.tmdbId)
+  let showToDisplay: TTMDBShowSummaryModel
+  if (isTTMDBFullShow(show)) {
+    showToDisplay = mapFullShowToSummary(show)
+  } else {
+    showToDisplay = show
+  }
+
+  const imageUrl = showToDisplay.poster_path
+    ? `https://image.tmdb.org/t/p/w500${showToDisplay.poster_path}`
+    : 'https://via.placeholder.com/500x750?text=No+Poster'
+  const releaseYear = getYearFromDateString(showToDisplay.first_air_date)
+
+  const isShowFavorite = isFavorite(showToDisplay.tmdbId)
 
   // Handle click on the favorite icon
   const handleToggleFavorite = async (e: React.MouseEvent) => {
@@ -39,12 +50,12 @@ const ShowCard: React.FC<ShowCardProps> = ({ show, displayDetails = true }) => {
     // Do nothing if auth context is still loading
     if (authLoading) return
 
-    await toggleFavorite(show)
+    await toggleFavorite(showToDisplay)
   }
 
   return (
     <Hyperlink
-      href={`/shows/${show.tmdbId}`}
+      href={`/shows/${showToDisplay.tmdbId}`}
       variant="unstyled"
       className="group"
     >
@@ -52,7 +63,7 @@ const ShowCard: React.FC<ShowCardProps> = ({ show, displayDetails = true }) => {
         <div className="aspect-[2/3] w-full overflow-hidden">
           <img
             src={imageUrl}
-            alt={show.name || 'Show Poster'}
+            alt={showToDisplay.name || 'Show Poster'}
             className="object-cover w-full h-full"
           />
         </div>
@@ -73,34 +84,33 @@ const ShowCard: React.FC<ShowCardProps> = ({ show, displayDetails = true }) => {
           </button>
         )}
 
-        {displayDetails && (
-          <div className="flex flex-col flex-grow pt-4">
-            <div className="grow">
-              <Text
-                variant="h3"
-                className="mb-2 leading-none transition-colors duration-300 group-hover:text-primary"
-              >
-                {show.name}
-              </Text>
-              <Text className="truncate">{show.overview}</Text>
-            </div>
-            <div className="flex justify-between items-center pt-4">
-              {show.vote_average !== undefined &&
-                show.vote_count !== undefined && (
-                  <Text className="flex items-center">
-                    <MdOutlineStarOutline className="mr-2 text-lg" />{' '}
-                    {show.vote_average.toFixed(1)} ({show.vote_count})
-                  </Text>
-                )}
-              {show.first_air_date && (
+        <div className="flex flex-col flex-grow pt-4">
+          <div className="grow">
+            <Text
+              variant="h3"
+              className="mb-2 leading-none transition-colors duration-300 group-hover:text-primary"
+            >
+              {showToDisplay.name}
+            </Text>
+            <Text className="truncate">{showToDisplay.overview}</Text>
+          </div>
+          <div className="flex justify-between items-center pt-4">
+            {showToDisplay.vote_average !== undefined &&
+              showToDisplay.vote_count !== undefined && (
                 <Text className="flex items-center">
-                  <IoCalendarClearOutline className="mr-2 text-sm" />{' '}
-                  {releaseYear}
+                  <MdOutlineStarOutline className="mr-2 text-lg" />{' '}
+                  {showToDisplay.vote_average.toFixed(1)} (
+                  {showToDisplay.vote_count})
                 </Text>
               )}
-            </div>
+            {showToDisplay.first_air_date && (
+              <Text className="flex items-center">
+                <IoCalendarClearOutline className="mr-2 text-sm" />{' '}
+                {releaseYear}
+              </Text>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </Hyperlink>
   )

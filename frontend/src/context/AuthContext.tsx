@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react'
 
-import type { TShowSummaryModel, TUser } from '@/types'
+import type { TTMDBShowSummaryModel, TUser } from '@/types'
 
 const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL
 
@@ -23,7 +23,7 @@ type AuthContextType = {
   // Favorites
   favoriteShowTmdbIds: number[]
   fetchUserFavoriteTmdbIds: () => Promise<void>
-  toggleFavorite: (show: TShowSummaryModel) => Promise<void>
+  toggleFavorite: (show: TTMDBShowSummaryModel) => Promise<void>
   isFavorite: (tmdbId: number) => boolean
 }
 
@@ -91,20 +91,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
 
     loadAuthData()
-  }, []) 
+  }, [])
 
   // useEffect for fetchUserFavoriteTmdbIds if valid user.
   useEffect(() => {
     if (isAuthenticated && user?._id && token) {
       fetchUserFavoriteTmdbIds()
     } else {
-      setFavoriteShowTmdbIds([]) 
+      setFavoriteShowTmdbIds([])
     }
-  }, [isAuthenticated, user?._id, token, fetchUserFavoriteTmdbIds]) 
+  }, [isAuthenticated, user?._id, token, fetchUserFavoriteTmdbIds])
 
   // Toggle a show's favorite status
   const toggleFavorite = useCallback(
-    async (show: TShowSummaryModel) => {
+    async (show: TTMDBShowSummaryModel) => {
       if (!user || !token) {
         alert('You need to be logged in to favorite shows!')
         return
@@ -114,7 +114,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Optimistic update.
       // Save state if error.
-      const originalFavoriteShowTmdbIds = [...favoriteShowTmdbIds] 
+      const originalFavoriteShowTmdbIds = [...favoriteShowTmdbIds]
       setFavoriteShowTmdbIds((prevIds) => {
         if (prevIds.includes(tmdbId)) {
           return prevIds.filter((id) => id !== tmdbId)
@@ -166,7 +166,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsAuthenticated(true)
     localStorage.setItem('token', newToken)
     localStorage.setItem('user', JSON.stringify(newUser))
-  
   }, [])
 
   // Logout function: clears token and user from state and localStorage.
@@ -177,7 +176,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setFavoriteShowTmdbIds([])
     localStorage.removeItem('token')
     localStorage.removeItem('user')
-  }, []) 
+  }, [])
 
   // useMemo for context value to prevent unnecessary re-renders
   const authContextValue = useMemo(

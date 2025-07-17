@@ -13,5 +13,5 @@ export type { TTMDBProductionCompany } from '@shared/types/production-company'
 export type {
   TTMDBShow,
   TTMDBShowSummary,
-  TShowSummaryModel,
+  TTMDBShowSummaryModel,
 } from '@shared/types/show'

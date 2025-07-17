@@ -1,10 +1,10 @@
 import api from '@/services/api'
-import { type TShowSummaryModel } from '@/types'
+import { type TTMDBShowSummaryModel } from '@/types'
 
-export const getTrendingShows = async (): Promise<TShowSummaryModel[]> => {
+export const getTrendingShows = async (): Promise<TTMDBShowSummaryModel[]> => {
   try {
     const response = await api.get<{
-      shows: TShowSummaryModel[]
+      shows: TTMDBShowSummaryModel[]
       message: string
       count: number
     }>('/api/tmdb/shows')

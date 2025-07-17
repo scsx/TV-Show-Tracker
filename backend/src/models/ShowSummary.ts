@@ -1,11 +1,11 @@
 import { Schema, model } from 'mongoose'
-import { TShowSummaryModel } from '@shared/types/show'
+import { TTMDBShowSummaryModel } from '@shared/types/show'
 
 /**
- * @description Mongoose schema for summarized TV show data, mapping to TShowSummaryModel.
+ * @description Mongoose schema for summarized TV show data, mapping to TTMDBShowSummaryModel.
  * This schema is used for storing basic trending/popular show information.
  */
-const ShowSummarySchema = new Schema<TShowSummaryModel>(
+const ShowSummarySchema = new Schema<TTMDBShowSummaryModel>(
   {
     tmdbId: { type: Number, required: true, unique: true, index: true }, // TMDb ID as unique identifier
     name: { type: String, required: true },
@@ -29,6 +29,6 @@ const ShowSummarySchema = new Schema<TShowSummaryModel>(
 /**
  * @description Mongoose model for summarized TV shows.
  */
-const ShowSummary = model<TShowSummaryModel>('ShowSummary', ShowSummarySchema)
+const ShowSummary = model<TTMDBShowSummaryModel>('ShowSummary', ShowSummarySchema)
 
 export default ShowSummary

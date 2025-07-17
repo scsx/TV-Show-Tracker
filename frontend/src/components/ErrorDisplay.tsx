@@ -4,6 +4,7 @@ import { MdErrorOutline } from 'react-icons/md'
 import axios from 'axios'
 import { AxiosError } from 'axios'
 
+import PageLayout from '@/components/PageLayout'
 import Text from '@/components/Text'
 
 type TErrorDisplayProps = {
@@ -53,20 +54,19 @@ const ErrorDisplay: React.FC<TErrorDisplayProps> = ({
   }
 
   return (
-    <div className="flex p-8 border rounded-lg mt-16 w-[400px] h-[400px] mx-auto mb-16">
-      <div className="w-[70px] text-5xl text-left">
-        <MdErrorOutline />
+    <PageLayout title={displayTitle}>
+      <div className="flex p-8 border rounded-lg mt-16 w-[400px] h-auto mx-auto mb-16">
+        <div className="w-[70px] text-5xl text-left">
+          <MdErrorOutline />
+        </div>
+        <div>
+          <pre className="mb-8 text-foreground text-wrap text-red-400">
+            {displayMessage}
+          </pre>
+          {displayDetails && <Text variant="paragraph">{displayDetails}</Text>}
+        </div>
       </div>
-      <div>
-        <Text variant="h3" as="h3" className="mb-8">
-          {displayTitle}
-        </Text>
-        <pre className="mb-8 text-foreground text-wrap text-red-400">
-          {displayMessage}
-        </pre>
-        {displayDetails && <Text variant="paragraph">{displayDetails}</Text>}
-      </div>
-    </div>
+    </PageLayout>
   )
 }
 

@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
 
 import { getTrendingShows } from '@/services/getTrendingShows'
-import { type TShowSummaryModel } from '@/types'
+import { type TTMDBShowSummaryModel } from '@/types'
 
 import ErrorDisplay from '@/components/ErrorDisplay'
 import Loading from '@/components/Loading'
 import PageLayout from '@/components/PageLayout'
-import ShowCard from '@/components/ShowCard'
+import ShowCard from '@/components/ShowCard/ShowCard'
 
 const Trending = () => {
-  const [shows, setShows] = useState<TShowSummaryModel[]>([])
+  const [shows, setShows] = useState<TTMDBShowSummaryModel[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -52,7 +52,7 @@ const Trending = () => {
 
   return (
     <PageLayout title="Trending" subtitle="Trending on TMDB this week">
-      <div className="grid grid-cols-5 gap-8">
+      <div className="grid grid-cols-5 gap-x-8 gap-y-12">
         {shows.map((show) => (
           <ShowCard key={show._id} show={show} displayDetails={true} />
         ))}
