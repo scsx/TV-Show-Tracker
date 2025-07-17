@@ -7,12 +7,14 @@ interface LoadingProps {
   message?: string
   type?: 'spinner' | 'skeleton'
   skeletonCount?: number
+  skeletonCols?: number
 }
 
 const Loading: React.FC<LoadingProps> = ({
   message = 'Loading...',
   type = 'spinner',
   skeletonCount = 8,
+  skeletonCols = 5, // TODO: use
 }) => {
   return (
     <div className="w-full flex flex-col items-center justify-center py-8">

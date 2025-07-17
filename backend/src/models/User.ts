@@ -1,12 +1,12 @@
 import { Schema, model, Document, Types } from 'mongoose'
 import bcrypt from 'bcryptjs'
-import { TUser } from '@shared/types/user'
+import { TCommonUser } from '@shared/types/user'
 
 // 1. Define a specific interface for the Mongoose User Document
 // This extends the shared TUser type (for common fields)
 // and Mongoose's Document (for Mongoose methods and default _id, timestamps)
 // It also explicitly adds backend-only fields like 'password'.
-export interface IUserMongooseDocument extends TUser, Document {
+export interface IUserMongooseDocument extends TCommonUser, Document {
   _id: Types.ObjectId
   password: string // Add the password property specifically for the Mongoose document
   comparePassword(candidatePassword: string): Promise<boolean> // Method for password comparison

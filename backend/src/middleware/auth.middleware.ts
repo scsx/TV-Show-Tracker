@@ -10,6 +10,7 @@ declare global {
         id: string
         username: string
         email: string
+        favoriteShowTmdbIds: number[]
       }
     }
   }
@@ -61,8 +62,9 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
     req.user = {
       id: user._id.toString(),
       username: user.username,
-      email: user.email
-    }
+      email: user.email,
+      favoriteShowTmdbIds: user.favoriteShowTmdbIds || []
+    } as typeof req.user // Quick fix, wouldn't be used in a real project.
 
     // 4. Call next middleware/route handler
     next()

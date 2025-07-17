@@ -20,7 +20,6 @@ const Trending = () => {
         setError(null)
 
         const fetchedShows = await getTrendingShows()
-        console.log(fetchedShows[0])
         setShows(fetchedShows)
       } catch (err: any) {
         console.error('Error in Trending component during fetch:', err)
@@ -52,10 +51,7 @@ const Trending = () => {
   }
 
   return (
-    <PageLayout
-      title="Trending"
-      subtitle="Trending on TMDB this week"
-    >
+    <PageLayout title="Trending" subtitle="Trending on TMDB this week">
       <div className="grid grid-cols-5 gap-8">
         {shows.map((show) => (
           <ShowCard key={show._id} show={show} displayDetails={true} />
