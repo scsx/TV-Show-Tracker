@@ -46,6 +46,7 @@ export type TTMDBShow = {
 export type TTMDBShowSummary = Pick<
   TTMDBShow,
   | 'name'
+  | 'tmdbId'
   | 'original_name'
   | 'overview'
   | 'poster_path'

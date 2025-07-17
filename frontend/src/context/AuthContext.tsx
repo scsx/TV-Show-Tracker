@@ -12,6 +12,7 @@ type AuthContextType = {
   user: TUser | null
   token: string | null
   isAuthenticated: boolean
+  loading: boolean
   login: (token: string, user: TUser) => void
   logout: () => void
 }
@@ -26,24 +27,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<TUser | null>(null)
   const [token, setToken] = useState<string | null>(null)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token')
-    const storedUser = localStorage.getItem('user')
+    const loadAuthData = () => {
+      const storedToken = localStorage.getItem('token')
+      const storedUser = localStorage.getItem('user')
 
-    if (storedToken && storedUser) {
-      try {
-        const parsedUser: TUser = JSON.parse(storedUser)
-        setToken(storedToken)
-        setUser(parsedUser)
-        setIsAuthenticated(true)
-        console.log('Token and user loaded from localStorage.')
-      } catch (error) {
-        console.error('Failed to parse user from localStorage:', error)
-        // If parsing fails, clear invalid data
-        logout()
+      if (storedToken && storedUser) {
+        try {
+          const parsedUser: TUser = JSON.parse(storedUser)
+          setToken(storedToken)
+          setUser(parsedUser)
+          setIsAuthenticated(true)
+          console.log('Token and user loaded from localStorage.')
+        } catch (error) {
+          console.error('Failed to parse user from localStorage:', error)
+          // If parsing fails, clear invalid data
+          logout()
+        }
       }
+      setLoading(false)
     }
+
+    loadAuthData()
   }, [])
 
   // Login function: stores token and user in state and localStorage.
@@ -69,6 +76,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     user,
     token,
     isAuthenticated,
+    loading,
     login,
     logout,
   }

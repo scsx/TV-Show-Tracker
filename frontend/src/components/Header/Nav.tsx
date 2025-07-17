@@ -52,14 +52,10 @@ export function Nav() {
           description: 'Welcome to my personalized application!',
         },
         links: [
-          { title: 'Start', href: '/' },
+          { title: 'Search shows', href: '/shows' },
           {
-            title: 'Features',
-            href: '/features',
-          },
-          {
-            title: 'About',
-            href: '/about',
+            title: 'Recommendations',
+            href: '/recommendations',
           },
         ],
       },

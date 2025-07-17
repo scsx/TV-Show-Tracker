@@ -4,6 +4,7 @@ import Coverage from '@/pages/Coverage'
 import Login from '@/pages/Login'
 import NotFound from '@/pages/NotFound'
 import Profile from '@/pages/Profile'
+import Recommendations from '@/pages/Recommendations'
 import Register from '@/pages/Register'
 import Trending from '@/pages/Trending'
 
@@ -35,6 +36,9 @@ const App = () => {
 
           <Route element={<AuthGuard />}>
             <Route path="/trending" element={<Trending />} />
+            {/* TODO: Update */}
+            <Route path="/shows" element={<Trending />} />
+            <Route path="/recommendations" element={<Recommendations />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
 
