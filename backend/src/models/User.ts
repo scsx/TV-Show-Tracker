@@ -10,6 +10,7 @@ export interface IUserMongooseDocument extends TUser, Document {
   _id: Types.ObjectId
   password: string // Add the password property specifically for the Mongoose document
   comparePassword(candidatePassword: string): Promise<boolean> // Method for password comparison
+  favoriteShowTmdbIds: number[] // Favorites
 }
 
 const UserSchema = new Schema<IUserMongooseDocument>(
@@ -33,6 +34,10 @@ const UserSchema = new Schema<IUserMongooseDocument>(
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters long']
+    },
+    favoriteShowTmdbIds: {
+      type: [Number],
+      default: []
     }
   },
   {
