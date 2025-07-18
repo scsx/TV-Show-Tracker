@@ -7,6 +7,7 @@ import NotFound from '@/pages/NotFound'
 import Profile from '@/pages/Profile'
 import Recommendations from '@/pages/Recommendations'
 import Register from '@/pages/Register'
+import ShowPage from '@/pages/ShowPage'
 import Shows from '@/pages/Shows'
 import Trending from '@/pages/Trending'
 
@@ -39,6 +40,7 @@ const App = () => {
           <Route element={<AuthGuard />}>
             <Route path="/trending" element={<Trending />} />
             <Route path="/shows" element={<Shows />} />
+            <Route path="/shows/:id" element={<ShowPage />} />
             <Route path="/recommendations" element={<Recommendations />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/favorites" element={<Favorites />} />
