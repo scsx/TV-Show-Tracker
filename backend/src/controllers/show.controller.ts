@@ -48,23 +48,23 @@ export const getAllShowSummaries = async (req: Request, res: Response): Promise<
 }
 
 /**
- * @route GET /api/tmdb/shows/:tmdbId
+ * @route GET /api/tmdb/shows/:id
  * @description Fetches detailed information for a specific TV show from TMDb by its ID.
  * @access Private (via auth middleware na rota)
  */
-export const getShowDetailsByTmdbId = async (req: Request, res: Response) => {
-  const { tmdbId } = req.params
+export const getShowDetailsByid = async (req: Request, res: Response) => {
+  const { id } = req.params
 
-  if (!tmdbId || isNaN(Number(tmdbId))) {
+  if (!id || isNaN(Number(id))) {
     return res.status(400).json({ msg: 'A valid TMDB show ID is required.' })
   }
 
   try {
     const TMDB_API_KEY = process.env.TMDB_API_KEY
     const TMDB_BASE_URL = process.env.TMDB_BASE_URL
-    const tmdbIdNum = Number(tmdbId)
+    const idNum = Number(id)
 
-    const response = await axios.get(`${TMDB_BASE_URL}/tv/${tmdbIdNum}`, {
+    const response = await axios.get(`${TMDB_BASE_URL}/tv/${idNum}`, {
       params: {
         api_key: TMDB_API_KEY
       }
@@ -74,7 +74,7 @@ export const getShowDetailsByTmdbId = async (req: Request, res: Response) => {
 
     res.json(showDetails)
   } catch (error: any) {
-    console.error(`Error fetching TV show details for TMDB ID ${tmdbId}:`, error.message)
+    console.error(`Error fetching TV show details for TMDB ID ${id}:`, error.message)
     if (error.response && error.response.status === 404) {
       return res.status(404).json({ msg: 'TV show not found on TMDb.' })
     }

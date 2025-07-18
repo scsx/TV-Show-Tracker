@@ -7,7 +7,7 @@ import { TTMDBShowSummaryModel } from '@shared/types/show'
  */
 const ShowSummarySchema = new Schema<TTMDBShowSummaryModel>(
   {
-    tmdbId: { type: Number, required: true, unique: true, index: true }, // TMDb ID as unique identifier
+    id: { type: Number, required: true, unique: true, index: true }, // TMDb ID as unique identifier
     name: { type: String, required: true },
     original_name: { type: String, required: true },
     overview: { type: String, required: true },

@@ -8,11 +8,11 @@ import User from '../models/User'
  */
 export const toggleFavoriteShow = async (req: Request, res: Response) => {
   const { userId } = req.params
-  const { tmdbId } = req.body // Expecting tmdbId in the request body
+  const { id } = req.body // Expecting id in the request body
 
   // Validate incoming TMDB ID
-  if (!tmdbId || typeof tmdbId !== 'number') {
-    return res.status(400).json({ msg: 'A valid TMDB show ID (tmdbId) is required.' })
+  if (!id || typeof id !== 'number') {
+    return res.status(400).json({ msg: 'A valid TMDB show ID (id) is required.' })
   }
 
   // Ensure the authenticated user matches the user in the URL
@@ -21,33 +21,33 @@ export const toggleFavoriteShow = async (req: Request, res: Response) => {
   }
 
   try {
-    // Fetch the user and ensure favoriteShowTmdbIds is initialized
-    const user = await User.findById(userId).select('username favoriteShowTmdbIds')
+    // Fetch the user and ensure favoriteShowids is initialized
+    const user = await User.findById(userId).select('username favoriteShowids')
 
     if (!user) {
       return res.status(404).json({ msg: 'User not found.' })
     }
 
     // Ensure the array exists (if not defaulted in the schema or read before being created)
-    if (!user.favoriteShowTmdbIds) {
-      user.favoriteShowTmdbIds = []
+    if (!user.favoriteShowids) {
+      user.favoriteShowids = []
     }
 
-    const tmdbIdNum = Number(tmdbId)
+    const idNum = Number(id)
 
     // Check if the show is currently in favorites based on the DB array
-    const isCurrentlyFavorite = user.favoriteShowTmdbIds.includes(tmdbIdNum)
+    const isCurrentlyFavorite = user.favoriteShowids.includes(idNum)
 
     let updateOperation
     let message: string
 
     if (isCurrentlyFavorite) {
       // If already a favorite, remove it
-      updateOperation = { $pull: { favoriteShowTmdbIds: tmdbIdNum } }
+      updateOperation = { $pull: { favoriteShowids: idNum } }
       message = 'Show removed from favorites.'
     } else {
       // If not a favorite, add it (using $addToSet to prevent duplicates)
-      updateOperation = { $addToSet: { favoriteShowTmdbIds: tmdbIdNum } }
+      updateOperation = { $addToSet: { favoriteShowids: idNum } }
       message = 'Show added to favorites.'
     }
 
@@ -56,14 +56,14 @@ export const toggleFavoriteShow = async (req: Request, res: Response) => {
       userId,
       updateOperation,
       { new: true, runValidators: true } // 'new: true' returns the updated document; 'runValidators: true' ensures Mongoose schema validations are run
-    ).select('favoriteShowTmdbIds') // Select only the field we want to return, for optimization.
+    ).select('favoriteShowids') // Select only the field we want to return, for optimization.
 
     if (!updatedUser) {
       return res.status(404).json({ msg: 'User not found after update attempt.' })
     }
 
     // Return the updated array of TMDB IDs to the frontend
-    res.json({ msg: message, favoriteTmdbIds: updatedUser.favoriteShowTmdbIds })
+    res.json({ msg: message, favoriteids: updatedUser.favoriteShowids })
   } catch (error: any) {
     console.error('Error toggling favorite show:', error.message)
     res.status(500).send('Server Error')
@@ -90,10 +90,10 @@ export const getUserFavorites = async (req: Request, res: Response) => {
       return res.status(404).json({ msg: 'User not found.' })
     }
 
-    const favoriteTmdbIds = user.favoriteShowTmdbIds || []
+    const favoriteids = user.favoriteShowids || []
 
     // Return the array of TMDB IDs directly
-    res.json({ favoriteTmdbIds: favoriteTmdbIds })
+    res.json({ favoriteids: favoriteids })
   } catch (error: any) {
     console.error('Error fetching user favorites:', error.message)
     res.status(500).send('Server Error')

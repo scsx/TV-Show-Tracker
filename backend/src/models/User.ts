@@ -10,7 +10,7 @@ export interface IUserMongooseDocument extends TCommonUser, Document {
   _id: Types.ObjectId
   password: string // Add the password property specifically for the Mongoose document
   comparePassword(candidatePassword: string): Promise<boolean> // Method for password comparison
-  favoriteShowTmdbIds: number[] // Favorites
+  favoriteShowids: number[] // Favorites
 }
 
 const UserSchema = new Schema<IUserMongooseDocument>(
@@ -35,7 +35,7 @@ const UserSchema = new Schema<IUserMongooseDocument>(
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters long']
     },
-    favoriteShowTmdbIds: {
+    favoriteShowids: {
       type: [Number],
       default: []
     }

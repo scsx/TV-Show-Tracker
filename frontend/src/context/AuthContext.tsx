@@ -21,10 +21,10 @@ type AuthContextType = {
   login: (token: string, user: TUser) => void
   logout: () => void
   // Favorites
-  favoriteShowTmdbIds: number[]
-  fetchUserFavoriteTmdbIds: () => Promise<void>
+  favoriteShowids: number[]
+  fetchUserFavoriteids: () => Promise<void>
   toggleFavorite: (show: TTMDBShowSummaryModel) => Promise<void>
-  isFavorite: (tmdbId: number) => boolean
+  isFavorite: (id: number) => boolean
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -38,12 +38,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
-  const [favoriteShowTmdbIds, setFavoriteShowTmdbIds] = useState<number[]>([])
+  const [favoriteShowids, setFavoriteShowids] = useState<number[]>([])
 
   // Fetch user's favorite TMDB IDs from the backend.
-  const fetchUserFavoriteTmdbIds = useCallback(async () => {
+  const fetchUserFavoriteids = useCallback(async () => {
     if (!user || !token || !user._id) {
-      setFavoriteShowTmdbIds([]) // Clear favorites if no user
+      setFavoriteShowids([]) // Clear favorites if no user
       return
     }
 
@@ -60,12 +60,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json()
-        setFavoriteShowTmdbIds(data.favoriteTmdbIds || []) // Backend now sends { favoriteTmdbIds: [...] }
+        setFavoriteShowids(data.favoriteids || []) // Backend now sends { favoriteids: [...] }
       } else {
-        setFavoriteShowTmdbIds([])
+        setFavoriteShowids([])
       }
     } catch (error) {
-      setFavoriteShowTmdbIds([])
+      setFavoriteShowids([])
     }
   }, [user, token, BACKEND_BASE_URL])
 
@@ -93,14 +93,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     loadAuthData()
   }, [])
 
-  // useEffect for fetchUserFavoriteTmdbIds if valid user.
+  // useEffect for fetchUserFavoriteids if valid user.
   useEffect(() => {
     if (isAuthenticated && user?._id && token) {
-      fetchUserFavoriteTmdbIds()
+      fetchUserFavoriteids()
     } else {
-      setFavoriteShowTmdbIds([])
+      setFavoriteShowids([])
     }
-  }, [isAuthenticated, user?._id, token, fetchUserFavoriteTmdbIds])
+  }, [isAuthenticated, user?._id, token, fetchUserFavoriteids])
 
   // Toggle a show's favorite status
   const toggleFavorite = useCallback(
@@ -110,16 +110,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return
       }
 
-      const { tmdbId } = show
+      const { id } = show
 
       // Optimistic update.
       // Save state if error.
-      const originalFavoriteShowTmdbIds = [...favoriteShowTmdbIds]
-      setFavoriteShowTmdbIds((prevIds) => {
-        if (prevIds.includes(tmdbId)) {
-          return prevIds.filter((id) => id !== tmdbId)
+      const originalFavoriteShowids = [...favoriteShowids]
+      setFavoriteShowids((prevIds) => {
+        if (prevIds.includes(id)) {
+          return prevIds.filter((id) => id !== id)
         } else {
-          return [...prevIds, tmdbId]
+          return [...prevIds, id]
         }
       })
 
@@ -131,32 +131,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ tmdbId }),
+          body: JSON.stringify({ id }),
         })
 
         if (response.ok) {
           const data = await response.json()
-          setFavoriteShowTmdbIds(data.favoriteTmdbIds || [])
+          setFavoriteShowids(data.favoriteids || [])
         } else {
           // Revert if req fails
-          setFavoriteShowTmdbIds(originalFavoriteShowTmdbIds)
+          setFavoriteShowids(originalFavoriteShowids)
           alert('Failed to update favorites. Please try again.')
         }
       } catch (error) {
         // Revert if error
-        setFavoriteShowTmdbIds(originalFavoriteShowTmdbIds)
+        setFavoriteShowids(originalFavoriteShowids)
         alert('Network error. Failed to update favorites. Please try again.')
       }
     },
-    [user, token, favoriteShowTmdbIds, BACKEND_BASE_URL],
+    [user, token, favoriteShowids, BACKEND_BASE_URL],
   )
 
   // Check if a show is favorite
   const isFavorite = useCallback(
-    (tmdbId: number): boolean => {
-      return favoriteShowTmdbIds.includes(tmdbId)
+    (id: number): boolean => {
+      return favoriteShowids.includes(id)
     },
-    [favoriteShowTmdbIds],
+    [favoriteShowids],
   )
 
   // Login function: stores token and user in state and localStorage.
@@ -173,7 +173,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setToken(null)
     setUser(null)
     setIsAuthenticated(false)
-    setFavoriteShowTmdbIds([])
+    setFavoriteShowids([])
     localStorage.removeItem('token')
     localStorage.removeItem('user')
   }, [])
@@ -187,8 +187,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       loading,
       login,
       logout,
-      favoriteShowTmdbIds,
-      fetchUserFavoriteTmdbIds,
+      favoriteShowids,
+      fetchUserFavoriteids,
       toggleFavorite,
       isFavorite,
     }),
@@ -199,8 +199,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       loading,
       login,
       logout,
-      favoriteShowTmdbIds,
-      fetchUserFavoriteTmdbIds,
+      favoriteShowids,
+      fetchUserFavoriteids,
       toggleFavorite,
       isFavorite,
     ],

@@ -13,8 +13,8 @@ export type TTMDBShowSeason = {
 }
 
 export type TTMDBShow = {
-  _id?: string
-  tmdbId: number
+  _id?: string // MongoDB only
+  id: number // TMDB
   name: string
   original_name: string
   overview: string
@@ -46,7 +46,7 @@ export type TTMDBShow = {
 export type TTMDBShowSummary = Pick<
   TTMDBShow,
   | 'name'
-  | 'tmdbId'
+  | 'id'
   | 'original_name'
   | 'overview'
   | 'poster_path'
@@ -59,14 +59,12 @@ export type TTMDBShowSummary = Pick<
   | 'original_language'
 > & {
   // Overrides and additions for fields specific to the summary API response
-  id: number // TMDb's 'id' field, which will be mapped to 'tmdbId' for DB
   genre_ids: number[] // Trending/Popular endpoints return only genre IDs, not full genre objects
 }
 
-// Type for the DB (Mongo)
-export type TShowSummaryModel = Omit<TTMDBShowSummary, 'id'> & {
-  _id?: string
-  tmdbId: number
+// Type for the format from DB (Mongo)
+export type TTMDBShowSummaryModel = TTMDBShowSummary & {
+  _id?: string // MongoDB only
   updatedAt?: Date
   createdAt?: Date
 }

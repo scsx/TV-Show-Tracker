@@ -40,7 +40,7 @@ const ShowCard: React.FC<ShowCardProps> = ({ show }) => {
     : 'https://via.placeholder.com/500x750?text=No+Poster'
   const releaseYear = getYearFromDateString(showToDisplay.first_air_date)
 
-  const isShowFavorite = isFavorite(showToDisplay.tmdbId)
+  const isShowFavorite = isFavorite(showToDisplay.id)
 
   // Handle click on the favorite icon
   const handleToggleFavorite = async (e: React.MouseEvent) => {
@@ -55,7 +55,7 @@ const ShowCard: React.FC<ShowCardProps> = ({ show }) => {
 
   return (
     <Hyperlink
-      href={`/shows/${showToDisplay.tmdbId}`}
+      href={`/shows/${showToDisplay.id}`}
       variant="unstyled"
       className="group"
     >

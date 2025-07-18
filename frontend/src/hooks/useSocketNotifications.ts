@@ -22,7 +22,7 @@ export const useSocketNotifications = () => {
         const formattedTime = new Date(data.timestamp).toLocaleTimeString()
 
         showToast({
-          title: `Trending shows updated!`,
+          title: `IO: Trending shows updated!`,
           description: `${data.message}. Checked at ${formattedTime}`,
         })
       },

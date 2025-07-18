@@ -1,5 +1,3 @@
-// C:/DEV/TV-Show-Tracker/backend/src/routes/authRoutes.ts
-
 import { Router, Request, Response } from 'express'
 import User from '../models/User'
 import AccessToken from '../models/AccessToken'

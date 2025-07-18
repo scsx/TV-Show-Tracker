@@ -23,10 +23,10 @@ export const showUpdaterTask = async (io?: SocketIOServer) => {
 
     for (const showApiData of trendingShowsFromApi) {
       try {
-        const existingShow = await ShowSummary.findOne({ tmdbId: showApiData.id })
+        const existingShow = await ShowSummary.findOne({ id: showApiData.id })
 
         const showSummaryData = {
-          tmdbId: showApiData.id,
+          id: showApiData.id,
           name: showApiData.name,
           original_name: showApiData.original_name,
           overview: showApiData.overview,
@@ -45,7 +45,7 @@ export const showUpdaterTask = async (io?: SocketIOServer) => {
           await ShowSummary.create(showSummaryData)
           newlySavedCount++
         } else {
-          await ShowSummary.updateOne({ tmdbId: showApiData.id }, { $set: showSummaryData })
+          await ShowSummary.updateOne({ id: showApiData.id }, { $set: showSummaryData })
           updatedCount++
         }
       } catch (saveError: any) {

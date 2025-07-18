@@ -9,7 +9,7 @@ import { TTMDBProductionCompany } from '@shared/types/production-company'
  */
 const ShowSchema = new Schema<TTMDBShow>(
   {
-    tmdbId: { type: Number, required: true, unique: true, index: true }, // TMDb ID as unique identifier
+    id: { type: Number, required: true, unique: true, index: true }, // TMDb ID as unique identifier
     name: { type: String, required: true },
     original_name: { type: String, required: true },
     overview: { type: String, required: true },

@@ -10,7 +10,7 @@ export const mapFullShowToSummary = (
   show: TTMDBShow,
 ): TTMDBShowSummaryModel => {
   return {
-    tmdbId: show.tmdbId,
+    id: show.id,
     name: show.name,
     original_name: show.original_name,
     overview: show.overview,

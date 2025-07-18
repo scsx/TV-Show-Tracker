@@ -5,11 +5,11 @@ export type TCommonUser = {
   // password: string; // Hashed password is not returned to frontend, so no need here
   createdAt?: Date
   updatedAt?: Date
-  favoriteShowTmdbIds?: number[]
+  favoriteShowids?: number[]
 }
 
 // Frontend only.
 export type TUser = TCommonUser & {
   _id: string
-  favoriteShowTmdbIds: number[]
+  favoriteShowids: number[]
 }
