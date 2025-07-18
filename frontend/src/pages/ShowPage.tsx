@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { getShowDetailsById } from '@/services/getShowDetailsById'
@@ -6,75 +6,59 @@ import { type TTMDBShow } from '@/types'
 
 import ErrorDisplay from '@/components/ErrorDisplay'
 import Loading from '@/components/Loading'
-import PageLayout from '@/components/PageLayout'
+import ShowHero from '@/components/ShowPage/ShowHero'
+// TODO: DELETE
 import ShowJSONDelete from '@/components/ShowPage/ShowJSON-DELETE'
 
-// TODO: TRANSLATE
-
-const ShowPage: React.FC = () => {
-  // Use useParams to get id
+const ShowPage = () => {
   const { id } = useParams<{ id: string }>()
-  const [showDetails, setShowDetails] = useState<TTMDBShow | null>(null)
-  const [loading, setLoading] = useState<boolean>(true)
+  const [showData, setShowData] = useState<TTMDBShow | null>(null)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchDetailsAndLog = async () => {
+    const fetchShowData = async () => {
       if (!id) {
-        console.error('ShowPage Error: ID not present in URL.')
-        setError('Show ID not provided.')
+        setError('Show ID is missing.')
         setLoading(false)
         return
       }
-
-      const showIdNum = Number(id)
-      if (isNaN(showIdNum)) {
-        console.error(`ShowPage Error: invalid Show ID in URL: ${id}`)
-        setError('Invalid Show ID.')
-        setLoading(false)
-        return
-      }
-
-      setLoading(true)
-      setError(null)
-
       try {
-        const details: TTMDBShow = await getShowDetailsById(showIdNum)
-        if (details) {
-          setShowDetails(details)
-        } else {
-          console.warn(`ShowPage: No details for show ID: ${showIdNum}`)
-          setError('Show details not found.')
-        }
-      } catch (err: any) {
-        console.error(
-          `ShowPage Error: Fail loading details (show ID: ${showIdNum}):`,
-          err.message,
-          err,
-        )
-        setError('Check console for error details.')
+        setLoading(true)
+        setError(null)
+        const data = await getShowDetailsById(Number(id))
+        setShowData(data)
+      } catch (err) {
+        console.error('Error fetching show details:', err)
+        setError('Failed to load show details.')
       } finally {
         setLoading(false)
       }
     }
 
-    fetchDetailsAndLog()
+    fetchShowData()
   }, [id])
 
-  return (
-    <PageLayout title="Detalhes do Show" subtitle={`ID: ${id || 'N/A'}`}>
-      <div className="p-4">
-        {loading && (
-          <Loading
-            type="spinner"
-            message="A buscar detalhes do show para a consola..."
-          />
-        )}
+  if (loading) {
+    return <Loading type="spinner" message="Loading show details..." />
+  }
 
-        {showDetails && <ShowJSONDelete />}
-        {error && <ErrorDisplay error={error} />}
-      </div>
-    </PageLayout>
+  if (error) {
+    return <ErrorDisplay error={error} />
+  }
+
+  if (!showData) {
+    return <ErrorDisplay error="No show data found." />
+  }
+
+  return (
+    <div className="show-page-container">
+      <ShowHero show={showData} />
+      {/* <ShowHero data={showData} />
+      <ShowOverview data={showData} /> 
+      <ShowSeasons data={showData} />*/}
+      <ShowJSONDelete data={showData} />
+    </div>
   )
 }
 

@@ -15,6 +15,7 @@ import {
 } from '@/components/ShowCard/mapFullShowToSummary'
 import Text from '@/components/Text'
 
+import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
 import { getYearFromDateString } from '@/lib/date'
 
 type ShowCardProps = {
@@ -40,9 +41,10 @@ const ShowCard: React.FC<ShowCardProps> = ({
     showToDisplay = show
   }
 
+  const imageSize = 'w500'
   const imageUrl = showToDisplay.poster_path
-    ? `https://image.tmdb.org/t/p/w500${showToDisplay.poster_path}`
-    : 'https://via.placeholder.com/500x750?text=No+Poster'
+    ? `${TMDB_BASE_IMAGES_URL}/${imageSize}${showToDisplay.poster_path}`
+    : '/images/no-poster.png'
   const releaseYear = getYearFromDateString(showToDisplay.first_air_date)
 
   const isShowFavorite = isFavorite(showToDisplay.id)
