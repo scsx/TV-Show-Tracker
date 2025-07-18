@@ -5,7 +5,7 @@ import { tv } from 'tailwind-variants'
 
 type TextProps = {
   children: ReactNode
-  variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'paragraph' | 'quote'
+  variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'paragraph' | 'paragraphL' | 'quote'
   color?: 'foreground' | 'muted' | 'primary' | 'gray'
   as?: 'p' | 'small' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span'
   className?: string
@@ -23,6 +23,7 @@ const textStyles = tv({
       h5: 'text-lg font-jakarta font-bold',
       h6: 'uppercase text-sm tracking-wider font-jakarta font-bold',
       paragraph: 'text-sm leading-normal font-jakarta',
+      paragraphL: 'text-lg leading-normal font-jakarta',
       quote: 'text-2xl font-playfair tracking-wide py-2 pl-4 border-l-2 italic',
       small: '',
     },

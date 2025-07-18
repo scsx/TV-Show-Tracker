@@ -4,6 +4,16 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    proxy: {
+      '/tmdb-image-proxy': {
+        target: 'https://image.tmdb.org',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/tmdb-image-proxy/, ''),
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

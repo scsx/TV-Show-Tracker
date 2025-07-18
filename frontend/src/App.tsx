@@ -21,12 +21,14 @@ import Loading from '@/components/Loading'
 import { Toaster } from '@/components/ui/sonner'
 
 import { useAxiosInterceptor } from '@/hooks/useAxiosInterceptor'
+import { useDynamicDocumentTitle } from '@/hooks/useDynamicDocumentTitle'
 import { useSocketNotifications } from '@/hooks/useSocketNotifications'
 
 const App = () => {
   useSocketNotifications()
   // Initializes Axios interceptors and gets their readiness status.
   const interceptorsReady = useAxiosInterceptor()
+  useDynamicDocumentTitle()
 
   // Authentication loading state from AuthContext.
   const { loading: authLoading } = useAuth()

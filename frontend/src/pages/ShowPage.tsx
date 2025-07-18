@@ -10,6 +10,8 @@ import ShowHero from '@/components/ShowPage/ShowHero'
 // TODO: DELETE
 import ShowJSONDelete from '@/components/ShowPage/ShowJSON-DELETE'
 
+import { useDynamicDocumentTitle } from '@/hooks/useDynamicDocumentTitle'
+
 const ShowPage = () => {
   const { id } = useParams<{ id: string }>()
   const [showData, setShowData] = useState<TTMDBShow | null>(null)
@@ -39,6 +41,8 @@ const ShowPage = () => {
     fetchShowData()
   }, [id])
 
+  useDynamicDocumentTitle(showData ? showData.name : null)
+
   if (loading) {
     return <Loading type="spinner" message="Loading show details..." />
   }
@@ -52,12 +56,14 @@ const ShowPage = () => {
   }
 
   return (
-    <div className="show-page-container">
+    <div className="w-full">
       <ShowHero show={showData} />
       {/* <ShowHero data={showData} />
       <ShowOverview data={showData} /> 
       <ShowSeasons data={showData} />*/}
-      <ShowJSONDelete data={showData} />
+      <div className="container">
+        <ShowJSONDelete data={showData} />
+      </div>
     </div>
   )
 }
