@@ -34,10 +34,6 @@ const ShowHero: React.FC<ShowHeroProps> = ({ show }) => {
     ? `rgba(${dominantColorResult.rgb[0]}, ${dominantColorResult.rgb[1]}, ${dominantColorResult.rgb[2]}, 0.7)`
     : 'rgba(0, 0, 0, 0.8)'
 
-  const textColorClass = dominantColorResult?.isDark
-    ? 'text-white'
-    : 'text-black'
-
   return (
     <div
       className="relative w-full min-h-[600px] bg-cover bg-center"
@@ -68,15 +64,15 @@ const ShowHero: React.FC<ShowHeroProps> = ({ show }) => {
             />
           </div>
           <div className="w-2/4 flex flex-col justify-end">
-            <Text variant="h1" as="h1" className={`mb-4 ${textColorClass}`}>
+            <Text variant="h1" as="h1" className="mb-4">
               {show.name}
             </Text>
-            <Text
-              variant="paragraphL"
-              className={`line-clamp-4 ${textColorClass}`}
-            >
-              {show.overview}
-            </Text>
+            {show.tagline && (
+              <Text variant="quote" as="h2" className="mb-4">
+                {show.tagline}
+              </Text>
+            )}
+            <Text variant="paragraphL">{show.overview}</Text>
           </div>
         </div>
       </div>
