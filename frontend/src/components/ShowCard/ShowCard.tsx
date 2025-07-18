@@ -1,11 +1,7 @@
 import React from 'react'
-import { GoHeart } from 'react-icons/go'
-import { GoHeartFill } from 'react-icons/go'
-import { IoMdClose } from 'react-icons/io'
 import { IoCalendarClearOutline } from 'react-icons/io5'
 import { MdOutlineStarOutline } from 'react-icons/md'
 
-import { useAuth } from '@/context/AuthContext'
 import { type TTMDBShow, type TTMDBShowSummaryModel } from '@/types'
 
 import Hyperlink from '@/components/Hyperlink'
@@ -14,6 +10,7 @@ import {
   mapFullShowToSummary,
 } from '@/components/ShowCard/mapFullShowToSummary'
 import Text from '@/components/Text'
+import ToggleFavorite from '@/components/ToggleFavorite'
 
 import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
 import { getYearFromDateString } from '@/lib/date'
@@ -27,13 +24,6 @@ const ShowCard: React.FC<ShowCardProps> = ({
   show,
   showHeartAsFavorite = true,
 }) => {
-  const {
-    isAuthenticated,
-    isFavorite,
-    toggleFavorite,
-    loading: authLoading,
-  } = useAuth()
-
   let showToDisplay: TTMDBShowSummaryModel
   if (isTTMDBFullShow(show)) {
     showToDisplay = mapFullShowToSummary(show)
@@ -46,19 +36,6 @@ const ShowCard: React.FC<ShowCardProps> = ({
     ? `${TMDB_BASE_IMAGES_URL}/${imageSize}${showToDisplay.poster_path}`
     : '/images/no-poster.png'
   const releaseYear = getYearFromDateString(showToDisplay.first_air_date)
-
-  const isShowFavorite = isFavorite(showToDisplay.id)
-
-  // Handle click on the favorite icon
-  const handleToggleFavorite = async (e: React.MouseEvent) => {
-    e.preventDefault() // Prevent navigating to the show detail page
-    e.stopPropagation() // Stop event propagation to avoid triggering parent clicks
-
-    // Do nothing if auth context is still loading
-    if (authLoading) return
-
-    await toggleFavorite(showToDisplay)
-  }
 
   return (
     <Hyperlink
@@ -75,23 +52,7 @@ const ShowCard: React.FC<ShowCardProps> = ({
           />
         </div>
 
-        {isAuthenticated && (
-          <button
-            onClick={handleToggleFavorite}
-            className="absolute top-2 right-2 p-2 bg-black bg-opacity-60 rounded-full text-white hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition-colors duration-200"
-            aria-label={
-              isShowFavorite ? 'Remove from favorites' : 'Add to favorites'
-            }
-          >
-            {showHeartAsFavorite === false ? (
-              <IoMdClose className="h-6 w-6 text-white hover:text-red-500" />
-            ) : isShowFavorite ? (
-              <GoHeartFill className="h-6 w-6 text-red-500 hover:text-white" />
-            ) : (
-              <GoHeart className="h-6 w-6" />
-            )}
-          </button>
-        )}
+        <ToggleFavorite show={showToDisplay} showHeartAsFavorite={showHeartAsFavorite} />
 
         <div className="flex flex-col flex-grow pt-4">
           <div className="grow">

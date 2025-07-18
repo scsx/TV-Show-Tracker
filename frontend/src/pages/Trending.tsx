@@ -54,7 +54,7 @@ const Trending = () => {
     <PageLayout title="Trending" subtitle="Trending on TMDB this week">
       <div className="grid grid-cols-5 gap-x-8 gap-y-12">
         {shows.map((show) => (
-          <ShowCard key={show._id} show={show} displayDetails={true} />
+          <ShowCard key={show._id} show={show} showHeartAsFavorite={true} />
         ))}
       </div>
     </PageLayout>
