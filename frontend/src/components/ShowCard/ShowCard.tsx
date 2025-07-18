@@ -1,6 +1,7 @@
 import React from 'react'
 import { GoHeart } from 'react-icons/go'
 import { GoHeartFill } from 'react-icons/go'
+import { IoMdClose } from 'react-icons/io'
 import { IoCalendarClearOutline } from 'react-icons/io5'
 import { MdOutlineStarOutline } from 'react-icons/md'
 
@@ -18,9 +19,13 @@ import { getYearFromDateString } from '@/lib/date'
 
 type ShowCardProps = {
   show: TTMDBShow | TTMDBShowSummaryModel
+  showHeartAsFavorite?: boolean
 }
 
-const ShowCard: React.FC<ShowCardProps> = ({ show }) => {
+const ShowCard: React.FC<ShowCardProps> = ({
+  show,
+  showHeartAsFavorite = true,
+}) => {
   const {
     isAuthenticated,
     isFavorite,
@@ -76,7 +81,9 @@ const ShowCard: React.FC<ShowCardProps> = ({ show }) => {
               isShowFavorite ? 'Remove from favorites' : 'Add to favorites'
             }
           >
-            {isShowFavorite ? (
+            {showHeartAsFavorite === false ? (
+              <IoMdClose className="h-6 w-6 text-white hover:text-red-500" />
+            ) : isShowFavorite ? (
               <GoHeartFill className="h-6 w-6 text-red-500 hover:text-white" />
             ) : (
               <GoHeart className="h-6 w-6" />

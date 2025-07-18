@@ -81,7 +81,7 @@ const Favorites: React.FC = () => {
       ) : (
         <div className="grid grid-cols-4 gap-x-8 gap-y-12">
           {favoriteShowsDetails.map((show) => (
-            <ShowCard key={show.id} show={show} />
+            <ShowCard key={show.id} show={show} showHeartAsFavorite={false} />
           ))}
         </div>
       )}
