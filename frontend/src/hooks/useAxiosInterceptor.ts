@@ -1,48 +1,56 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useAuth } from '@/context/AuthContext'
 import api from '@/services/api'
 
 export const useAxiosInterceptor = () => {
-  const { token, logout } = useAuth()
+  const { token, logout, loading: authContextLoading } = useAuth()
+  const [interceptorsReady, setInterceptorsReady] = useState(false)
 
   useEffect(() => {
-    // Add a request interceptor to inject the authorization token
-    const requestInterceptor = api.interceptors.request.use(
-      (config) => {
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`
-        }
-        return config
-      },
-      (error) => Promise.reject(error),
-    )
+    // Clear existing Axios interceptors to prevent duplicates and stale configurations.
+    api.interceptors.request.clear()
+    api.interceptors.response.clear()
 
-    // Add a response interceptor to handle unauthorized (401) responses
-    const responseInterceptor = api.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        // If response is 401 and it's not a token refresh attempt,
-        // log the error and trigger logout
-        if (
-          error.response &&
-          error.response.status === 401 &&
-          error.config.url !== '/api/auth/refresh-token'
-        ) {
-          console.error(
-            'Unauthorized access. Token might be expired or invalid.',
-          )
-          logout()
-        }
-        return Promise.reject(error)
-      },
-    )
+    // Configure interceptors only when AuthContext has finished loading its state.
+    if (!authContextLoading) {
+      // Request interceptor: Add Authorization header if a token is present.
+      api.interceptors.request.use(
+        (config) => {
+          if (token) {
+            config.headers = config.headers || {}
+            config.headers.Authorization = `Bearer ${token}`
+          } else {
+            delete config.headers.Authorization
+          }
+          return config
+        },
+        (error) => Promise.reject(error),
+      )
 
-    // Cleanup function: eject interceptors when the component unmounts
-    // or when dependencies (token, logout) change, to prevent memory leaks
-    return () => {
-      api.interceptors.request.eject(requestInterceptor)
-      api.interceptors.response.eject(responseInterceptor)
+      // Response interceptor: Handle 401 Unauthorized errors (e.g., expired token).
+      api.interceptors.response.use(
+        (response) => response,
+        (error) => {
+          if (
+            error.response?.status === 401 &&
+            error.config.url !== '/api/auth/login'
+          ) {
+            logout() // Log out the user on 401
+          }
+          return Promise.reject(error)
+        },
+      )
+
+      setInterceptorsReady(true) // Signal that interceptors are configured.
+    } else {
+      setInterceptorsReady(false) // Interceptors are not ready while AuthContext loads.
     }
-  }, [token, logout])
+
+    // Cleanup function: Ensures interceptors are managed correctly on unmount/dependency change.
+    return () => {} // No explicit ejects needed with api.interceptors.clear() in current Axios versions.
+  }, [token, logout, authContextLoading])
+
+  // Return readiness state for conditional rendering in parent components.
+  return interceptorsReady
 }

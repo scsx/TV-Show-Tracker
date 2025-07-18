@@ -38,9 +38,6 @@ const Favorites: React.FC = () => {
         // Call the getFavorites service function
         const fetchedShows = await getFavorites(favoriteShowids)
 
-        // TODO: REMOVE
-        console.log('Fetched Favorite Shows Details:', fetchedShows)
-
         setFavoriteShowsDetails(fetchedShows)
       } catch (error: any) {
         console.error(

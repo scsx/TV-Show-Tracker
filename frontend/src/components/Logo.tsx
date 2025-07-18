@@ -9,7 +9,7 @@ interface LogoProps {
 
 const Logo = ({ large = false }: LogoProps) => {
   return (
-    <Hyperlink href="/" className="group hover:no-underline">
+    <Hyperlink href="/" className="group hover:no-underline inline-block">
       <Text className={twMerge('font-[900]', large ? 'text-3xl' : 'text-lg')}>
         <span className="text-primary group-hover:text-white">TV</span>
         <span className="text-secondary group-hover:text-white">S</span>

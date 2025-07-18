@@ -7,13 +7,13 @@ import { type TTMDBShow } from '@/types'
 import ErrorDisplay from '@/components/ErrorDisplay'
 import Loading from '@/components/Loading'
 import PageLayout from '@/components/PageLayout'
-import Text from '@/components/Text'
+import ShowJSONDelete from '@/components/ShowPage/ShowJSON-DELETE'
 
 // TODO: TRANSLATE
 
 const ShowPage: React.FC = () => {
-  // Use useParams para obter o 'id' da URL
-  const { id } = useParams<{ id: string }>() // O ID da URL é sempre uma string
+  // Use useParams to get id
+  const { id } = useParams<{ id: string }>()
   const [showDetails, setShowDetails] = useState<TTMDBShow | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
@@ -21,16 +21,16 @@ const ShowPage: React.FC = () => {
   useEffect(() => {
     const fetchDetailsAndLog = async () => {
       if (!id) {
-        console.error('ShowPage Error: ID do show não fornecido na URL.')
-        setError('ID do show não fornecido.')
+        console.error('ShowPage Error: ID not present in URL.')
+        setError('Show ID not provided.')
         setLoading(false)
         return
       }
 
       const showIdNum = Number(id)
       if (isNaN(showIdNum)) {
-        console.error(`ShowPage Error: ID do show inválido na URL: ${id}`)
-        setError('ID do show inválido.')
+        console.error(`ShowPage Error: invalid Show ID in URL: ${id}`)
+        setError('Invalid Show ID.')
         setLoading(false)
         return
       }
@@ -41,38 +41,29 @@ const ShowPage: React.FC = () => {
       try {
         const details: TTMDBShow = await getShowDetailsById(showIdNum)
         if (details) {
-          console.log(
-            `ShowPage: Detalhes do show (ID: ${showIdNum}) obtidos com sucesso:`,
-            details,
-          )
           setShowDetails(details)
         } else {
-          console.warn(
-            `ShowPage: Nenhum detalhe encontrado para o show com ID: ${showIdNum}`,
-          )
-          setError('Detalhes do show não encontrados.')
+          console.warn(`ShowPage: No details for show ID: ${showIdNum}`)
+          setError('Show details not found.')
         }
       } catch (err: any) {
         console.error(
-          `ShowPage Error: Falha ao carregar detalhes do show (ID: ${showIdNum}):`,
+          `ShowPage Error: Fail loading details (show ID: ${showIdNum}):`,
           err.message,
           err,
         )
-        setError(
-          'Falha ao carregar os detalhes do show. Verifique a consola para mais informações.',
-        )
+        setError('Check console for error details.')
       } finally {
         setLoading(false)
       }
     }
 
     fetchDetailsAndLog()
-  }, [id]) // O efeito é re-executado se o ID na URL mudar
+  }, [id])
 
-  // Apenas para mostrar algo na UI enquanto os dados são buscados/logados
   return (
     <PageLayout title="Detalhes do Show" subtitle={`ID: ${id || 'N/A'}`}>
-      <div className="p-4 text-center">
+      <div className="p-4">
         {loading && (
           <Loading
             type="spinner"
@@ -80,7 +71,7 @@ const ShowPage: React.FC = () => {
           />
         )}
 
-        {showDetails && <Text>{JSON.stringify(showDetails)}</Text>}
+        {showDetails && <ShowJSONDelete />}
         {error && <ErrorDisplay error={error} />}
       </div>
     </PageLayout>
