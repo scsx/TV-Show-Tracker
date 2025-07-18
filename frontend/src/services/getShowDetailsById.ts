@@ -9,14 +9,12 @@ import { type TTMDBShow } from '@/types'
  * @returns A Promise that resolves to the complete TV show details (TTMDBShow)
  * or null if there's an error during the request.
  */
-export const getShowDetailsById = async (
-  id: number,
-): Promise<TTMDBShow | null> => {
+export const getShowDetailsById = async (id: number): Promise<TTMDBShow> => {
   try {
     const response = await api.get<TTMDBShow>(`/api/tmdb/shows/${id}`)
     return response.data
   } catch (error) {
     console.error(`Error fetching show details with TMDb ID ${id}:`, error)
-    return null
+    throw error
   }
 }
