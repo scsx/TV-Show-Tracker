@@ -2,7 +2,9 @@ import React, { useRef } from 'react'
 
 import { type TTMDBShow } from '@/types'
 
+import ShowHeroDetails from '@/components/ShowPage/ShowHeroDetails'
 import Text from '@/components/Text'
+import ToggleFavorite from '@/components/ToggleFavorite'
 
 import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
 
@@ -73,6 +75,10 @@ const ShowHero: React.FC<ShowHeroProps> = ({ show }) => {
               </Text>
             )}
             <Text variant="paragraphL">{show.overview}</Text>
+          </div>
+          <div className="w-1/4 relative h-full flex flex-col justify-end text-right">
+            <ToggleFavorite showId={show.id} className="top-12 bg-black/50" />
+            <ShowHeroDetails show={show} />
           </div>
         </div>
       </div>

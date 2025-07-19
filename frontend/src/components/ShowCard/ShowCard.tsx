@@ -52,7 +52,10 @@ const ShowCard: React.FC<ShowCardProps> = ({
           />
         </div>
 
-        <ToggleFavorite show={showToDisplay} showHeartAsFavorite={showHeartAsFavorite} />
+        <ToggleFavorite
+          showId={showToDisplay.id}
+          showHeartAsFavorite={showHeartAsFavorite}
+        />
 
         <div className="flex flex-col flex-grow pt-4">
           <div className="grow">

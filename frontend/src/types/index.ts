@@ -7,11 +7,15 @@
  */
 
 export type { TUser } from '@shared/types/user'
+export type { TTMDBCreator } from '@shared/types/creator'
 export type { TAccessToken } from '@shared/types/access-token'
 export type { TTMDBGenre } from '@shared/types/genre'
+export type { TMDBPersonCredit } from '@shared/types/person'
 export type { TTMDBProductionCompany } from '@shared/types/production-company'
 export type {
   TTMDBShow,
+  TTMDBShowSeason,
+  TTMDBShowCredits,
   TTMDBShowSummary,
   TTMDBShowSummaryModel,
 } from '@shared/types/show'

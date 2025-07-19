@@ -3,6 +3,7 @@ import { Server as SocketIOServer } from 'socket.io'
 import { showUpdaterTask } from '../services/showUpdater.service'
 import axios from 'axios'
 import ShowSummary from '../models/ShowSummary'
+import { TTMDBShow } from '@shared/types/show'
 
 /**
  * @description Fetches trending TV shows from TMDb and saves them (summaries) to the database.
@@ -52,11 +53,12 @@ export const getAllShowSummaries = async (req: Request, res: Response): Promise<
  * @description Fetches detailed information for a specific TV show from TMDb by its ID.
  * @access Private (via auth middleware na rota)
  */
-export const getShowDetailsByid = async (req: Request, res: Response) => {
+export const getShowDetailsByid = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params
 
   if (!id || isNaN(Number(id))) {
-    return res.status(400).json({ msg: 'A valid TMDB show ID is required.' })
+    res.status(400).json({ msg: 'A valid TMDB show ID is required.' })
+    return
   }
 
   try {
@@ -64,20 +66,36 @@ export const getShowDetailsByid = async (req: Request, res: Response) => {
     const TMDB_BASE_URL = process.env.TMDB_BASE_URL
     const idNum = Number(id)
 
-    const response = await axios.get(`${TMDB_BASE_URL}/tv/${idNum}`, {
-      params: {
-        api_key: TMDB_API_KEY
-      }
-    })
-
-    const showDetails = response.data
-
-    res.json(showDetails)
-  } catch (error: any) {
-    console.error(`Error fetching TV show details for TMDB ID ${id}:`, error.message)
-    if (error.response && error.response.status === 404) {
-      return res.status(404).json({ msg: 'TV show not found on TMDb.' })
+    if (!TMDB_API_KEY || !TMDB_BASE_URL) {
+      console.error('TMDB_API_KEY or TMDB_BASE_URL not configured in environment variables.')
+      res.status(500).json({ msg: 'Server configuration error.' })
+      return
     }
-    res.status(500).send('Server Error while fetching TV show details.')
+
+    const [tmdbShowDetailsResponse, tmdbShowCreditsResponse] = await Promise.all([
+      axios.get(`${TMDB_BASE_URL}/tv/${idNum}`, { params: { api_key: TMDB_API_KEY } }),
+      axios.get(`${TMDB_BASE_URL}/tv/${idNum}/credits`, { params: { api_key: TMDB_API_KEY } })
+    ])
+
+    const combinedShowData: TTMDBShow = {
+      ...tmdbShowDetailsResponse.data,
+      cast: tmdbShowCreditsResponse.data.cast,
+      crew: tmdbShowCreditsResponse.data.crew
+    }
+
+    res.status(200).json(combinedShowData)
+  } catch (error: any) {
+    console.error(`Error fetching TV show details and credits for TMDB ID ${id}:`, error.message)
+    if (axios.isAxiosError(error) && error.response) {
+      if (error.response.status === 404) {
+        res.status(404).json({ msg: 'TV show not found on TMDb.' })
+        return
+      }
+      res
+        .status(error.response.status)
+        .json({ msg: error.response.data.status_message || 'Error from external API.' })
+      return
+    }
+    res.status(500).json({ msg: 'Server Error while fetching TV show details and credits.' })
   }
 }

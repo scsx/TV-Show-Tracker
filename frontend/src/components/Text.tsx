@@ -5,7 +5,16 @@ import { tv } from 'tailwind-variants'
 
 type TextProps = {
   children: ReactNode
-  variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'paragraph' | 'paragraphL' | 'quote'
+  variant?:
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6'
+    | 'paragraph'
+    | 'paragraphL'
+    | 'quote'
   color?: 'foreground' | 'muted' | 'primary' | 'gray'
   as?: 'p' | 'small' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span'
   className?: string
@@ -49,9 +58,7 @@ export default function Text({
   style,
 }: TextProps) {
   const Component = as
-  const combinedClasses = twMerge(
-    textStyles({ variant, color }) + ' ' + className,
-  )
+  const combinedClasses = twMerge(textStyles({ variant, color }), className)
 
   return (
     <Component className={combinedClasses} style={style}>

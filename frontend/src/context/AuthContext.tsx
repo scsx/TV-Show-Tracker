@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react'
 
-import type { TTMDBShowSummaryModel, TUser } from '@/types'
+import type { TUser } from '@/types'
 
 const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL
 
@@ -23,7 +23,7 @@ type AuthContextType = {
   // Favorites
   favoriteShowids: number[]
   fetchUserFavoriteids: () => Promise<void>
-  toggleFavorite: (show: TTMDBShowSummaryModel) => Promise<void>
+  toggleFavorite: (showId: number) => Promise<void>
   isFavorite: (id: number) => boolean
 }
 
@@ -104,22 +104,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Toggle a show's favorite status
   const toggleFavorite = useCallback(
-    async (show: TTMDBShowSummaryModel) => {
+    async (showId: number) => {
       if (!user || !token) {
         alert('You need to be logged in to favorite shows!')
         return
       }
 
-      const { id } = show
-
       // Optimistic update.
       // Save state if error.
       const originalFavoriteShowids = [...favoriteShowids]
       setFavoriteShowids((prevIds) => {
-        if (prevIds.includes(id)) {
-          return prevIds.filter((id) => id !== id)
+        if (prevIds.includes(showId)) {
+          return prevIds.filter((id) => id !== showId)
         } else {
-          return [...prevIds, id]
+          return [...prevIds, showId]
         }
       })
 
@@ -131,7 +129,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ id }),
+          body: JSON.stringify({ id: showId }),
         })
 
         if (response.ok) {

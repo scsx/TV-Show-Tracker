@@ -3,16 +3,18 @@ import { GoHeart, GoHeartFill } from 'react-icons/go'
 import { IoMdClose } from 'react-icons/io'
 
 import { useAuth } from '@/context/AuthContext'
-import { type TTMDBShowSummaryModel } from '@/types'
+import { twMerge } from 'tailwind-merge'
 
 type ToggleFavoriteProps = {
-  show: TTMDBShowSummaryModel
+  showId: number
   showHeartAsFavorite?: boolean
+  className?: string
 }
 
 const ToggleFavorite: React.FC<ToggleFavoriteProps> = ({
-  show,
+  showId,
   showHeartAsFavorite = true,
+  className,
 }) => {
   const {
     isAuthenticated,
@@ -21,7 +23,7 @@ const ToggleFavorite: React.FC<ToggleFavoriteProps> = ({
     loading: authLoading,
   } = useAuth()
 
-  const isShowFavorite = isFavorite(show.id)
+  const isShowFavorite = isFavorite(showId)
 
   const handleToggleFavorite = async (e: React.MouseEvent) => {
     e.preventDefault()
@@ -29,7 +31,7 @@ const ToggleFavorite: React.FC<ToggleFavoriteProps> = ({
 
     if (authLoading) return
 
-    await toggleFavorite(show)
+    await toggleFavorite(showId)
   }
 
   if (!isAuthenticated) {
@@ -39,7 +41,10 @@ const ToggleFavorite: React.FC<ToggleFavoriteProps> = ({
   return (
     <button
       onClick={handleToggleFavorite}
-      className="absolute top-2 right-2 p-2 bg-black bg-opacity-60 rounded-full text-white hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition-colors duration-200"
+      className={twMerge(
+        'absolute top-2 right-2 p-2 bg-black bg-opacity-60 rounded-full text-white hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition-colors duration-200',
+        className,
+      )}
       aria-label={isShowFavorite ? 'Remove from favorites' : 'Add to favorites'}
     >
       {showHeartAsFavorite ? (

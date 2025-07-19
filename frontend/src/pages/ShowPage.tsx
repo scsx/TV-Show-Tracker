@@ -6,9 +6,10 @@ import { type TTMDBShow } from '@/types'
 
 import ErrorDisplay from '@/components/ErrorDisplay'
 import Loading from '@/components/Loading'
+import SeasonsList from '@/components/Season/SeasonsList'
+import Cast from '@/components/ShowPage/Cast'
+import Crew from '@/components/ShowPage/Crew'
 import ShowHero from '@/components/ShowPage/ShowHero'
-// TODO: DELETE
-import ShowJSONDelete from '@/components/ShowPage/ShowJSON-DELETE'
 
 import { useDynamicDocumentTitle } from '@/hooks/useDynamicDocumentTitle'
 
@@ -56,13 +57,18 @@ const ShowPage = () => {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full pb-32">
       <ShowHero show={showData} />
-      {/* <ShowHero data={showData} />
-      <ShowOverview data={showData} /> 
-      <ShowSeasons data={showData} />*/}
       <div className="container">
-        <ShowJSONDelete data={showData} />
+        <div className="flex space-x-16">
+          <div className="w-3/4">
+            <Cast cast={showData.cast} />
+          </div>
+          <div className="w-1/4 bg-orange-600">
+            <Crew crew={showData.crew} />
+          </div>
+        </div>
+        <SeasonsList show={showData} />
       </div>
     </div>
   )

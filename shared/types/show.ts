@@ -1,5 +1,7 @@
 import { type TTMDBGenre } from './genre'
 import { type TTMDBProductionCompany } from './production-company'
+import { type TTMDBCreator } from './creator'
+import { type TMDBPersonCredit } from './person'
 
 export type TTMDBShowSeason = {
   air_date: string | null
@@ -14,9 +16,11 @@ export type TTMDBShowSeason = {
 
 export type TTMDBShow = {
   _id?: string // MongoDB only
+  // From https://api.themoviedb.org/3/tv/{series_id}
   id: number // TMDB
   name: string
   original_name: string
+  created_by: TTMDBCreator[]
   overview: string
   poster_path: string | null
   backdrop_path: string | null
@@ -40,6 +44,13 @@ export type TTMDBShow = {
   seasons: TTMDBShowSeason[]
   updatedAt?: Date
   createdAt?: Date
+  // From https://api.themoviedb.org/3/tv/{series_id}/credits
+  cast: TMDBPersonCredit[]
+  crew: TMDBPersonCredit[]
+}
+
+export type TTMDBShowCredits = Pick<TTMDBShow, 'cast' | 'crew'> & {
+  id: number
 }
 
 // Type for the reponse of https://api.themoviedb.org/3/trending/tv/{time_window}

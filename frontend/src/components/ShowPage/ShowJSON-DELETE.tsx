@@ -13,6 +13,7 @@ const ShowJSONDisplay: React.FC<ShowJSONDisplayProps> = ({ data }) => {
   return (
     <pre
       className="
+      mt-16
         max-w-full          /* Ensures the pre tag does not exceed parent width */
         whitespace-pre-wrap /* Allows long lines to wrap instead of overflowing */
         overflow-x-auto     /* Adds horizontal scroll if wrapping is not enough */
