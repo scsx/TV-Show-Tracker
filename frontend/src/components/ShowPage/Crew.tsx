@@ -34,7 +34,7 @@ const Crew: React.FC<CrewProps> = ({ crew }) => {
   const limitedCrew = filteredCrew.slice(0, 15)
 
   return (
-    <section className="mt-8">
+    <section className="py-8">
       <Text variant="h2" as="h2" className="mb-8">
         Crew
       </Text>

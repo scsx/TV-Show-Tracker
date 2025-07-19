@@ -43,7 +43,7 @@ const ShowHeroDetails: React.FC<ShowHeroDetailsProps> = ({ show }) => {
           <Text variant="paragraphL">Genres</Text>
           <div className="flex flex-wrap gap-2 mt-2 justify-end">
             {show.genres.map((genre) => (
-              <Badge variant="outline" key={genre.id}>
+              <Badge variant="outline" key={genre.id} className='border-white'>
                 {genre.name}
               </Badge>
             ))}

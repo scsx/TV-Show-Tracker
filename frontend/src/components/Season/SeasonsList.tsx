@@ -23,9 +23,9 @@ const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
 
   if (!mainSeasons || mainSeasons.length === 0) {
     return (
-      <p className="mt-4 text-center text-gray-600">
+      <Text>
         No main seasons available for this show.
-      </p>
+      </Text>
     )
   }
 

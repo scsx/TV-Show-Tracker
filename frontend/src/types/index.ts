@@ -16,6 +16,7 @@ export type {
   TTMDBShow,
   TTMDBShowSeason,
   TTMDBShowCredits,
+  TTMDBShowLanguage,
   TTMDBShowSummary,
   TTMDBShowSummaryModel,
 } from '@shared/types/show'

@@ -10,6 +10,7 @@ import SeasonsList from '@/components/Season/SeasonsList'
 import Cast from '@/components/ShowPage/Cast'
 import Crew from '@/components/ShowPage/Crew'
 import ShowHero from '@/components/ShowPage/ShowHero'
+import ShowInfo from '@/components/ShowPage/ShowInfo'
 
 import { useDynamicDocumentTitle } from '@/hooks/useDynamicDocumentTitle'
 
@@ -47,7 +48,7 @@ const ShowPage = () => {
   useDynamicDocumentTitle(showData ? showData.name : null)
 
   if (loading) {
-    return <Loading type="spinner" message="Loading show details..." />
+    return <Loading type="spinner" message="Loading..." />
   }
 
   if (error) {
@@ -66,9 +67,10 @@ const ShowPage = () => {
           <div className="col-span-3">
             <Cast cast={showData.cast} />
           </div>
-          <div className="col-span-1">
+          <aside className="col-span-1">
             <Crew crew={showData.crew} />
-          </div>
+            <ShowInfo show={showData} />
+          </aside>
         </div>
         <SeasonsList show={showData} />
       </div>

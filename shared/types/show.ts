@@ -14,6 +14,12 @@ export type TTMDBShowSeason = {
   vote_average: number
 }
 
+export type TTMDBShowLanguage = {
+  name: string | null
+  english_name: string | null
+  iso_639_1: string
+}
+
 export type TTMDBShow = {
   _id?: string // MongoDB only
   // From https://api.themoviedb.org/3/tv/{series_id}
@@ -44,6 +50,7 @@ export type TTMDBShow = {
   seasons: TTMDBShowSeason[]
   updatedAt?: Date
   createdAt?: Date
+  spoken_languages?: TTMDBShowLanguage[]
   // From https://api.themoviedb.org/3/tv/{series_id}/credits
   cast: TMDBPersonCredit[]
   crew: TMDBPersonCredit[]

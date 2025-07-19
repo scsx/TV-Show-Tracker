@@ -24,7 +24,7 @@ const PersonCard: React.FC<PersonCardProps> = ({ person }) => {
         <img
           src={personProfileImageUrl}
           alt={person.name}
-          className="w-24 h-24 rounded-full object-cover shadow-md mb-2"
+          className="w-24 h-24 rounded-full object-cover object-[50%_30%] shadow-md mb-2"
         />
         <Text
           variant="h4"
