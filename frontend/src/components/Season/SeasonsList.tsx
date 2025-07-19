@@ -1,19 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-// Certifique-se de que TTMDBShow está importado corretamente
 import { type TTMDBShow, type TTMDBShowSeason } from '@/types'
 
-// Importe TTMDBShow e TMDBSeason
+import SeasonDetail from '@/components/Season/SeasonDetail'
 import Text from '@/components/Text'
 
 import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
 
-interface SeasonsListProps {
-  show: TTMDBShow // Agora recebe o objeto show completo
+type SeasonsListProps = {
+  show: TTMDBShow
 }
 
 const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
-  // Acessa as temporadas através de show.seasons
+  const [selectedSeason, setSelectedSeason] = useState<TTMDBShowSeason | null>(
+    null,
+  )
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
+
   const mainSeasons = show.seasons.filter(
     (season) => season.season_number !== 0,
   )
@@ -26,9 +29,18 @@ const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
     )
   }
 
-  // Você pode usar show.number_of_seasons e show.number_of_episodes aqui
   const totalSeasons = show.number_of_seasons
   const totalEpisodes = show.number_of_episodes
+
+  const handleSeasonClick = (season: TTMDBShowSeason) => {
+    setSelectedSeason(season)
+    setIsSheetOpen(true)
+  }
+
+  const handleCloseSheet = () => {
+    setIsSheetOpen(false)
+    setSelectedSeason(null)
+  }
 
   return (
     <section className="mt-16">
@@ -58,7 +70,8 @@ const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
           return (
             <article
               key={season.id}
-              className="bg-card-background overflow-hidden flex flex-col transition-transform duration-200 hover:scale-105"
+              className="overflow-hidden flex flex-col cursor-pointer transition-transform duration-200 hover:scale-105"
+              onClick={() => handleSeasonClick(season)}
             >
               <img
                 src={posterUrl}
@@ -74,7 +87,7 @@ const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
                   {season.name}
                 </Text>
                 <Text variant="paragraph" as="p" color="muted">
-                  {season.episode_count} Episodes / {airDate}
+                  {airDate} / {season.episode_count} Episodes
                 </Text>
                 {season.overview && (
                   <Text variant="small" as="p" className="mt-2 line-clamp-2">
@@ -86,6 +99,12 @@ const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
           )
         })}
       </div>
+
+      <SeasonDetail
+        season={selectedSeason}
+        isOpen={isSheetOpen}
+        onClose={handleCloseSheet}
+      />
     </section>
   )
 }
