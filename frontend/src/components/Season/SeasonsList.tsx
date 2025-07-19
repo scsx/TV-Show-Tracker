@@ -45,7 +45,7 @@ const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
         </Text>
       )}
 
-      <div className="grid grid-cols-8 gap-4">
+      <div className="grid grid-cols-8 gap-6">
         {mainSeasons.map((season: TTMDBShowSeason) => {
           const posterUrl = season.poster_path
             ? `${TMDB_BASE_IMAGES_URL}/w185${season.poster_path}`
@@ -56,48 +56,33 @@ const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
             : 'N/A'
 
           return (
-            <div
+            <article
               key={season.id}
-              className="bg-card-background rounded-lg overflow-hidden flex flex-col transition-transform duration-200 hover:scale-105"
+              className="bg-card-background overflow-hidden flex flex-col transition-transform duration-200 hover:scale-105"
             >
               <img
                 src={posterUrl}
                 alt={season.name}
-                className="w-full h-auto object-cover"
+                className="w-full h-auto rounded-lg object-cover"
               />
-              <div className="p-3 flex flex-col flex-grow">
+              <div className="flex pt-2 flex-col flex-grow">
                 <Text
                   variant="h5"
-                  as="h3"
+                  as="h5"
                   className="font-semibold mb-1 leading-tight"
                 >
                   {season.name}
                 </Text>
-                <Text
-                  variant="paragraph"
-                  as="p"
-                  className="text-sm text-muted-foreground"
-                >
-                  {season.episode_count} Episodes
-                </Text>
-                <Text
-                  variant="paragraph"
-                  as="p"
-                  className="text-sm text-muted-foreground"
-                >
-                  {airDate}
+                <Text variant="paragraph" as="p" color="muted">
+                  {season.episode_count} Episodes / {airDate}
                 </Text>
                 {season.overview && (
-                  <Text
-                    variant="paragraph"
-                    as="p"
-                    className="text-xs mt-2 text-foreground line-clamp-3"
-                  >
+                  <Text variant="small" as="p" className="mt-2 line-clamp-2">
                     {season.overview}
                   </Text>
                 )}
               </div>
-            </div>
+            </article>
           )
         })}
       </div>

@@ -15,8 +15,19 @@ type TextProps = {
     | 'paragraph'
     | 'paragraphL'
     | 'quote'
+    | 'small'
   color?: 'foreground' | 'muted' | 'primary' | 'gray'
-  as?: 'p' | 'small' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span'
+  as?:
+    | 'p'
+    | 'small'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6'
+    | 'span'
+    | 'small'
   className?: string
   style?: CSSProperties
 }
@@ -34,7 +45,7 @@ const textStyles = tv({
       paragraph: 'text-sm leading-normal font-jakarta',
       paragraphL: 'text-lg leading-normal font-jakarta',
       quote: 'text-2xl font-playfair tracking-wide py-2 pl-4 border-l-2 italic',
-      small: '',
+      small: 'text-xs leading-normal font-jakarta',
     },
     color: {
       foreground: 'text-foreground',

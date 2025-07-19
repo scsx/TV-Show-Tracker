@@ -13,6 +13,8 @@ import ShowHero from '@/components/ShowPage/ShowHero'
 
 import { useDynamicDocumentTitle } from '@/hooks/useDynamicDocumentTitle'
 
+// TODO: Hero sticky
+
 const ShowPage = () => {
   const { id } = useParams<{ id: string }>()
   const [showData, setShowData] = useState<TTMDBShow | null>(null)
@@ -60,11 +62,11 @@ const ShowPage = () => {
     <div className="w-full pb-32">
       <ShowHero show={showData} />
       <div className="container">
-        <div className="flex space-x-16">
-          <div className="w-3/4">
+        <div className="grid grid-cols-4 gap-x-16">
+          <div className="col-span-3">
             <Cast cast={showData.cast} />
           </div>
-          <div className="w-1/4 bg-orange-600">
+          <div className="col-span-1">
             <Crew crew={showData.crew} />
           </div>
         </div>

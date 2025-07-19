@@ -28,6 +28,11 @@ const footerLinks = [
         href: '/shows/1396',
         external: false,
       },
+      {
+        label: 'The Simpsons',
+        href: '/shows/456',
+        external: false,
+      },
       // TODO: Keep or delete.
       /* {
         label: 'Login',
