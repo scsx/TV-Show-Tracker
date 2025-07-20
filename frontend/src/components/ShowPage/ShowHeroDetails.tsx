@@ -7,6 +7,8 @@ import Text from '@/components/Text'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 
+import { getYearFromDateString } from '@/lib/date'
+
 type ShowHeroDetailsProps = {
   show: TTMDBShow
 }
@@ -17,9 +19,7 @@ const ShowHeroDetails: React.FC<ShowHeroDetailsProps> = ({ show }) => {
       {show.first_air_date && (
         <div>
           <Text variant="paragraphL">Year</Text>
-          <Text variant="h3">
-            {new Date(show.first_air_date).getFullYear()}
-          </Text>
+          <Text variant="h3">{getYearFromDateString(show.first_air_date)}</Text>
         </div>
       )}
 
@@ -43,7 +43,7 @@ const ShowHeroDetails: React.FC<ShowHeroDetailsProps> = ({ show }) => {
           <Text variant="paragraphL">Genres</Text>
           <div className="flex flex-wrap gap-2 mt-2 justify-end">
             {show.genres.map((genre) => (
-              <Badge variant="outline" key={genre.id} className='border-white'>
+              <Badge variant="outline" key={genre.id} className="border-white">
                 {genre.name}
               </Badge>
             ))}

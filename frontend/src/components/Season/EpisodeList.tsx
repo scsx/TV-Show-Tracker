@@ -5,10 +5,13 @@ import { type TTMDBEpisode } from '@/types'
 import Text from '@/components/Text'
 
 import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
+import { formatShortDate } from '@/lib/date'
 
 type EpisodeListProps = {
   episodes: TTMDBEpisode[]
 }
+
+// TODO: formatShortDate
 
 const EpisodeList: React.FC<EpisodeListProps> = ({ episodes }) => {
   return (
@@ -31,14 +34,14 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episodes }) => {
             </div>
           )}
           <div className="w-1/2">
-            <Text variant="h4" as="h4" className='leading-none mb-2'>
-              <small className="font-jakarta text-muted-foreground mr-2">Ep. {episode.episode_number}</small> {episode.name}
+            <Text variant="h4" as="h4" className="leading-none mb-2">
+              <small className="font-jakarta text-muted-foreground mr-2">
+                Ep. {episode.episode_number}
+              </small>{' '}
+              {episode.name}
             </Text>
-            <Text color='muted' className="text-sm mb-2">
-              
-              {episode.air_date
-                ? new Date(episode.air_date).toDateString()
-                : 'N/A'}
+            <Text color="muted" className="text-sm mb-2">
+              {episode.air_date ? formatShortDate(episode.air_date) : 'N/A'}
               {episode.runtime ? ` / Runtime: ${episode.runtime} mins` : ''}
             </Text>
             {episode.overview && episode.overview.length > 0 ? (

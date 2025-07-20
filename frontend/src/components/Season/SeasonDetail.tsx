@@ -1,19 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { MdErrorOutline } from 'react-icons/md'
 
 import { getShowSeasonDetails } from '@/services/getShowSeasonDetails'
 import { type TTMDBShowSeason, type TTMDBShowSeasonDetails } from '@/types'
 
 import EpisodeList from '@/components/Season/EpisodeList'
+import SeasonDetailError from '@/components/Season/SeasonDetailError'
+import SeasonDetailLoading from '@/components/Season/SeasonDetailLoading'
 import Text from '@/components/Text'
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
+  SheetTitle,
 } from '@/components/ui/sheet'
 
 import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
+import { formatShortDate } from '@/lib/date'
 
 type SeasonDetailsProps = {
   seriesId: number
@@ -33,8 +35,6 @@ const SeasonDetails: React.FC<SeasonDetailsProps> = ({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [refreshTrigger, setRefreshTrigger] = useState(0) // State to force refresh
-
-  console.log(season)
 
   const fetchSeasonDetails = useCallback(async () => {
     if (!season || !seriesId) {
@@ -97,9 +97,7 @@ const SeasonDetails: React.FC<SeasonDetailsProps> = ({
   if (loading && !fullSeasonDetails) {
     return (
       <Sheet open={isOpen} onOpenChange={onClose}>
-        <SheetContent className="w-[33.33%] sm:max-w-[33.33%] flex items-center justify-center">
-          <p>Loading season details...</p>
-        </SheetContent>
+        <SeasonDetailLoading onClose={onClose} />
       </Sheet>
     )
   }
@@ -107,21 +105,10 @@ const SeasonDetails: React.FC<SeasonDetailsProps> = ({
   if (error || !seasonToDisplay) {
     return (
       <Sheet open={isOpen} onOpenChange={onClose}>
-        <SheetContent className="w-[33.33%] sm:max-w-[33.33%] flex flex-col items-center justify-center text-center">
-          <div className="text-6xl mb-4">
-            <MdErrorOutline />
-          </div>
-          <h2 className="text-2xl font-bold mb-4">Error Loading Season</h2>
-          <pre className="mb-4 whitespace-pre-wrap">
-            {error || 'Could not retrieve season information.'}
-          </pre>
-          <Text variant="paragraph">
-            Please check your internet connection or try again.
-          </Text>
-          <button onClick={handleRefreshClick} className="mt-6">
-            Try Again
-          </button>
-        </SheetContent>
+        <SeasonDetailError
+          errorMessage={error}
+          onRefresh={handleRefreshClick}
+        />
       </Sheet>
     )
   }
@@ -130,38 +117,39 @@ const SeasonDetails: React.FC<SeasonDetailsProps> = ({
     ? `${TMDB_BASE_IMAGES_URL}/w300${seasonToDisplay.poster_path}`
     : '/images/no-poster.png'
 
-  const airDate = seasonToDisplay.air_date
-    ? new Date(seasonToDisplay.air_date).toDateString()
-    : 'N/A'
-
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="w-1/2 sm:max-w-1/2 overflow-y-auto">
         <SheetHeader>
-          <Text variant="h2" as="h2">
-            {seasonToDisplay.name}
-            <small className='pl-4 text-muted-foreground text-sm'>{airDate}</small>
-          </Text>
-          <SheetDescription>
-            <div className="flex pt-8 space-x-8">
-              <div className="w-1/3">
-                <img
-                  src={posterUrl}
-                  alt={seasonToDisplay.name}
-                  className="w-full h-auto"
-                />
-              </div>
-              <div className="w-2/3">
-                {seasonToDisplay.overview ? (
-                  <Text variant="paragraphL">{seasonToDisplay.overview}</Text>
-                ) : (
-                  <Text variant="paragraphL">
-                    No overview available for this season.
-                  </Text>
-                )}
-              </div>
+          <SheetTitle>
+            <Text variant="h2" as="span">
+              {seasonToDisplay.name}
+              {seasonToDisplay.air_date && (
+                <small className="pl-4 text-muted-foreground font-jakarta font-normal text-sm">
+                  {formatShortDate(seasonToDisplay.air_date)}
+                </small>
+              )}
+            </Text>
+          </SheetTitle>
+
+          <div className="flex pt-8 space-x-8">
+            <div className="w-1/3">
+              <img
+                src={posterUrl}
+                alt={seasonToDisplay.name}
+                className="w-full h-auto"
+              />
             </div>
-          </SheetDescription>
+            <div className="w-2/3">
+              {seasonToDisplay.overview ? (
+                <Text variant="paragraphL">{seasonToDisplay.overview}</Text>
+              ) : (
+                <Text variant="paragraphL">
+                  No overview available for this season.
+                </Text>
+              )}
+            </div>
+          </div>
         </SheetHeader>
         <div className="py-8">
           {fullSeasonDetails?.episodes &&

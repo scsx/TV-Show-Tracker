@@ -25,3 +25,15 @@ export function getYearFromDateString(
   }
   return null
 }
+
+export function formatShortDate(dateString: string): string {
+  const date = new Date(dateString)
+  if (isNaN(date.getTime())) {
+    return 'Invalid Date'
+  }
+  return new Intl.DateTimeFormat('pt-PT', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(date)
+}

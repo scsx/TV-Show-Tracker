@@ -6,6 +6,7 @@ import SeasonDetail from '@/components/Season/SeasonDetail'
 import Text from '@/components/Text'
 
 import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
+import { getYearFromDateString } from '@/lib/date'
 
 type SeasonsListProps = {
   show: TTMDBShow
@@ -60,7 +61,7 @@ const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
             : '/images/no-poster.png'
 
           const airDate = season.air_date
-            ? new Date(season.air_date).getFullYear()
+            ? getYearFromDateString(season.air_date)
             : 'N/A'
 
           return (

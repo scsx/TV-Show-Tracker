@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { type TMDBPersonCredit } from '@/types'
+import { type TTMDBPersonCredit } from '@/types'
 
 import Hyperlink from '@/components/Hyperlink'
 import Text from '@/components/Text'
@@ -8,7 +8,7 @@ import Text from '@/components/Text'
 import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
 
 interface PersonCardProps {
-  person: TMDBPersonCredit
+  person: TTMDBPersonCredit
 }
 
 const PersonCard: React.FC<PersonCardProps> = ({ person }) => {
@@ -24,7 +24,7 @@ const PersonCard: React.FC<PersonCardProps> = ({ person }) => {
         <img
           src={personProfileImageUrl}
           alt={person.name}
-          className="w-24 h-24 rounded-full object-cover object-[50%_30%] shadow-md mb-2"
+          className="w-24 h-24 rounded-full object-cover object-[50%_30%] shadow-md mb-2 border-2 border-transparent group-hover:border-primary transition-colors duration-200"
         />
         <Text
           variant="h4"
