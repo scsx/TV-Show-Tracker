@@ -5,12 +5,13 @@ import { type TTMDBShow, type TTMDBShowLanguage } from '@/types'
 import Hyperlink from '@/components/Hyperlink'
 import Text from '@/components/Text'
 
+import { cleanUrl } from '@/lib/clean-url'
+
 type SeasonsListProps = {
   show: TTMDBShow
 }
 
 const ShowInfo: React.FC<SeasonsListProps> = ({ show }) => {
-  console.log(show)
   return (
     <div>
       <Text variant="h3" as="h3" className="mb-4">
@@ -23,8 +24,8 @@ const ShowInfo: React.FC<SeasonsListProps> = ({ show }) => {
             Site
           </Text>
           <Text as="p">
-            <Hyperlink href={show.homepage} title={show.homepage}>
-              {show.homepage}
+            <Hyperlink href={show.homepage} title={show.homepage} external>
+              {cleanUrl(show.homepage)}
             </Hyperlink>
           </Text>
         </div>
