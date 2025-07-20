@@ -2,7 +2,8 @@ import { Router } from 'express'
 import {
   fetchAndSaveTrendingShows,
   getAllShowSummaries,
-  getShowDetailsByid
+  getShowDetailsByid,
+  getSeasonDetailsBySeriesIdAndSeasonNumber
 } from '../../controllers/show.controller'
 import { Server as SocketIOServer } from 'socket.io'
 import authMiddleware from '../../middleware/auth.middleware'
@@ -28,6 +29,17 @@ const createShowRouter = (io: SocketIOServer) => {
    * @access Private (requires authentication)
    */
   router.get('/:id', authMiddleware, getShowDetailsByid)
+
+  /**
+   * @route GET /api/tmdb/shows/:seriesId/season/:seasonNumber
+   * @description Fetches details for a specific season of a TV show.
+   * @access Private (requires authentication, se desejar)
+   */
+  router.get(
+    '/:seriesId/season/:seasonNumber',
+    authMiddleware,
+    getSeasonDetailsBySeriesIdAndSeasonNumber
+  ) // Adicione authMiddleware se necessário
 
   return router
 }

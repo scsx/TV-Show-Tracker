@@ -1,7 +1,22 @@
 import { type TTMDBGenre } from './genre'
 import { type TTMDBProductionCompany } from './production-company'
 import { type TTMDBCreator } from './creator'
-import { type TMDBPersonCredit } from './person'
+import { type TTMDBPersonCredit, type TTMDBGuestStar } from './person'
+
+export type TTMDBEpisode = {
+  air_date: string | null
+  episode_number: number
+  id: number
+  name: string
+  overview: string
+  production_code: string | null
+  runtime: number | null
+  season_number: number
+  show_id: number
+  still_path: string | null
+  vote_average: number
+  vote_count: number
+}
 
 export type TTMDBShowSeason = {
   air_date: string | null
@@ -9,6 +24,20 @@ export type TTMDBShowSeason = {
   id: number
   name: string
   overview: string
+  poster_path: string | null
+  season_number: number
+  vote_average: number
+}
+
+export type TTMDBShowSeasonDetails = {
+  object_id?: string
+  air_date: string | null
+  episodes: TTMDBEpisode[]
+  crew: TTMDBPersonCredit[]
+  guest_stars: TTMDBGuestStar[]
+  name: string
+  overview: string
+  id: number
   poster_path: string | null
   season_number: number
   vote_average: number
@@ -52,8 +81,8 @@ export type TTMDBShow = {
   createdAt?: Date
   spoken_languages?: TTMDBShowLanguage[]
   // From https://api.themoviedb.org/3/tv/{series_id}/credits
-  cast: TMDBPersonCredit[]
-  crew: TMDBPersonCredit[]
+  cast: TTMDBPersonCredit[]
+  crew: TTMDBPersonCredit[]
 }
 
 export type TTMDBShowCredits = Pick<TTMDBShow, 'cast' | 'crew'> & {

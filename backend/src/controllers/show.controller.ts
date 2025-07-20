@@ -3,7 +3,7 @@ import { Server as SocketIOServer } from 'socket.io'
 import { showUpdaterTask } from '../services/showUpdater.service'
 import axios from 'axios'
 import ShowSummary from '../models/ShowSummary'
-import { TTMDBShow } from '@shared/types/show'
+import { TTMDBShow, TTMDBShowSeasonDetails } from '@shared/types/show'
 
 /**
  * @description Fetches trending TV shows from TMDb and saves them (summaries) to the database.
@@ -62,6 +62,7 @@ export const getShowDetailsByid = async (req: Request, res: Response): Promise<v
   }
 
   try {
+    // Globally was causing timing errors.
     const TMDB_API_KEY = process.env.TMDB_API_KEY
     const TMDB_BASE_URL = process.env.TMDB_BASE_URL
     const idNum = Number(id)
@@ -97,5 +98,52 @@ export const getShowDetailsByid = async (req: Request, res: Response): Promise<v
       return
     }
     res.status(500).json({ msg: 'Server Error while fetching TV show details and credits.' })
+  }
+}
+
+/**
+ * @route GET /api/tmdb/shows/:id
+ * @description Fetches detailed information for a specific TV show from TMDb by its ID.
+ * @access Private (via auth middleware on route)
+ */
+export const getSeasonDetailsBySeriesIdAndSeasonNumber = async (req: Request, res: Response) => {
+  try {
+    const { seriesId, seasonNumber } = req.params
+    // Globally was causing timing errors.
+    const TMDB_API_KEY = process.env.TMDB_API_KEY
+    const TMDB_BASE_URL = process.env.TMDB_BASE_URL
+
+    if (!TMDB_API_KEY || !TMDB_BASE_URL) {
+      console.error('TMDB_API_KEY or TMDB_BASE_URL not configured in environment variables.')
+      res.status(500).json({ message: 'Server configuration error.' })
+      return
+    }
+
+    if (!seriesId || !seasonNumber) {
+      return res.status(400).json({ message: 'Series ID and Season Number are required.' })
+    }
+
+    const parsedSeriesId = Number(seriesId)
+    const parsedSeasonNumber = Number(seasonNumber)
+
+    if (isNaN(parsedSeriesId) || isNaN(parsedSeasonNumber)) {
+      return res.status(400).json({ message: 'Invalid Series ID or Season Number.' })
+    }
+
+    const tmdbUrl = `${TMDB_BASE_URL}/tv/${parsedSeriesId}/season/${parsedSeasonNumber}?api_key=${TMDB_API_KEY}&append_to_response=credits,videos,episodes`
+
+    const response = await axios.get(tmdbUrl)
+    const seasonDetails: TTMDBShowSeasonDetails = response.data
+
+    res.status(200).json(seasonDetails)
+  } catch (error: any) {
+    console.error('Error fetching season details from TMDB:', error.message)
+    if (axios.isAxiosError(error) && error.response) {
+      res
+        .status(error.response.status)
+        .json({ message: error.response.data.status_message || 'Error from TMDB API' })
+    } else {
+      res.status(500).json({ message: 'Internal server error.' })
+    }
   }
 }
