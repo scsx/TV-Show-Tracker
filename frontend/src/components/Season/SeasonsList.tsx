@@ -22,11 +22,7 @@ const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
   )
 
   if (!mainSeasons || mainSeasons.length === 0) {
-    return (
-      <Text>
-        No main seasons available for this show.
-      </Text>
-    )
+    return <Text>No main seasons available for this show.</Text>
   }
 
   const totalSeasons = show.number_of_seasons
@@ -104,6 +100,7 @@ const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
         season={selectedSeason}
         isOpen={isSheetOpen}
         onClose={handleCloseSheet}
+        seriesId={show.id}
       />
     </section>
   )
