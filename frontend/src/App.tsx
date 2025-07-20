@@ -7,6 +7,8 @@ import HomePage from '@/pages/HomePage'
 import KitchenSink from '@/pages/KitchenSink'
 import Login from '@/pages/Login'
 import NotFound from '@/pages/NotFound'
+import PersonPage from '@/pages/PersonPage'
+import Persons from '@/pages/Persons'
 import Profile from '@/pages/Profile'
 import Recommendations from '@/pages/Recommendations'
 import Register from '@/pages/Register'
@@ -57,6 +59,8 @@ const App = () => {
               <Route path="/trending" element={<Trending />} />
               <Route path="/shows" element={<Shows />} />
               <Route path="/shows/:id" element={<ShowPage />} />
+              <Route path="/persons" element={<Persons />} />
+              <Route path="/persons/:id" element={<PersonPage />} />
               <Route path="/recommendations" element={<Recommendations />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/profile/favorites" element={<Favorites />} />

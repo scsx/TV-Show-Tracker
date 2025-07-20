@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { TTMDBPersonDetails, TTMDBPersonCombinedCredit } from '@shared/types/person'
 
 /**
  * @description Service for interacting with TheMovieDB (TMDb) API.
@@ -80,6 +81,34 @@ class TmdbService {
     } catch (error: any) {
       console.error(`Error fetching TV show details for ID ${tvId} from TMDb:`, error.message)
       throw new Error(`Failed to fetch TV show details for ID ${tvId}: ${error.message}`)
+    }
+  }
+
+  /**
+   * @description Fetches detailed information for a specific person, including their combined movie and TV credits.
+   * @param {number} personId - The ID of the person.
+   * @returns {Promise<TTMDBPersonDetailsAPI & { combined_credits?: { cast: TTMDBPersonCombinedCredit[]; crew: TTMDBPersonCombinedCredit[]; } }>} - A promise that resolves to the TMDb person details with combined credits.
+   */
+  public async getPersonDetailsAndCredits(personId: number): Promise<
+    TTMDBPersonDetails & {
+      combined_credits?: { cast: TTMDBPersonCombinedCredit[]; crew: TTMDBPersonCombinedCredit[] }
+    }
+  > {
+    if (!this.TMDB_API_KEY || !this.TMDB_BASE_URL) {
+      throw new Error('TmdbService not initialized. Call initialize() first.')
+    }
+    try {
+      const response = await axios.get(`${this.TMDB_BASE_URL}/person/${personId}`, {
+        params: {
+          api_key: this.TMDB_API_KEY,
+          language: 'en-US',
+          append_to_response: 'combined_credits'
+        }
+      })
+      return response.data
+    } catch (error: any) {
+      console.error(`Error fetching person details for ID ${personId} from TMDb:`, error.message)
+      throw new Error(`Failed to fetch person details for ID ${personId}: ${error.message}`)
     }
   }
 }
