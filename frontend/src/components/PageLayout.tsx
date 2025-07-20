@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge'
 
 import Text from '@/components/Text'
 
-interface PageLayoutProps {
+type PageLayoutProps = {
   title: string
   subtitle?: string
   children: React.ReactNode

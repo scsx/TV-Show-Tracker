@@ -53,7 +53,7 @@ const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
         </Text>
       )}
 
-      <div className="grid grid-cols-8 gap-6">
+      <div className="grid grid-cols-6 gap-8">
         {mainSeasons.map((season: TTMDBShowSeason) => {
           const posterUrl = season.poster_path
             ? `${TMDB_BASE_IMAGES_URL}/w185${season.poster_path}`

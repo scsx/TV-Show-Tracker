@@ -16,6 +16,7 @@ export type {
   TTMDBShow,
   TTMDBShowSeason,
   TTMDBShowSeasonDetails,
+  TTMDBEpisode,
   TTMDBShowCredits,
   TTMDBShowLanguage,
   TTMDBShowSummary,

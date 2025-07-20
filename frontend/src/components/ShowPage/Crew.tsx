@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { type TMDBPersonCredit } from '@/types'
+import { type TTMDBPersonCredit } from '@/types'
 
 import Hyperlink from '@/components/Hyperlink'
 import Text from '@/components/Text'
 
-interface CrewProps {
-  crew: TMDBPersonCredit[]
+type CrewProps = {
+  crew: TTMDBPersonCredit[]
 }
 
 const Crew: React.FC<CrewProps> = ({ crew }) => {
@@ -15,7 +15,7 @@ const Crew: React.FC<CrewProps> = ({ crew }) => {
   }
 
   // Helper to get the most relevant role (job or department)
-  const getRole = (person: TMDBPersonCredit): string => {
+  const getRole = (person: TTMDBPersonCredit): string => {
     return person.job || person.department || ''
   }
 

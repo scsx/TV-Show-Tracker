@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge'
 import PageLayout from '@/components/PageLayout'
 import Text from '@/components/Text'
 
-interface LoadingProps {
+type LoadingProps = {
   message?: string
   type?: 'spinner' | 'skeleton'
   skeletonCount?: number

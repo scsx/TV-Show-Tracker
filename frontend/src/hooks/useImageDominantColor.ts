@@ -4,7 +4,7 @@ import ColorThief from 'colorthief'
 
 const colorThief = new ColorThief()
 
-interface DominantColorResult {
+type DominantColorResult = {
   rgb: [number, number, number]
   isDark: boolean
   isLight: boolean

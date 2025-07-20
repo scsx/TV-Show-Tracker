@@ -66,13 +66,13 @@ const ShowPage = () => {
         <div className="grid grid-cols-4 gap-x-16">
           <div className="col-span-3">
             <Cast cast={showData.cast} />
+            <SeasonsList show={showData} />
           </div>
           <aside className="col-span-1">
             <Crew crew={showData.crew} />
             <ShowInfo show={showData} />
           </aside>
         </div>
-        <SeasonsList show={showData} />
       </div>
     </div>
   )

@@ -3,7 +3,7 @@ import { MdErrorOutline } from 'react-icons/md'
 
 import axios from 'axios'
 import { AxiosError } from 'axios'
-
+import { Button } from '@/components/ui/button'
 import PageLayout from '@/components/PageLayout'
 import Text from '@/components/Text'
 
@@ -53,6 +53,10 @@ const ErrorDisplay: React.FC<TErrorDisplayProps> = ({
     displayTitle = title || 'Unhandled Error Type'
   }
 
+  const refreshPage = () => {
+    window.location.reload()
+  }
+
   return (
     <PageLayout title={displayTitle}>
       <div className="flex p-8 border rounded-lg mt-16 w-[400px] h-auto mx-auto mb-16">
@@ -64,6 +68,7 @@ const ErrorDisplay: React.FC<TErrorDisplayProps> = ({
             {displayMessage}
           </pre>
           {displayDetails && <Text variant="paragraph">{displayDetails}</Text>}
+          <Button onClick={refreshPage} variant="outline">Reload page</Button>
         </div>
       </div>
     </PageLayout>
