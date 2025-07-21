@@ -26,7 +26,7 @@ const PersonBio: React.FC<PersonBioProps> = ({ bio }) => {
   const profileImageUrl = profile_path
     ? `${TMDB_BASE_IMAGES_URL}/${imageSize}${profile_path}`
     : '/images/no-profile-picture.png'
-  console.log(also_known_as)
+
   return (
     <article>
       <img

@@ -4,6 +4,7 @@ import { type TTMDBPersonCombinedCredit } from '@/types'
 
 import PersonCreditCrew from '@/components/Person/PersonCreditCrew'
 import PersonCreditMovies from '@/components/Person/PersonCreditMovies'
+import PersonCreditShows from '@/components/Person/PersonCreditShows'
 import Text from '@/components/Text'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -22,28 +23,11 @@ const PersonCredits: React.FC<PersonCreditsProps> = ({ credits }) => {
     (credit) => credit.media_type === 'tv',
   )
 
-  console.log(credits.crew)
-
-  // Helper function to sort by date (most recent first)
-  const sortByDate = (
-    a: TTMDBPersonCombinedCredit,
-    b: TTMDBPersonCombinedCredit,
-  ) => {
-    const dateA = a.media_type === 'movie' ? a.release_date : a.first_air_date
-    const dateB = b.media_type === 'movie' ? b.release_date : b.first_air_date
-
-    const actualDateA = dateA ? new Date(dateA) : new Date(0)
-    const actualDateB = dateB ? new Date(dateB) : new Date(0)
-
-    return actualDateB.getTime() - actualDateA.getTime()
-  }
-
   return (
     <section>
-      {/* TODO: Default to shows */}
-      <Tabs defaultValue="crew" className="w-full">
+      <Tabs defaultValue="shows" className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-8">
-          <TabsTrigger value="tv-shows">
+          <TabsTrigger value="shows">
             TV Shows ({tvShowCastCredits.length})
           </TabsTrigger>
           <TabsTrigger value="movies">
@@ -52,21 +36,8 @@ const PersonCredits: React.FC<PersonCreditsProps> = ({ credits }) => {
           <TabsTrigger value="crew">Crew ({credits.crew.length})</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="tv-shows">
-          {tvShowCastCredits.length > 0 ? (
-            <div className="space-y-4 pt-4">
-              {tvShowCastCredits.sort(sortByDate).map((credit) => (
-                <Text key={credit.credit_id} as="p">
-                  {JSON.stringify(credit.name || credit.title)} (TV Show -{' '}
-                  {credit.character ? `as ${credit.character}` : 'Cast'})
-                </Text>
-              ))}
-            </div>
-          ) : (
-            <Text as="p" variant="paragraphL" className="py-8">
-              No TV show credits found.
-            </Text>
-          )}
+        <TabsContent value="shows">
+          <PersonCreditShows tvShows={tvShowCastCredits} />
         </TabsContent>
 
         <TabsContent value="movies">
@@ -77,6 +48,9 @@ const PersonCredits: React.FC<PersonCreditsProps> = ({ credits }) => {
         </TabsContent>
 
         <TabsContent value="crew">
+          <Text color="muted" className="mb-8 italic">
+            Details are not available yet.
+          </Text>
           <PersonCreditCrew crew={credits.crew} />
         </TabsContent>
       </Tabs>

@@ -1,4 +1,8 @@
-import { type TTMDBShow, type TTMDBShowSummaryModel } from '@/types'
+import {
+  type TTMDBPersonCombinedCredit,
+  type TTMDBShow,
+  type TTMDBShowSummaryModel,
+} from '@/types'
 
 /**
  * Maps a full TTMDBShow object (from show details API) to a TTMDBShowSummary object,
@@ -33,7 +37,7 @@ export const mapFullShowToSummary = (
  * @returns True if the object is TTMDBShow, false otherwise.
  */
 export const isTTMDBFullShow = (
-  show: TTMDBShow | TTMDBShowSummaryModel,
+  show: TTMDBShow | TTMDBShowSummaryModel | TTMDBPersonCombinedCredit,
 ): show is TTMDBShow => {
   // TTMDBShow has 'number_of_seasons' and 'number_of_episodes', which TTMDBShowSummaryModel does not.
   return (
@@ -43,5 +47,23 @@ export const isTTMDBFullShow = (
     Array.isArray(show.genres) &&
     (show.genres.length === 0 ||
       (typeof show.genres[0] === 'object' && 'id' in show.genres[0]))
+  )
+}
+
+/**
+ * Type guard to check if an object is of type TTMDBPersonCombinedCredit.
+ * Assumes 'media_type' is a distinguishing factor, and 'credit_id' for combined credits.
+ * @param show The object to check.
+ * @returns True if the object is TTMDBPersonCombinedCredit, false otherwise.
+ */
+export const isTTMDBPersonCombinedCredit = (
+  show: TTMDBShow | TTMDBShowSummaryModel | TTMDBPersonCombinedCredit,
+): show is TTMDBPersonCombinedCredit => {
+  return (
+    ('media_type' in show &&
+      (show.media_type === 'tv' || show.media_type === 'movie') &&
+      'credit_id' in show &&
+      'job' in show) ||
+    'character' in show
   )
 }
