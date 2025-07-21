@@ -33,6 +33,11 @@ const footerLinks = [
         href: '/shows/456',
         external: false,
       },
+      {
+        label: 'James Gandolfini',
+        href: '/persons/4691',
+        external: false,
+      },
       // TODO: Keep or delete.
       /* {
         label: 'Login',
