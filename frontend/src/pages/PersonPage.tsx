@@ -7,7 +7,9 @@ import { type TPerson } from '@/types'
 import ErrorDisplay from '@/components/ErrorDisplay'
 import Loading from '@/components/Loading'
 import PageLayout from '@/components/PageLayout'
-import PersonBio from '@/components/Person/PersonBio'
+import PersonCredits from '@/components/Person/PersonCredits'
+import PersonDetails from '@/components/Person/PersonDetails'
+import Text from '@/components/Text'
 
 import { getYearFromDateString } from '@/lib/date'
 
@@ -31,8 +33,6 @@ const PersonPage = () => {
         setLoading(true)
         setError(null)
         const data = await getPersonDetailsById(personId)
-        console.log(data.credits.cast)
-        console.log(data.credits.crew)
         setPersonData(data)
       } catch (err: any) {
         setError(
@@ -85,14 +85,37 @@ const PersonPage = () => {
   if (!personData) {
     return (
       <div className="flex flex-1 items-center justify-center">
-        <p>No person found.</p>
+        <Text>No person found.</Text>
       </div>
     )
   }
 
   return (
     <PageLayout title={personData.bio.name} subtitle={years}>
-      <PersonBio bio={personData.bio} />
+      <section className="flex space-x-16">
+        <div className="w-1/4">
+          <PersonDetails bio={personData.bio} />
+        </div>
+
+        <div className="w-3/4">
+          {personData.bio.biography && (
+            <>
+              <Text variant="h2" as="h2">
+                Biography
+              </Text>
+              <Text variant="paragraphL" className="mt-8 mb-16">
+                {personData.bio.biography}
+              </Text>
+            </>
+          )}
+          <Text variant="h2" as="h2" className="mb-8">
+            Work
+          </Text>
+          <PersonCredits credits={personData.credits} />
+        </div>
+      </section>
+
+      {/* <PersonBio bio={personData.bio} /> */}
       {/* <pre className="bg-gray-800 text-white p-4 rounded-lg overflow-x-auto text-sm">
         {JSON.stringify(personData.bio, null, 2)}
       </pre> */}

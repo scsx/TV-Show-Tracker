@@ -43,20 +43,17 @@ const Crew: React.FC<CrewProps> = ({ crew }) => {
       ) : (
         <ul>
           {limitedCrew.map((person) => (
-            <li key={person.credit_id} className="flex mb-1">
-              <Text as="p">
-                <Hyperlink href={`/persons/${person.id}`} variant="white">
-                  {person.name}
-                </Hyperlink>
-                ,{' '}
-                {getRole(person) && (
-                  <Text color="muted" as="span">
-                    {' '}
-                    {getRole(person)}
-                  </Text>
-                )}
-              </Text>
-            </li>
+            <Text as="li" key={person.credit_id} className="flex mb-1">
+              <Hyperlink href={`/persons/${person.id}`} variant="white">
+                {person.name}
+              </Hyperlink>
+              ,{' '}
+              {getRole(person) && (
+                <Text color="muted" as="span" className="pl-1">
+                  {getRole(person)}
+                </Text>
+              )}
+            </Text>
           ))}
           {limitedCrew.length < filteredCrew.length && (
             <li>

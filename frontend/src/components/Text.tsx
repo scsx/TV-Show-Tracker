@@ -28,6 +28,7 @@ type TextProps = {
     | 'h6'
     | 'span'
     | 'small'
+    | 'li'
   className?: string
   style?: CSSProperties
 }
