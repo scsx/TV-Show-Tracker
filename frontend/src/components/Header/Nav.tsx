@@ -44,6 +44,11 @@ export function Nav() {
       href: '/trending',
     },
     {
+      label: 'Persons',
+      type: 'link',
+      href: '/persons',
+    },
+    {
       label: 'Shows',
       type: 'dropdown',
       dropdownContent: {

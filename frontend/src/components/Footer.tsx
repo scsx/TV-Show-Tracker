@@ -39,6 +39,11 @@ const footerLinks = [
         external: false,
       },
       {
+        label: "Conan O'Brien",
+        href: '/persons/81200',
+        external: false,
+      },
+      {
         label: 'James Gandolfini',
         href: '/persons/4691',
         external: false,
