@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
 import { tmdbService } from '../services/tmdb.service'
-import { TPerson, TTMDBPersonCombinedCredit } from '@shared/types/person'
+import {
+  TPerson,
+  TTMDBPersonCombinedCredit,
+  TTMDBPopularPersonsResponse
+} from '@shared/types/person'
 
 /**
  * @route GET /api/tmdb/persons/:id
@@ -54,6 +58,34 @@ export const getPersonDetailsById = async (req: Request, res: Response): Promise
       res.status(503).json({ msg: 'External API service unavailable.' })
     } else {
       res.status(500).json({ msg: 'Server Error while fetching person details and credits.' })
+    }
+  }
+}
+
+/**
+ * @route GET /api/tmdb/persons/popular
+ * @description Fetches a list of popular persons from TMDb.
+ * @access Private (via auth middleware)
+ */
+export const getPopularPersons = async (req: Request, res: Response): Promise<void> => {
+  try {
+    // Chama o serviço TMDb para obter pessoas populares
+    const tmdbResponse: TTMDBPopularPersonsResponse = await tmdbService.getPopularPersons()
+
+    // Envia apenas a lista de resultados para o frontend
+    res.status(200).json(tmdbResponse.results)
+  } catch (error: any) {
+    console.error('Error fetching popular persons:', error.message)
+
+    if (error.message.includes('No popular persons found')) {
+      // Mensagem de erro personalizada do serviço TMDb
+      res.status(404).json({ msg: 'No popular persons found.' })
+    } else if (error.message.includes('timed out')) {
+      res.status(504).json({ msg: 'Request to external API timed out.' })
+    } else if (error.message.includes('service unavailable')) {
+      res.status(503).json({ msg: 'External API service unavailable.' })
+    } else {
+      res.status(500).json({ msg: 'Server Error while fetching popular persons.' })
     }
   }
 }

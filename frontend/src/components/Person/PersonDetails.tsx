@@ -3,10 +3,10 @@ import React from 'react'
 import { type TTMDBPersonDetails } from '@/types'
 
 import Hyperlink from '@/components/Hyperlink'
+import TMDBImage from '@/components/TMDBImage'
 import Text from '@/components/Text'
 
 import { cleanUrl } from '@/lib/clean-url'
-import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
 
 type PersonBioProps = {
   bio: TTMDBPersonDetails
@@ -22,17 +22,15 @@ const PersonBio: React.FC<PersonBioProps> = ({ bio }) => {
     profile_path,
   } = bio
 
-  const imageSize = 'w300'
-  const profileImageUrl = profile_path
-    ? `${TMDB_BASE_IMAGES_URL}/${imageSize}${profile_path}`
-    : '/images/no-profile-picture.png'
-
   return (
     <article>
-      <img
-        src={profileImageUrl}
+      <TMDBImage
+        path={profile_path}
+        size="w300"
+        aspect={profile_path ? '2/3' : 'square'}
         alt={name}
         className="object-cover w-full h-auto rounded-lg shadow-md"
+        usage="person"
       />
       <div className="mt-8 flex flex-col space-y-4">
         <div>

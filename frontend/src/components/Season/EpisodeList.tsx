@@ -2,9 +2,9 @@ import React from 'react'
 
 import { type TTMDBEpisode } from '@/types'
 
+import TMDBImage from '@/components/TMDBImage'
 import Text from '@/components/Text'
 
-import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
 import { formatShortDate } from '@/lib/date'
 
 type EpisodeListProps = {
@@ -26,10 +26,13 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episodes }) => {
         <div key={episode.id} className="flex space-x-8 mb-8">
           {episode.still_path && (
             <div className="w-1/2">
-              <img
-                src={`${TMDB_BASE_IMAGES_URL}/w300${episode.still_path}`}
+              <TMDBImage
+                path={episode.still_path}
+                size="w300"
                 alt={`Still from ${episode.name}`}
-                className="w-full h-auto"
+                className="w-full h-auto rounded-md object-cover aspect-video"
+                usage="poster"
+                aspect="video"
               />
             </div>
           )}

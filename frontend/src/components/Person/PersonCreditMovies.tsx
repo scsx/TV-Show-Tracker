@@ -2,9 +2,9 @@ import React from 'react'
 
 import { type TTMDBPersonCombinedCredit } from '@/types'
 
+import TMDBImage from '@/components/TMDBImage'
 import Text from '@/components/Text'
 
-import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
 import { getYearFromDateString } from '@/lib/date'
 
 interface PersonCreditMoviesProps {
@@ -13,7 +13,11 @@ interface PersonCreditMoviesProps {
 
 const PersonCreditMovies: React.FC<PersonCreditMoviesProps> = ({ movies }) => {
   if (movies.length === 0) {
-    return <Text as="p">No movie credits found.</Text>
+    return (
+      <Text variant="paragraphL" as="p">
+        No movie credits found.
+      </Text>
+    )
   }
 
   return (
@@ -28,20 +32,21 @@ const PersonCreditMovies: React.FC<PersonCreditMoviesProps> = ({ movies }) => {
         })
         .map((credit) => (
           <article key={credit.credit_id}>
-            <img
-              src={
-                credit.poster_path
-                  ? `${TMDB_BASE_IMAGES_URL}/w185${credit.poster_path}`
-                  : '/images/no-poster.png'
-              }
-              className="aspect-[2/3] rounded-sm"
+            <TMDBImage
+              path={credit.poster_path}
+              size="w185"
               alt={credit.title || 'Movie Poster'}
+              className="aspect-[2/3] rounded-sm"
+              usage="poster"
+              aspect="2/3"
             />
             <div>
               <Text variant="h4" as="h4" className="leading-none my-2">
                 {credit.title}{' '}
-                {credit.release_date && ( 
-                  <small className='text-muted-foreground'>({getYearFromDateString(credit.release_date)})</small>
+                {credit.release_date && (
+                  <small className="text-muted-foreground">
+                    ({getYearFromDateString(credit.release_date)})
+                  </small>
                 )}
               </Text>
               {credit.character && (

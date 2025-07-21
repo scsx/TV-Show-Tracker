@@ -4,6 +4,7 @@ import { type TTMDBShow } from '@/types'
 import { twMerge } from 'tailwind-merge'
 
 import ShowHeroDetails from '@/components/ShowPage/ShowHeroDetails'
+import TMDBImage from '@/components/TMDBImage'
 import Text from '@/components/Text'
 import ToggleFavorite from '@/components/ToggleFavorite'
 
@@ -49,10 +50,6 @@ const ShowHero: React.FC<ShowHeroProps> = ({ show }) => {
     : hasPoster
       ? `${TMDB_BASE_IMAGES_URL}/w780${show.poster_path}`
       : ''
-
-  const posterImageUrl = hasPoster
-    ? `${TMDB_BASE_IMAGES_URL}/${posterImageSize}${show.poster_path}`
-    : ''
 
   const imgRef = useRef<HTMLImageElement>(null)
 
@@ -117,19 +114,22 @@ const ShowHero: React.FC<ShowHeroProps> = ({ show }) => {
           }}
         >
           <div className="container flex space-x-16 items-end h-full pb-8">
-            {posterImageUrl && (
+            {hasPoster && (
               <div className="w-1/4 flex-shrink-0">
-                <img
-                  src={posterImageUrl}
+                <TMDBImage
+                  path={show.poster_path}
+                  size={posterImageSize}
                   alt={`${show.name} poster`}
-                  className="w-full h-auto rounded-lg shadow-lg aspect-[2/3]"
+                  className="w-full h-auto rounded-lg shadow-lg"
+                  usage="poster"
+                  aspect="2/3"
                 />
               </div>
             )}
             <div
               className={twMerge(
                 'flex flex-col justify-end',
-                posterImageUrl ? 'w-2/4' : 'w-3/4',
+                hasPoster ? 'w-2/4' : 'w-3/4',
               )}
             >
               <Text variant="h1" as="h1" className="mb-4">

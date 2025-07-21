@@ -114,11 +114,6 @@ const PersonPage = () => {
           <PersonCredits credits={personData.credits} />
         </div>
       </section>
-
-      {/* <PersonBio bio={personData.bio} /> */}
-      {/* <pre className="bg-gray-800 text-white p-4 rounded-lg overflow-x-auto text-sm">
-        {JSON.stringify(personData.bio, null, 2)}
-      </pre> */}
     </PageLayout>
   )
 }

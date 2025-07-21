@@ -14,10 +14,10 @@ import {
   isTTMDBPersonCombinedCredit,
   mapFullShowToSummary,
 } from '@/components/ShowCard/mapFullShowToSummary'
+import TMDBImage from '@/components/TMDBImage'
 import Text from '@/components/Text'
 import ToggleFavorite from '@/components/ToggleFavorite'
 
-import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
 import { getYearFromDateString } from '@/lib/date'
 
 type ShowCardProps = {
@@ -85,9 +85,6 @@ const ShowCard: React.FC<ShowCardProps> = ({
   }
 
   const imageSize = isPersonCredit ? 'w185' : 'w500'
-  const imageUrl = dataToDisplay.poster_path
-    ? `${TMDB_BASE_IMAGES_URL}/${imageSize}${dataToDisplay.poster_path}`
-    : '/images/no-poster.png'
   const releaseYear = getYearFromDateString(dataToDisplay.first_air_date)
 
   return (
@@ -98,10 +95,13 @@ const ShowCard: React.FC<ShowCardProps> = ({
     >
       <div className="flex flex-col h-full overflow-hidden transform transition duration-300 hover:scale-105">
         <div className="aspect-[2/3] w-full overflow-hidden">
-          <img
-            src={imageUrl}
+          <TMDBImage
+            path={dataToDisplay.poster_path}
+            size={imageSize}
             alt={dataToDisplay.name || 'Show Poster'}
             className="object-cover w-full h-full"
+            usage="poster"
+            aspect="2/3"
           />
         </div>
 
@@ -119,7 +119,7 @@ const ShowCard: React.FC<ShowCardProps> = ({
               className="mb-2 leading-none transition-colors duration-300 group-hover:text-primary"
             >
               {dataToDisplay.name}
-              {releaseYear && <small>({releaseYear})</small>}
+              {releaseYear && <small> ({releaseYear})</small>}
             </Text>
 
             {/* Display character if it's a person credit, otherwise display overview */}

@@ -2,9 +2,9 @@ import React from 'react'
 
 import { type TTMDBPersonCombinedCredit } from '@/types'
 
+import TMDBImage from '@/components/TMDBImage'
 import Text from '@/components/Text'
 
-import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
 import { getYearFromDateString } from '@/lib/date'
 
 interface PersonCreditCrewProps {
@@ -60,14 +60,13 @@ const PersonCreditCrew: React.FC<PersonCreditCrewProps> = ({ crew }) => {
     <div className="grid grid-cols-6 gap-x-4 gap-y-8">
       {sortedGroupedCredits.map((group) => (
         <article key={group.credit.id}>
-          <img
-            className="aspect-[2/3] rounded-sm"
-            src={
-              group.credit.poster_path
-                ? `${TMDB_BASE_IMAGES_URL}/w185${group.credit.poster_path}`
-                : '/images/no-poster.png'
-            }
+          <TMDBImage
+            path={group.credit.poster_path}
+            size="w185"
             alt={group.credit.title || group.credit.name || 'Poster'}
+            className="aspect-[2/3] rounded-sm"
+            usage="poster"
+            aspect="2/3"
           />
           <div>
             <Text variant="h4" as="h4" className="leading-none mt-2 mb-4">

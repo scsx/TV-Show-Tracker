@@ -39,6 +39,11 @@ const footerLinks = [
         external: false,
       },
       {
+        label: 'SNL (huge cast)',
+        href: '/shows/279299',
+        external: false,
+      },
+      {
         label: "Conan O'Brien",
         href: '/persons/81200',
         external: false,

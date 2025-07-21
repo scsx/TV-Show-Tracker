@@ -3,28 +3,24 @@ import React from 'react'
 import { type TTMDBPersonCredit } from '@/types'
 
 import Hyperlink from '@/components/Hyperlink'
+import TMDBImage from '@/components/TMDBImage'
 import Text from '@/components/Text'
-
-import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
 
 interface PersonCardProps {
   person: TTMDBPersonCredit
 }
 
 const PersonCard: React.FC<PersonCardProps> = ({ person }) => {
-  const profileImageSize = 'w185'
-
-  const personProfileImageUrl = person.profile_path
-    ? `${TMDB_BASE_IMAGES_URL}/${profileImageSize}${person.profile_path}`
-    : '/images/no-poster.png'
-
   return (
     <Hyperlink href={`/persons/${person.id}`} variant="white" className="group">
       <div className="flex flex-col items-center text-center">
-        <img
-          src={personProfileImageUrl}
+        <TMDBImage
+          path={person.profile_path}
+          size="w185"
           alt={person.name}
           className="w-24 h-24 rounded-full object-cover object-[50%_30%] shadow-md mb-2 border-2 border-transparent group-hover:border-primary transition-colors duration-200"
+          usage="person"
+          aspect="square"
         />
         <Text
           variant="h4"

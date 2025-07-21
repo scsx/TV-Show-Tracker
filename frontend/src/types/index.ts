@@ -16,6 +16,8 @@ export type {
   TTMDBPersonDetails,
   TTMDBPersonCredit,
   TTMDBGuestStar,
+  TTMDBPopularPerson,
+  TTMDBPopularPersonsResponse,
 } from '@shared/types/person'
 export type { TTMDBProductionCompany } from '@shared/types/production-company'
 export type {

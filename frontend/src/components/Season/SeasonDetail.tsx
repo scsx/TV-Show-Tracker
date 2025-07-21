@@ -6,6 +6,7 @@ import { type TTMDBShowSeason, type TTMDBShowSeasonDetails } from '@/types'
 import EpisodeList from '@/components/Season/EpisodeList'
 import SeasonDetailError from '@/components/Season/SeasonDetailError'
 import SeasonDetailLoading from '@/components/Season/SeasonDetailLoading'
+import TMDBImage from '@/components/TMDBImage'
 import Text from '@/components/Text'
 import {
   Sheet,
@@ -14,7 +15,6 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet'
 
-import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
 import { formatShortDate } from '@/lib/date'
 
 type SeasonDetailsProps = {
@@ -113,10 +113,6 @@ const SeasonDetails: React.FC<SeasonDetailsProps> = ({
     )
   }
 
-  const posterUrl = seasonToDisplay.poster_path
-    ? `${TMDB_BASE_IMAGES_URL}/w300${seasonToDisplay.poster_path}`
-    : '/images/no-poster.png'
-
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="w-1/2 sm:max-w-1/2 overflow-y-auto">
@@ -134,10 +130,13 @@ const SeasonDetails: React.FC<SeasonDetailsProps> = ({
 
           <div className="flex pt-8 space-x-8">
             <div className="w-1/3">
-              <img
-                src={posterUrl}
+              <TMDBImage
+                path={seasonToDisplay.poster_path}
+                size="w300"
                 alt={seasonToDisplay.name}
                 className="w-full h-auto"
+                usage="poster"
+                aspect={seasonToDisplay.poster_path ? '2/3' : 'square'}
               />
             </div>
             <div className="w-2/3">

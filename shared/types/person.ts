@@ -72,6 +72,22 @@ export type TTMDBPersonDetails = {
   profile_path: string | null
 }
 
+// For https://api.themoviedb.org/3/person/popular
+export type TTMDBPopularPerson = Pick<
+  TTMDBPersonDetails,
+  'adult' | 'gender' | 'id' | 'known_for_department' | 'name' | 'popularity' | 'profile_path'
+> & {
+  known_for: TTMDBPersonCombinedCredit[]
+  original_name: string
+}
+
+export type TTMDBPopularPersonsResponse = {
+  page: number
+  results: TTMDBPopularPerson[]
+  total_pages: number
+  total_results: number
+}
+
 // API will return a combined response with these types.
 // This will be the concern of frontend.
 export type TPerson = {

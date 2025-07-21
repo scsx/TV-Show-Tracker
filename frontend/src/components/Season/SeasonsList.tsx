@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 import { type TTMDBShow, type TTMDBShowSeason } from '@/types'
 
 import SeasonDetail from '@/components/Season/SeasonDetail'
+import TMDBImage from '@/components/TMDBImage'
 import Text from '@/components/Text'
 
-import { TMDB_BASE_IMAGES_URL } from '@/lib/constants'
 import { getYearFromDateString } from '@/lib/date'
 
 type SeasonsListProps = {
@@ -56,10 +56,6 @@ const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
 
       <div className="grid grid-cols-6 gap-8">
         {mainSeasons.map((season: TTMDBShowSeason) => {
-          const posterUrl = season.poster_path
-            ? `${TMDB_BASE_IMAGES_URL}/w185${season.poster_path}`
-            : '/images/no-poster.png'
-
           const airDate = season.air_date
             ? getYearFromDateString(season.air_date)
             : 'N/A'
@@ -70,11 +66,15 @@ const SeasonsList: React.FC<SeasonsListProps> = ({ show }) => {
               className="overflow-hidden flex flex-col cursor-pointer transition-transform duration-200 hover:scale-105"
               onClick={() => handleSeasonClick(season)}
             >
-              <img
-                src={posterUrl}
+              <TMDBImage
+                path={season.poster_path}
+                size="w185"
                 alt={season.name}
                 className="w-full h-auto rounded-lg object-cover"
+                usage="poster"
+                aspect="2/3"
               />
+
               <div className="flex pt-2 flex-col flex-grow">
                 <Text
                   variant="h5"
