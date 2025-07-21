@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import axios from 'axios'
-import { TPerson, TTMDBPersonDetails, TTMDBPersonCombinedCredit } from '@shared/types/person'
+import { tmdbService } from '../services/tmdb.service'
+import { TPerson, TTMDBPersonCombinedCredit } from '@shared/types/person'
 
 /**
  * @route GET /api/tmdb/persons/:id
  * @description Fetches detailed information for a specific person from TMDb by their ID, including combined credits.
- * @access Private (via auth middleware na rota)
+ * @access Private (via auth middleware)
  */
 export const getPersonDetailsById = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params
@@ -16,28 +16,9 @@ export const getPersonDetailsById = async (req: Request, res: Response): Promise
   }
 
   try {
-    const TMDB_API_KEY = process.env.TMDB_API_KEY
-    const TMDB_BASE_URL = process.env.TMDB_BASE_URL
     const personId = Number(id)
+    const tmdbData = await tmdbService.getPersonDetailsAndCredits(personId)
 
-    if (!TMDB_API_KEY || !TMDB_BASE_URL) {
-      console.error('TMDB_API_KEY or TMDB_BASE_URL not configured in environment variables.')
-      res.status(500).json({ msg: 'Server configuration error.' })
-      return
-    }
-
-    const tmdbUrl = `${TMDB_BASE_URL}/person/${personId}`
-    const response = await axios.get(tmdbUrl, {
-      params: {
-        api_key: TMDB_API_KEY,
-        language: 'en-US',
-        append_to_response: 'combined_credits'
-      }
-    })
-
-    const tmdbData = response.data
-
-    // Format data.
     const personResponse: TPerson = {
       bio: {
         adult: tmdbData.adult,
@@ -64,16 +45,15 @@ export const getPersonDetailsById = async (req: Request, res: Response): Promise
     res.status(200).json(personResponse)
   } catch (error: any) {
     console.error(`Error fetching person details for TMDB ID ${id}:`, error.message)
-    if (axios.isAxiosError(error) && error.response) {
-      if (error.response.status === 404) {
-        res.status(404).json({ msg: 'Person not found on TMDb.' })
-        return
-      }
-      res
-        .status(error.response.status)
-        .json({ msg: error.response.data.status_message || 'Error from external API.' })
-      return
+
+    if (error.message.includes('Person not found on TMDb')) {
+      res.status(404).json({ msg: 'Person not found on TMDb.' })
+    } else if (error.message.includes('timed out')) {
+      res.status(504).json({ msg: 'Request to external API timed out.' })
+    } else if (error.message.includes('service unavailable')) {
+      res.status(503).json({ msg: 'External API service unavailable.' })
+    } else {
+      res.status(500).json({ msg: 'Server Error while fetching person details and credits.' })
     }
-    res.status(500).json({ msg: 'Server Error while fetching person details and credits.' })
   }
 }

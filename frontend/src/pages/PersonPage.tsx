@@ -50,7 +50,7 @@ const PersonPage = () => {
   if (loading) {
     return (
       <div className="flex flex-1 items-center justify-center">
-        <Loading type="spinner" message="A carregar detalhes da pessoa..." />
+        <Loading type="spinner" message="Loading person..." />
       </div>
     )
   }

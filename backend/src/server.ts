@@ -9,7 +9,7 @@ import cron from 'node-cron'
 // Routes
 import authRoutes from './routes/auth.routes'
 import showRoutes from './routes/tmdb/show.routes'
-import createPersonRouter from './routes/tmdb/person.routes'
+import personRoutes from './routes/tmdb/person.routes'
 import userRoutes from './routes/user.routes'
 
 //Middlewares
@@ -104,11 +104,11 @@ app.use('/api/auth', authRoutes)
 // All routes in show.routes.ts will be prefixed with /api/tmdb/shows
 app.use('/api/tmdb/shows', showRoutes(io)) // Pass io because controller can't access it.
 
+// Person routes.
+app.use('/api/tmdb/persons', personRoutes)
+
 // User routes (for now only favorites)
 app.use('/api/users', userRoutes)
-
-// Person routes.
-app.use('/api/tmdb/persons', createPersonRouter)
 
 // Status routes
 app.get('/', (req, res) => {

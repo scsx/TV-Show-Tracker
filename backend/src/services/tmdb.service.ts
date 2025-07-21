@@ -98,16 +98,19 @@ class TmdbService {
       throw new Error('TmdbService not initialized. Call initialize() first.')
     }
     try {
-      const response = await axios.get(`${this.TMDB_BASE_URL}/person/${personId}`, {
-        params: {
-          api_key: this.TMDB_API_KEY,
-          language: 'en-US',
-          append_to_response: 'combined_credits'
-        }
-      })
+      const url = `${this.TMDB_BASE_URL}/person/${personId}`
+      const params = {
+        api_key: this.TMDB_API_KEY,
+        language: 'en-US',
+        append_to_response: 'combined_credits'
+      }
+
+      const response = await axios.get(url, { params })
+
       return response.data
     } catch (error: any) {
-      console.error(`Error fetching person details for ID ${personId} from TMDb:`, error.message)
+      if (axios.isAxiosError(error)) {
+      }
       throw new Error(`Failed to fetch person details for ID ${personId}: ${error.message}`)
     }
   }
