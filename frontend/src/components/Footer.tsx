@@ -34,6 +34,11 @@ const footerLinks = [
         external: false,
       },
       {
+        label: 'Show w/o image',
+        href: '/shows/31663',
+        external: false,
+      },
+      {
         label: 'James Gandolfini',
         href: '/persons/4691',
         external: false,

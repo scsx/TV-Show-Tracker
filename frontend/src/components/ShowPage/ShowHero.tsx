@@ -41,15 +41,18 @@ const ShowHero: React.FC<ShowHeroProps> = ({ show }) => {
   }, [])
 
   // Images and colors.
-  const backgroundImageUrl = show.backdrop_path
-    ? `${TMDB_BASE_IMAGES_URL}/${backdropImageSize}${show.backdrop_path}`
-    : show.poster_path
-      ? `${TMDB_BASE_IMAGES_URL}/w780${show.poster_path}`
-      : '/images/no-poster.png'
+  const hasBackdrop = !!show.backdrop_path
+  const hasPoster = !!show.poster_path
 
-  const posterImageUrl = show.poster_path
+  const backgroundImageUrl = hasBackdrop
+    ? `${TMDB_BASE_IMAGES_URL}/${backdropImageSize}${show.backdrop_path}`
+    : hasPoster
+      ? `${TMDB_BASE_IMAGES_URL}/w780${show.poster_path}`
+      : ''
+
+  const posterImageUrl = hasPoster
     ? `${TMDB_BASE_IMAGES_URL}/${posterImageSize}${show.poster_path}`
-    : '/images/no-poster.png'
+    : ''
 
   const imgRef = useRef<HTMLImageElement>(null)
 
@@ -57,7 +60,7 @@ const ShowHero: React.FC<ShowHeroProps> = ({ show }) => {
 
   const overlayColor = dominantColorResult
     ? `rgba(${dominantColorResult.rgb[0]}, ${dominantColorResult.rgb[1]}, ${dominantColorResult.rgb[2]}, 0.7)`
-    : 'rgba(0, 0, 0, 0.8)'
+    : 'hsl(var(--darkblue))'
 
   return (
     <>
@@ -81,7 +84,10 @@ const ShowHero: React.FC<ShowHeroProps> = ({ show }) => {
           >
             {show.name}
           </Text>
-          <ToggleFavorite showId={show.id} className="bg-black/50 top-0 right-0 -mt-1" />
+          <ToggleFavorite
+            showId={show.id}
+            className="bg-black/50 top-0 right-0 -mt-1"
+          />
         </div>
       </div>
 
@@ -89,17 +95,21 @@ const ShowHero: React.FC<ShowHeroProps> = ({ show }) => {
         ref={heroRef}
         className="relative w-full min-h-[600px] bg-cover bg-center"
         style={{
-          backgroundImage: `url('${backgroundImageUrl}')`,
+          backgroundImage: backgroundImageUrl
+            ? `url('${backgroundImageUrl}')`
+            : 'none',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       >
-        <img
-          ref={imgRef}
-          src={backgroundImageUrl}
-          crossOrigin="anonymous"
-          style={{ display: 'none' }}
-        />
+        {backgroundImageUrl && (
+          <img
+            ref={imgRef}
+            src={backgroundImageUrl}
+            crossOrigin="anonymous"
+            style={{ display: 'none' }}
+          />
+        )}
         <div
           className="absolute inset-0"
           style={{
@@ -107,14 +117,21 @@ const ShowHero: React.FC<ShowHeroProps> = ({ show }) => {
           }}
         >
           <div className="container flex space-x-16 items-end h-full pb-8">
-            <div className="w-1/4 flex-shrink-0">
-              <img
-                src={posterImageUrl}
-                alt={`${show.name} poster`}
-                className="w-full h-auto rounded-lg shadow-lg aspect-[2/3]"
-              />
-            </div>
-            <div className="w-2/4 flex flex-col justify-end">
+            {posterImageUrl && (
+              <div className="w-1/4 flex-shrink-0">
+                <img
+                  src={posterImageUrl}
+                  alt={`${show.name} poster`}
+                  className="w-full h-auto rounded-lg shadow-lg aspect-[2/3]"
+                />
+              </div>
+            )}
+            <div
+              className={twMerge(
+                'flex flex-col justify-end',
+                posterImageUrl ? 'w-2/4' : 'w-3/4',
+              )}
+            >
               <Text variant="h1" as="h1" className="mb-4">
                 {show.name}
               </Text>

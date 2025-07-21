@@ -11,7 +11,7 @@ type CrewProps = {
 
 const Crew: React.FC<CrewProps> = ({ crew }) => {
   if (!crew || crew.length === 0) {
-    return <p>Crew not available.</p>
+    return <Text className='py-8 italic'>Crew not available.</Text>
   }
 
   // Helper to get the most relevant role (job or department)
