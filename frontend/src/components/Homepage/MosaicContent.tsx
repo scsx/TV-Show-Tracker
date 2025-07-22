@@ -27,11 +27,11 @@ const MosaicContent = ({ emptyCellCoordinates }: MosaicContentProps) => {
       <div className="flex space-x-4 mt-4">
         {isAuthenticated ? (
           <>
-            <Hyperlink variant="btnYellow" href="/xxxxxx">
-              TODO: BTN and link
+            <Hyperlink variant="btnYellow" href="/trending">
+              Trending shows
             </Hyperlink>
-            <Hyperlink variant="btnYellow" href="/xxxxxx">
-              TODO: BTN and link
+            <Hyperlink variant="btnYellow" href="/persons">
+              Trendy people
             </Hyperlink>
           </>
         ) : (
