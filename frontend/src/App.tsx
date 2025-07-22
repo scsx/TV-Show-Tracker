@@ -17,7 +17,7 @@ import Shows from '@/pages/Shows'
 import Trending from '@/pages/Trending'
 
 import AuthGuard from '@/components/AuthGuard'
-import Footer from '@/components/Footer'
+import Footer from '@/components/Footer/Footer'
 import Header from '@/components/Header/Header'
 import Loading from '@/components/Loading'
 import { Toaster } from '@/components/ui/sonner'
@@ -61,7 +61,7 @@ const App = () => {
               <Route path="/shows/:id" element={<ShowPage />} />
               <Route path="/persons" element={<Persons />} />
               <Route path="/persons/:id" element={<PersonPage />} />
-              <Route path="/recommendations" element={<Recommendations />} />
+              <Route path="/profile/recommendations" element={<Recommendations />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/profile/favorites" element={<Favorites />} />
             </Route>

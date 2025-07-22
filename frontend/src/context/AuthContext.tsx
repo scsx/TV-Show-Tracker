@@ -25,6 +25,7 @@ type AuthContextType = {
   fetchUserFavoriteids: () => Promise<void>
   toggleFavorite: (showId: number) => Promise<void>
   isFavorite: (id: number) => boolean
+  loginTime: number | null
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -39,6 +40,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [favoriteShowids, setFavoriteShowids] = useState<number[]>([])
+  const [loginTime, setLoginTime] = useState<number | null>(null)
 
   // Fetch user's favorite TMDB IDs from the backend.
   const fetchUserFavoriteids = useCallback(async () => {
@@ -75,6 +77,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const loadAuthData = () => {
       const storedToken = localStorage.getItem('token')
       const storedUser = localStorage.getItem('user')
+      const storedLoginTime = localStorage.getItem('loginTime')
 
       if (storedToken && storedUser) {
         try {
@@ -82,6 +85,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setToken(storedToken)
           setUser(parsedUser)
           setIsAuthenticated(true)
+          if (storedLoginTime) {
+            setLoginTime(parseInt(storedLoginTime, 10))
+          }
         } catch (error) {
           // If parsing fails, clear invalid data
           logout()
@@ -162,8 +168,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setToken(newToken)
     setUser(newUser)
     setIsAuthenticated(true)
+    const currentTime = Date.now()
+    setLoginTime(currentTime)
+
     localStorage.setItem('token', newToken)
     localStorage.setItem('user', JSON.stringify(newUser))
+    localStorage.setItem('loginTime', currentTime.toString())
   }, [])
 
   // Logout function: clears token and user from state and localStorage.
@@ -172,8 +182,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(null)
     setIsAuthenticated(false)
     setFavoriteShowids([])
+    setLoginTime(null)
     localStorage.removeItem('token')
     localStorage.removeItem('user')
+    localStorage.removeItem('loginTime')
   }, [])
 
   // useMemo for context value to prevent unnecessary re-renders
@@ -189,6 +201,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       fetchUserFavoriteids,
       toggleFavorite,
       isFavorite,
+      loginTime,
     }),
     [
       user,
@@ -201,6 +214,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       fetchUserFavoriteids,
       toggleFavorite,
       isFavorite,
+      loginTime,
     ],
   )
 
