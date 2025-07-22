@@ -93,7 +93,7 @@ export function Nav() {
 
   return (
     <nav className="relative">
-      <ul className="flex items-center space-x-4">
+      <ul className="flex items-center space-x-8">
         {menuItems.map((item, index) => (
           <li key={index} className="group">
             {item.type === 'link' ? (

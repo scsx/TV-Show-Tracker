@@ -1,6 +1,6 @@
 import React from 'react'
-import { FiUserX } from 'react-icons/fi'
-import { LuImageOff } from 'react-icons/lu'
+import { LiaUserTimesSolid } from 'react-icons/lia'
+import { MdOutlineHideImage } from 'react-icons/md'
 
 import { twMerge } from 'tailwind-merge'
 
@@ -44,9 +44,10 @@ const TMDBImage: React.FC<TMDBImageProps> = ({
   }
 
   if (!imageUrl) {
-    const IconComponent = usage === 'person' ? FiUserX : LuImageOff
+    const IconComponent =
+      usage === 'person' ? LiaUserTimesSolid : MdOutlineHideImage
     const iconSizeClass = ['w45', 'w92', 'w154', 'w185'].includes(size)
-      ? 'text-4xl'
+      ? 'text-5xl'
       : 'text-[100px]'
 
     return (

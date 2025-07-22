@@ -33,15 +33,17 @@ const PersonBio: React.FC<PersonBioProps> = ({ bio }) => {
         usage="person"
       />
       <div className="mt-8 flex flex-col space-y-4">
-        <div>
-          <Text variant="h4">Born</Text>
-          <Text>
-            {birthday && <span>{birthday}</span>}
-            {birthday && place_of_birth && <span>, </span>}
+        {(birthday || place_of_birth) && (
+          <div>
+            <Text variant="h4">Born</Text>
+            <Text>
+              {birthday && <span>{birthday}</span>}
+              {birthday && place_of_birth && <span>, </span>}
 
-            {place_of_birth && <span>{place_of_birth}</span>}
-          </Text>
-        </div>
+              {place_of_birth && <span>{place_of_birth}</span>}
+            </Text>
+          </div>
+        )}
 
         {imdb_id && (
           <div>

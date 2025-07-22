@@ -42,7 +42,7 @@ const ToggleFavorite: React.FC<ToggleFavoriteProps> = ({
     <button
       onClick={handleToggleFavorite}
       className={twMerge(
-        'absolute top-2 right-2 p-2 bg-black bg-opacity-60 rounded-full text-white hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition-colors duration-200',
+        'absolute top-2 right-2 p-2 bg-black/30 rounded-full text-white hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition-colors duration-200',
         className,
       )}
       aria-label={isShowFavorite ? 'Remove from favorites' : 'Add to favorites'}
