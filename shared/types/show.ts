@@ -115,3 +115,20 @@ export type TTMDBShowSummaryModel = TTMDBShowSummary & {
   updatedAt?: Date
   createdAt?: Date
 }
+
+// Type for the search (discover) format: https://api.themoviedb.org/3/discover/tv
+export type TTMDBShowSearchResult = Pick<
+  TTMDBShow,
+  | 'name'
+  | 'id'
+  | 'original_name'
+  | 'overview'
+  | 'poster_path'
+  | 'backdrop_path'
+  | 'first_air_date'
+  | 'popularity'
+  | 'vote_average'
+  | 'vote_count'
+  | 'origin_country'
+  | 'original_language'
+>

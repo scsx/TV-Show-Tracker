@@ -11,6 +11,7 @@ import authRoutes from './routes/auth.routes'
 import showRoutes from './routes/tmdb/show.routes'
 import personRoutes from './routes/tmdb/person.routes'
 import recommendationRoutes from './routes/tmdb/recommendation.routes'
+import searchRoutes from './routes/tmdb/search.routes'
 import userRoutes from './routes/user.routes'
 
 //Middlewares
@@ -109,7 +110,10 @@ app.use('/api/tmdb/shows', showRoutes(io)) // Pass io because controller can't a
 app.use('/api/tmdb/persons', personRoutes)
 
 // Recommendations routes.
-app.use('/api/users', recommendationRoutes) 
+app.use('/api/users', recommendationRoutes)
+
+// Search (discover) routes.
+app.use('/api/search', searchRoutes)
 
 // User routes (for now only favorites)
 app.use('/api/users', userRoutes)
