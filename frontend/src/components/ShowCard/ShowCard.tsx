@@ -1,4 +1,5 @@
 import React from 'react'
+import { GiFlame } from 'react-icons/gi'
 import { IoCalendarClearOutline } from 'react-icons/io5'
 import { MdOutlineStarOutline } from 'react-icons/md'
 
@@ -24,12 +25,14 @@ type ShowCardProps = {
   show: TTMDBShow | TTMDBShowSummaryModel | TTMDBPersonCombinedCredit
   showHeartAsFavorite?: boolean
   isPersonCredit?: boolean
+  showAsHot?: boolean
 }
 
 const ShowCard: React.FC<ShowCardProps> = ({
   show,
   showHeartAsFavorite = true,
   isPersonCredit = false,
+  showAsHot = false,
 }) => {
   // Define the base type for data to be displayed in the card.
   // This helps ensure consistent property access regardless of the 'show' prop's original type.
@@ -109,6 +112,8 @@ const ShowCard: React.FC<ShowCardProps> = ({
           showId={dataToDisplay.id}
           showHeartAsFavorite={showHeartAsFavorite}
         />
+
+        {showAsHot && <GiFlame className='absolute right-2 top-16 p-1.5 rounded-full bg-primary text-red-600 text-4xl' />}
 
         <div className="flex flex-col flex-grow pt-4">
           <div className="flex-grow">
