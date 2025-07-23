@@ -13,7 +13,7 @@ export type TTMDBKeywordsResponse = {
 }
 
 // Complete respoonse from https://api.themoviedb.org/3/discover/tv
-export type TTMDBDiscoverTVResponse = {
+export type TTMDBSearchShowResponse = {
   page: number
   results: TTMDBShowSearchResult[]
   total_pages: number

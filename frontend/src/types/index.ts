@@ -12,6 +12,11 @@ export type { TAccessToken } from '@shared/types/access-token'
 export type { TTMDBGenre } from '@shared/types/genre'
 export type { TRecommendation } from '@shared/types/recommendation'
 export type {
+  TTMDBKeyword,
+  TTMDBKeywordsResponse,
+  TTMDBSearchShowResponse,
+} from '@shared/types/search'
+export type {
   TPerson,
   TTMDBPersonCombinedCredit,
   TTMDBPersonDetails,
@@ -30,4 +35,5 @@ export type {
   TTMDBShowLanguage,
   TTMDBShowSummary,
   TTMDBShowSummaryModel,
+  TTMDBShowSearchResult,
 } from '@shared/types/show'

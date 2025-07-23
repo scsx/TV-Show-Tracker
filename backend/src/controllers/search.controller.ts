@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import axios from 'axios'
 import { TTMDBShowSearchResult } from '@shared/types/show'
-import { TTMDBKeywordsResponse, TTMDBDiscoverTVResponse } from '@shared/types/search'
+import { TTMDBKeywordsResponse, TTMDBSearchShowResponse } from '@shared/types/search'
 
 /**
  * @description Fetches keyword IDs from a text query via TMDB's search/keyword endpoint.
@@ -73,18 +73,19 @@ export const searchTvShows = async (req: Request, res: Response) => {
       discoverParams.with_genres = genreIds
     }
 
-    const response = await axios.get<TTMDBDiscoverTVResponse>(`${TMDB_BASE_URL}/discover/tv`, {
+    const response = await axios.get<TTMDBSearchShowResponse>(`${TMDB_BASE_URL}/discover/tv`, {
       params: discoverParams
     })
 
-    // Directly assign results as TTMDBShowSearchResult, assuming the TMDB response structure aligns
-    const searchResults: TTMDBShowSearchResult[] = response.data.results
+    const searchResults: TTMDBShowSearchResult[] = response.data.results || []
+    const totalPages: number = response.data.total_pages || 1
+    const totalResults: number = response.data.total_results || 0
 
     res.json({
       shows: searchResults,
       page: response.data.page,
-      totalPages: response.data.total_pages,
-      totalResults: response.data.total_results
+      totalPages: totalPages,
+      totalResults: totalResults
     })
   } catch (error: any) {
     console.error('Error searching TV shows on TMDB:', error.response?.data || error.message)
