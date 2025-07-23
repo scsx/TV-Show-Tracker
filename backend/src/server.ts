@@ -10,6 +10,7 @@ import cron from 'node-cron'
 import authRoutes from './routes/auth.routes'
 import showRoutes from './routes/tmdb/show.routes'
 import personRoutes from './routes/tmdb/person.routes'
+import recommendationRoutes from './routes/tmdb/recommendation.routes'
 import userRoutes from './routes/user.routes'
 
 //Middlewares
@@ -106,6 +107,9 @@ app.use('/api/tmdb/shows', showRoutes(io)) // Pass io because controller can't a
 
 // Person routes.
 app.use('/api/tmdb/persons', personRoutes)
+
+// Recommendations routes.
+app.use('/api/users', recommendationRoutes) 
 
 // User routes (for now only favorites)
 app.use('/api/users', userRoutes)

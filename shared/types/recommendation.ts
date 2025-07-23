@@ -5,5 +5,5 @@ import { type TTMDBShowSummary } from './show'
 export type TRecommendation = {
   favoriteId: number
   favoriteName: string
-  favoriteReccommended: TTMDBShowSummary[]
+  favoriteRecommended: TTMDBShowSummary[]
 }
