@@ -20,7 +20,6 @@ const Persons = () => {
       try {
         const fetchedPersons = await getPopularPersons()
         setPersons(fetchedPersons)
-        console.log(fetchedPersons)
       } catch (err: any) {
         setError(err.message || 'Failed to fetch popular persons.')
       } finally {
@@ -41,8 +40,8 @@ const Persons = () => {
 
   return (
     <PageLayout title="Persons" subtitle="Most popular now on TMDB">
-      <Text className="flex items-center italic mb-8" color='muted'>
-        Movies open a google search <TfiNewWindow className='ml-2' />
+      <Text className="flex items-center italic mb-8" color="muted">
+        Movies open a google search <TfiNewWindow className="ml-2" />
       </Text>
       <div className="grid grid-cols-4 gap-12">
         {persons.map((person) => (

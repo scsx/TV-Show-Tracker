@@ -13,6 +13,8 @@ import Text from '@/components/Text'
 
 import { getYearFromDateString } from '@/lib/date'
 
+import { useDynamicDocumentTitle } from '@/hooks/useDynamicDocumentTitle'
+
 const PersonPage = () => {
   const { id } = useParams<{ id: string }>()
   const personId = Number(id)
@@ -73,6 +75,8 @@ const PersonPage = () => {
       setYears(yearsString)
     }
   }, [personData])
+
+  useDynamicDocumentTitle(personData ? personData.bio.name : null)
 
   if (loading) {
     return <Loading type="spinner" message="Loading person..." />
