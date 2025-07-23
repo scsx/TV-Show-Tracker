@@ -50,7 +50,8 @@ const fetchTmdbRecommendations = async (showId: number): Promise<TTMDBShowSummar
     })
     const data = response.data
 
-    return data.results.map((show: any) => ({
+    // Limit to 6.
+    return data.results.slice(0, 6).map((show: any) => ({
       id: show.id,
       name: show.name,
       original_name: show.original_name,

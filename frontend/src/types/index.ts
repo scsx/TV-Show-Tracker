@@ -10,6 +10,7 @@ export type { TUser } from '@shared/types/user'
 export type { TTMDBCreator } from '@shared/types/creator'
 export type { TAccessToken } from '@shared/types/access-token'
 export type { TTMDBGenre } from '@shared/types/genre'
+export type { TRecommendation } from '@shared/types/recommendation'
 export type {
   TPerson,
   TTMDBPersonCombinedCredit,

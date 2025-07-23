@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import authMiddleware from 'src/middleware/auth.middleware'
-import { getPersonalizedRecommendations } from 'src/controllers/recommendation.controller'
+import authMiddleware from '../../middleware/auth.middleware'
+import { getPersonalizedRecommendations } from '../../controllers/recommendation.controller'
 
 const router = Router()
 
