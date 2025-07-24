@@ -24,6 +24,7 @@ const fetchKeywordIds = async (query: string): Promise<number[]> => {
         query: query
       }
     })
+
     return response.data.results.map((keyword) => keyword.id)
   } catch (error) {
     console.error('Error fetching keyword IDs from TMDB:', error)
