@@ -134,3 +134,4 @@ export type TTMDBShowSearchResult = Pick<
 > & {
   genre_ids: number[]
 }
+
