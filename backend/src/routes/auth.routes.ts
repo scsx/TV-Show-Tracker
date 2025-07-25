@@ -44,7 +44,7 @@ router.post('/register', async (req: Request, res: Response) => {
     const accessToken = new AccessToken({
       token: tokenValue,
       userId: user._id, // User's ID from MongoDB
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // Token expires in 7 days
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // Token expires in 24h
     })
     await accessToken.save()
 
@@ -89,7 +89,7 @@ router.post('/login', async (req: Request, res: Response) => {
     const accessToken = new AccessToken({
       token: tokenValue,
       userId: user._id,
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // Token expires in 7 days
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // Token expires in 24h
     })
     await accessToken.save()
 
