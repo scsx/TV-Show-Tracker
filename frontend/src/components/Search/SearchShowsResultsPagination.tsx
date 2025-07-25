@@ -93,7 +93,6 @@ const SearchShowsResultsPagination: React.FC<
 
           <PaginationItem>
             <PaginationNext
-              href="#" // TODO: not #
               onClick={(e) => {
                 e.preventDefault()
                 onPageChange(currentPage + 1)

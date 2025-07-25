@@ -92,7 +92,6 @@ const SearchShowsResults: React.FC<SearchShowsResultsProps> = ({
       <div className="grid grid-cols-5 gap-6">
         {shows.map((show) => (
           <div key={show.id}>
-            {/* TODO: TS */}
             <ShowCard key={show.id} show={show} />
           </div>
         ))}

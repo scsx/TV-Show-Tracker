@@ -11,8 +11,6 @@ type EpisodeListProps = {
   episodes: TTMDBEpisode[]
 }
 
-// TODO: formatShortDate
-
 const EpisodeList: React.FC<EpisodeListProps> = ({ episodes }) => {
   return (
     <div className="mt-4">

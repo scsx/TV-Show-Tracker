@@ -14,8 +14,6 @@ import ShowInfo from '@/components/ShowPage/ShowInfo'
 
 import { useDynamicDocumentTitle } from '@/hooks/useDynamicDocumentTitle'
 
-// TODO: Hero sticky
-
 const ShowPage = () => {
   const { id } = useParams<{ id: string }>()
   const [showData, setShowData] = useState<TTMDBShow | null>(null)
