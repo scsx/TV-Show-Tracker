@@ -14,8 +14,6 @@ type PersonKnowForProps = {
 const PersonKnowFor: React.FC<PersonKnowForProps> = ({ knownFor }) => {
   const posterImageSize = 'w92'
 
-  console.log(knownFor)
-
   return (
     <div className="mt-2">
       <Text variant="small" className="text-center" color="muted">

@@ -66,7 +66,7 @@ const Favorites: React.FC = () => {
   return (
     <PageLayout title="Favorites">
       {favoriteShowsDetails.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-[50%]">
+        <div className="flex flex-col items-center justify-center py-16">
           <Text variant="h3" as="h2" className="mb-8">
             You don't have any favorite shows yet. Start exploring!
           </Text>
