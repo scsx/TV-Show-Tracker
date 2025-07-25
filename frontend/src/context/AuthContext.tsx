@@ -10,6 +10,8 @@ import React, {
 
 import type { TUser } from '@/types'
 
+import { usePushNotification } from '@/hooks/usePushNotification'
+
 const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL
 
 type AuthContextType = {
@@ -41,6 +43,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true)
   const [favoriteShowids, setFavoriteShowids] = useState<number[]>([])
   const [loginTime, setLoginTime] = useState<number | null>(null)
+  const { showToast } = usePushNotification()
 
   // Fetch user's favorite TMDB IDs from the backend.
   const fetchUserFavoriteids = useCallback(async () => {
@@ -116,6 +119,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return
       }
 
+      // Feedback.
+      const isCurrentlyFavorite = favoriteShowids.includes(showId)
+      const optimisticMessageTitle = isCurrentlyFavorite
+        ? 'Removed from favorites'
+        : 'Added to favoritos'
+
       // Optimistic update.
       // Save state if error.
       const originalFavoriteShowids = [...favoriteShowids]
@@ -125,6 +134,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         } else {
           return [...prevIds, showId]
         }
+      })
+
+      showToast({
+        title: optimisticMessageTitle,
+        description: 'Confirm at Profile > Favorites',
       })
 
       try {

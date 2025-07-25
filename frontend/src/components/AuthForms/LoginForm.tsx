@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
   type LoginFormInputs,
   loginFormSchema,
-} from '@/components/Forms/zod-form-schemas'
+} from '@/components/AuthForms/zod-form-schemas'
 import Text from '@/components/Text'
 import { Button } from '@/components/ui/button'
 import {

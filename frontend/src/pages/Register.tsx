@@ -1,6 +1,6 @@
 import { CiCircleInfo } from 'react-icons/ci'
 
-import RegisterForm from '@/components/Forms/RegisterForm/RegisterForm'
+import RegisterForm from '@/components/AuthForms/RegisterForm/RegisterForm'
 import Hyperlink from '@/components/Hyperlink'
 import PageLayout from '@/components/PageLayout'
 import Text from '@/components/Text'
@@ -21,8 +21,7 @@ const Register = () => {
                 Already registered?
               </Text>
               <Text>
-                You can{' '}
-                <Hyperlink href="/login">login here.</Hyperlink>
+                You can <Hyperlink href="/login">login here.</Hyperlink>
               </Text>
             </div>
           </Alert>

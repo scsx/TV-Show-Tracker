@@ -3,11 +3,11 @@ import { useForm } from 'react-hook-form'
 import { useAuth } from '@/context/AuthContext'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import RegisterFormUI from '@/components/Forms/RegisterForm/RegisterFormUI'
+import RegisterFormUI from '@/components/AuthForms/RegisterForm/RegisterFormUI'
 import {
   type RegisterFormInputs,
   registerFormSchema,
-} from '@/components/Forms/zod-form-schemas'
+} from '@/components/AuthForms/zod-form-schemas'
 
 import { usePushNotification } from '@/hooks/usePushNotification'
 

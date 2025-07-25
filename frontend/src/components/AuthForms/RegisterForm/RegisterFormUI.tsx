@@ -1,6 +1,6 @@
 import { type UseFormReturn } from 'react-hook-form'
 
-import { type RegisterFormInputs } from '@/components/Forms/zod-form-schemas'
+import { type RegisterFormInputs } from '@/components/AuthForms/zod-form-schemas'
 import Text from '@/components/Text'
 import { Button } from '@/components/ui/button'
 import {
