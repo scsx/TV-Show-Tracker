@@ -94,7 +94,7 @@ const ShowCard: React.FC<ShowCardProps> = ({
     <Hyperlink
       href={`/shows/${dataToDisplay.id}`}
       variant="unstyled"
-      className="group"
+      className="block group"
     >
       <div className="flex flex-col h-full overflow-hidden transform transition duration-300 hover:scale-105">
         <div className="aspect-[2/3] w-full overflow-hidden">
@@ -132,21 +132,21 @@ const ShowCard: React.FC<ShowCardProps> = ({
               </Text>
             ) : (
               dataToDisplay.overview && (
-                <Text className="truncate">{dataToDisplay.overview}</Text>
+                <Text variant='small' className="u-clamp-2-lines">{dataToDisplay.overview}</Text>
               )
             )}
           </div>
-          <div className="flex justify-between items-center pt-4">
+          <div className="flex justify-between items-center pt-1">
             {dataToDisplay.vote_average !== undefined &&
               dataToDisplay.vote_count !== undefined && (
-                <Text className="flex items-center">
+                <Text className="flex items-center" color='muted'>
                   <MdOutlineStarOutline className="mr-2 text-lg" />{' '}
                   {dataToDisplay.vote_average.toFixed(1)} (
                   {dataToDisplay.vote_count})
                 </Text>
               )}
             {dataToDisplay.first_air_date && (
-              <Text className="flex items-center">
+              <Text className="flex items-center" color='muted'>
                 <IoCalendarClearOutline className="mr-2 text-sm" />{' '}
                 {releaseYear}
               </Text>

@@ -64,7 +64,7 @@ const Favorites: React.FC = () => {
   }
 
   return (
-    <PageLayout title="Favorites">
+    <PageLayout title="Favorites" className="pb-48">
       {favoriteShowsDetails.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16">
           <Text variant="h3" as="h2" className="mb-8">
@@ -75,11 +75,20 @@ const Favorites: React.FC = () => {
           </Hyperlink>
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-x-8 gap-y-12">
-          {favoriteShowsDetails.map((show) => (
-            <ShowCard key={show.id} show={show} showHeartAsFavorite={false} />
-          ))}
-        </div>
+        <>
+          <Text className="mb-8" color="muted">
+            Check{' '}
+            <Hyperlink href="/profile/recommendations">
+              recommendations
+            </Hyperlink>{' '}
+            for more like these.
+          </Text>
+          <div className="grid grid-cols-4 gap-x-8 gap-y-12">
+            {favoriteShowsDetails.map((show) => (
+              <ShowCard key={show.id} show={show} showHeartAsFavorite={false} />
+            ))}
+          </div>
+        </>
       )}
     </PageLayout>
   )

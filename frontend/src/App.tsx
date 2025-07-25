@@ -1,3 +1,4 @@
+import React, { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@/context/AuthContext'
@@ -14,7 +15,6 @@ import Recommendations from '@/pages/Recommendations'
 import Register from '@/pages/Register'
 import ShowPage from '@/pages/ShowPage'
 import Shows from '@/pages/Shows'
-import Trending from '@/pages/Trending'
 
 import AuthGuard from '@/components/AuthGuard'
 import Footer from '@/components/Footer/Footer'
@@ -25,6 +25,9 @@ import { Toaster } from '@/components/ui/sonner'
 import { useAxiosInterceptor } from '@/hooks/useAxiosInterceptor'
 import { useDynamicDocumentTitle } from '@/hooks/useDynamicDocumentTitle'
 import { useSocketNotifications } from '@/hooks/useSocketNotifications'
+
+// Lazy load the Trending component (heavy)
+const Trending = React.lazy(() => import('@/pages/Trending'))
 
 const App = () => {
   useSocketNotifications()
@@ -56,12 +59,30 @@ const App = () => {
 
             {/* Protected routes */}
             <Route element={<AuthGuard />}>
-              <Route path="/trending" element={<Trending />} />
+              {/* Suspense for trending only */}
+              <Route
+                path="/trending"
+                element={
+                  <Suspense
+                    fallback={
+                      <Loading
+                        type="spinner"
+                        message="Loading trending shows..."
+                      />
+                    }
+                  >
+                    <Trending />
+                  </Suspense>
+                }
+              />
               <Route path="/shows" element={<Shows />} />
               <Route path="/shows/:id" element={<ShowPage />} />
               <Route path="/persons" element={<Persons />} />
               <Route path="/persons/:id" element={<PersonPage />} />
-              <Route path="/profile/recommendations" element={<Recommendations />} />
+              <Route
+                path="/profile/recommendations"
+                element={<Recommendations />}
+              />
               <Route path="/profile" element={<Profile />} />
               <Route path="/profile/favorites" element={<Favorites />} />
             </Route>
