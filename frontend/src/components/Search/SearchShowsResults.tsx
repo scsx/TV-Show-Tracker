@@ -4,6 +4,8 @@ import { type TTMDBShowSearchResult } from '@/types'
 
 import SearchShowsResultsPagination from '@/components/Search/SearchShowsResultsPagination'
 import ShowCard from '@/components/ShowCard/ShowCard'
+import Text from '@/components/Text'
+import { Button } from '@/components/ui/button'
 
 type SearchShowsResultsProps = {
   shows: TTMDBShowSearchResult[]
@@ -12,9 +14,10 @@ type SearchShowsResultsProps = {
   currentPage: number
   totalPages: number
   totalResults: number
-  onPageChange: (newPage: number) => void
   currentQuery: string
   currentGenreIds: string
+  onPageChange: (newPage: number) => void
+  onClearSearch: () => void
 }
 
 const SearchShowsResults: React.FC<SearchShowsResultsProps> = ({
@@ -24,9 +27,10 @@ const SearchShowsResults: React.FC<SearchShowsResultsProps> = ({
   currentPage,
   totalPages,
   totalResults,
-  onPageChange,
   currentQuery,
   currentGenreIds,
+  onPageChange,
+  onClearSearch,
 }) => {
   if (loading) {
     return (
@@ -64,19 +68,32 @@ const SearchShowsResults: React.FC<SearchShowsResultsProps> = ({
   }
 
   return (
-    <div className="p-4">
-      {totalResults > 0 && (
-        <p className="text-gray-400 text-sm mb-4 text-center">
-          Showing {shows.length} of {totalResults} results.
-          {currentQuery && ` para "${currentQuery}"`}
-        </p>
-      )}
+    <div className="pt-4">
+      <div className="flex items-center pb-8">
+        <div className="grow">
+          {totalResults > 0 && (
+            <Text color="muted">
+              Showing {shows.length} of {totalResults} results
+              {currentQuery && (
+                <>
+                  {' for "'}
+                  <span className="text-primary">{currentQuery}</span>
+                  {'"'}
+                </>
+              )}
+            </Text>
+          )}
+        </div>
+        <Button variant="ghost" onClick={onClearSearch}>
+          Clear search
+        </Button>
+      </div>
 
-      <div className="grid grid-cols-6 gap-6">
+      <div className="grid grid-cols-5 gap-6">
         {shows.map((show) => (
           <div key={show.id}>
-            {/* <ShowCard key={show.id} show={show} /> */}
-            <p className="whitespace-normal">{JSON.stringify(show.name)}</p>
+            {/* TODO: TS */}
+            <ShowCard key={show.id} show={show} />
           </div>
         ))}
       </div>

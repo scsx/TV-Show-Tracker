@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-
-import { twMerge } from 'tailwind-merge'
+import { IoSearch } from 'react-icons/io5'
 
 import Text from '@/components/Text'
 import { Button } from '@/components/ui/button'
@@ -13,14 +12,12 @@ type SearchFormProps = {
   initialQuery: string
   initialGenreIds: string
   onSubmit: (query: string, genreIds: string) => void
-  hasSearched?: boolean
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({
   initialQuery,
   initialGenreIds,
   onSubmit,
-  hasSearched = false,
 }) => {
   const [query, setQuery] = useState(initialQuery)
   const [genreIds, setGenreIds] = useState<string[]>(
@@ -42,10 +39,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className={twMerge(
-        'flex items-center border-2 rounded-md overflow-hidden border-darkblue bg-muted',
-        hasSearched ? 'mb-8' : 'mt-16 mb-64',
-      )}
+      className="flex items-center mb-8 border-2 rounded-md overflow-hidden border-darkblue bg-muted"
     >
       <Input
         type="text"
@@ -57,7 +51,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
       <ToggleGroup
         type="multiple"
-        className="h-12 flex gap-0 border-r-2 border-darkblue"
+        className="h-12 px-2 flex gap-0 border-r-2 border-darkblue"
         value={genreIds}
         onValueChange={(values: string[]) => setGenreIds(values)}
       >
@@ -76,9 +70,9 @@ const SearchForm: React.FC<SearchFormProps> = ({
       </ToggleGroup>
       <Button
         type="submit"
-        className="h-12 text-lg rounded-none font-bold bg-primary border-2 border-primary text-darkblue hover:bg-white hover:border-[#eed654]"
+        className="h-12 rounded-none bg-primary border-2 border-primary text-darkblue hover:bg-white hover:border-[#eed654]"
       >
-        Search {hasSearched}
+        <IoSearch />
       </Button>
     </form>
   )

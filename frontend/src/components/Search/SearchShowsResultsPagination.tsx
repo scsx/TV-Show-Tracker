@@ -47,7 +47,7 @@ const SearchShowsResultsPagination: React.FC<
   const visiblePageNumbers = getPageNumbers()
 
   return (
-    <div className="mt-8 flex justify-center">
+    <div className="mt-24 flex justify-center">
       <Pagination>
         <PaginationContent>
           <PaginationItem>

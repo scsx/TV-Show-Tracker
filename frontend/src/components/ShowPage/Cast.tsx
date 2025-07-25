@@ -11,7 +11,7 @@ type CastProps = {
 
 const Cast: React.FC<CastProps> = ({ cast }) => {
   if (!cast || cast.length === 0) {
-    return <Text>Cast not available.</Text>
+    return <Text className='pt-8 italic'>Cast not available.</Text>
   }
 
   return (
