@@ -131,4 +131,6 @@ export type TTMDBShowSearchResult = Pick<
   | 'vote_count'
   | 'origin_country'
   | 'original_language'
->
+> & {
+  genre_ids: number[]
+}
