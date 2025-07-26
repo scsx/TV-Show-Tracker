@@ -19,3 +19,6 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: jest.fn(),
   })),
 })
+
+// Mocks for .env
+process.env.VITE_BACKEND_URL = 'http://localhost:5000'

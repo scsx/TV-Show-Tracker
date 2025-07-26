@@ -1,23 +1,52 @@
 import { MemoryRouter } from 'react-router-dom'
 
 import { AuthContext } from '@/context/AuthContext'
+import { type TUser } from '@/types'
 import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
+import { cleanup, render, screen } from '@testing-library/react'
 
 import Header from '@/components/Header/Header'
 
-const mockAuthContext = (isAuthenticated: boolean) => ({
+type MockAuthContextType = {
+  isAuthenticated: boolean
+  user: TUser | null
+  login: jest.Mock
+  logout: jest.Mock
+  loading: boolean
+  token: string | null
+  favoriteShowids: number[]
+  fetchUserFavoriteids: jest.Mock
+  toggleFavorite: jest.Mock
+  isFavorite: jest.Mock
+  loginTime: number | null
+}
+
+const mockAuthContext = (isAuthenticated: boolean): MockAuthContextType => ({
   isAuthenticated: isAuthenticated,
   user: isAuthenticated
-    ? { id: '123', username: 'testuser', email: 'test@example.com' }
+    ? {
+        _id: '123',
+        username: 'testuser',
+        email: 'test@example.com',
+        favoriteShowids: [],
+      }
     : null,
   login: jest.fn(),
   logout: jest.fn(),
-  isLoading: false,
+  loading: false,
   token: isAuthenticated ? 'mock-auth-token' : null,
+  favoriteShowids: [],
+  fetchUserFavoriteids: jest.fn(),
+  toggleFavorite: jest.fn(),
+  isFavorite: jest.fn(),
+  loginTime: null,
 })
 
 describe('Header Component', () => {
+  afterEach(() => {
+    cleanup()
+  })
+
   test('renders login and register links when not authenticated', () => {
     render(
       <MemoryRouter>
@@ -50,7 +79,7 @@ describe('Header Component', () => {
     expect(screen.getByRole('navigation')).toBeInTheDocument()
   })
 
-  test('always renders the Logo', () => {
+  test('renders the Logo when not authenticated', () => {
     render(
       <MemoryRouter>
         <AuthContext.Provider value={mockAuthContext(false)}>
@@ -58,9 +87,18 @@ describe('Header Component', () => {
         </AuthContext.Provider>
       </MemoryRouter>,
     )
-    // Adjust "TV Show Tracker" to the actual text rendered by your Logo component
-    expect(screen.getByText(/TV Show Tracker/i)).toBeInTheDocument()
 
+    expect(
+      screen.getByText((content, element) => {
+        const hasText = (node: Element) => node.textContent === 'TVST'
+        const elementHasText =
+          element?.tagName.toLowerCase() === 'p' && hasText(element)
+        return elementHasText
+      }),
+    ).toBeInTheDocument()
+  })
+
+  test('renders the Logo when authenticated', () => {
     render(
       <MemoryRouter>
         <AuthContext.Provider value={mockAuthContext(true)}>
@@ -68,7 +106,14 @@ describe('Header Component', () => {
         </AuthContext.Provider>
       </MemoryRouter>,
     )
-    // Adjust "TV Show Tracker" to the actual text rendered by your Logo component
-    expect(screen.getByText(/TV Show Tracker/i)).toBeInTheDocument()
+
+    expect(
+      screen.getByText((content, element) => {
+        const hasText = (node: Element) => node.textContent === 'TVST'
+        const elementHasText =
+          element?.tagName.toLowerCase() === 'p' && hasText(element)
+        return elementHasText
+      }),
+    ).toBeInTheDocument()
   })
 })
