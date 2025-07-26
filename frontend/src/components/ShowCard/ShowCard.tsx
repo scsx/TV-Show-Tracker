@@ -71,13 +71,17 @@ const ShowCard: React.FC<ShowCardProps> = ({
         />
 
         {showAsHot && (
-          <GiFlame className="absolute right-2 top-16 p-1.5 rounded-full bg-primary text-red-600 text-4xl" />
+          <GiFlame
+            className="absolute right-2 top-16 p-1.5 rounded-full bg-primary text-red-600 text-4xl"
+            data-testid="gi-flame-icon"
+          />
         )}
 
         <div className="flex flex-col flex-grow pt-4">
           <div className="flex-grow">
             <Text
               variant={isPersonCredit ? 'h4' : 'h3'}
+              as='h3'
               className="mb-2 leading-none transition-colors duration-300 group-hover:text-primary"
             >
               {dataToDisplay.name}
