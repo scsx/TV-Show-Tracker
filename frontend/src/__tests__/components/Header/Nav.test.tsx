@@ -6,60 +6,57 @@ import { fireEvent, render, screen } from '@testing-library/react'
 
 import { Nav } from '@/components/Header/Nav'
 
-// Mock the useAuth hook
 jest.mock('@/context/AuthContext', () => ({
   useAuth: jest.fn(),
 }))
 
-// Mock the useNavigate hook
 const mockNavigate = jest.fn()
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
 }))
 
-describe('Nav Component - Profile Menu Only', () => {
+describe('Nav Component', () => {
   const mockLogout = jest.fn()
 
   beforeEach(() => {
-    // Reset mocks before each test
     ;(useAuth as jest.Mock).mockReturnValue({ logout: mockLogout })
     mockNavigate.mockClear()
     mockLogout.mockClear()
   })
 
-  test('renders "Profile" dropdown label', () => {
+  test('renders "Trending", "Persons", "Shows" links', () => {
     render(
       <MemoryRouter>
         <Nav />
       </MemoryRouter>,
     )
 
-    // Check for the "Profile" label
-    expect(screen.getByText('Profile')).toBeInTheDocument()
-    // Initially, dropdown content should not be visible
-    expect(
-      screen.queryByText('Manage your account and favorites'),
-    ).not.toBeVisible()
-    expect(screen.queryByRole('link', { name: /account/i })).not.toBeVisible()
+    expect(screen.getByRole('link', { name: /trending/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /persons/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /shows/i })).toBeInTheDocument()
   })
 
-  test('displays "Profile" dropdown content on hover', async () => {
+  test('renders "Profile" dropdown label and content is initially present but visually hidden by classes', () => {
     render(
       <MemoryRouter>
         <Nav />
       </MemoryRouter>,
     )
 
-    const profileLabel = screen.getByText('Profile')
-    fireEvent.mouseEnter(profileLabel) // Simulate hover
+    expect(screen.getByText('Profile')).toBeInTheDocument()
 
-    expect(
-      await screen.findByText('Manage your account and favorites'),
-    ).toBeVisible()
-    expect(screen.getByRole('link', { name: /account/i })).toBeVisible()
-    expect(screen.getByRole('link', { name: /favorites/i })).toBeVisible()
-    expect(screen.getByRole('button', { name: /logout/i })).toBeVisible()
+    const introDescription = screen.getByText(
+      'Manage your account, favorites and get recommendations',
+    )
+    expect(introDescription).toBeInTheDocument()
+
+    const dropdownContentDiv = introDescription.closest('div.absolute')
+
+    expect(dropdownContentDiv).toBeInTheDocument()
+    expect(dropdownContentDiv).toHaveClass('opacity-0')
+    expect(dropdownContentDiv).toHaveClass('invisible')
+    expect(dropdownContentDiv).toHaveClass('scale-y-0')
   })
 
   test('calls logout and navigates to login on "Logout" button click', async () => {
@@ -70,7 +67,7 @@ describe('Nav Component - Profile Menu Only', () => {
     )
 
     const profileLabel = screen.getByText('Profile')
-    fireEvent.mouseEnter(profileLabel) // Show dropdown
+    fireEvent.mouseEnter(profileLabel)
 
     const logoutButton = await screen.findByRole('button', { name: /logout/i })
     fireEvent.click(logoutButton)
@@ -89,12 +86,28 @@ describe('Nav Component - Profile Menu Only', () => {
     const profileLabel = screen.getByText('Profile')
     fireEvent.mouseEnter(profileLabel)
 
-    const accountLink = await screen.findByRole('link', { name: /account/i })
-    expect(accountLink).toHaveAttribute('href', '/profile')
-
     const favoritesLink = await screen.findByRole('link', {
       name: /favorites/i,
     })
     expect(favoritesLink).toHaveAttribute('href', '/profile/favorites')
+
+    const recommendationsLink = await screen.findByRole('link', {
+      name: /recommendations/i,
+    })
+    expect(recommendationsLink).toHaveAttribute(
+      'href',
+      '/profile/recommendations',
+    )
+  })
+
+  test('Profile dropdown label navigates to /profile via href', () => {
+    render(
+      <MemoryRouter>
+        <Nav />
+      </MemoryRouter>,
+    )
+
+    const profileLink = screen.getByRole('link', { name: /profile/i })
+    expect(profileLink).toHaveAttribute('href', '/profile')
   })
 })
