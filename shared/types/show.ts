@@ -107,6 +107,8 @@ export type TTMDBShowSummary = Pick<
 > & {
   // Overrides and additions for fields specific to the summary API response
   genre_ids: number[] // Trending/Popular endpoints return only genre IDs, not full genre objects
+  media_type: 'tv' | 'movie'
+  video?: boolean
 }
 
 // Type for the format from DB (Mongo)
@@ -134,4 +136,3 @@ export type TTMDBShowSearchResult = Pick<
 > & {
   genre_ids: number[]
 }
-

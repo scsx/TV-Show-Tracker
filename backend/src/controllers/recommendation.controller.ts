@@ -62,10 +62,11 @@ const fetchTmdbRecommendations = async (showId: number): Promise<TTMDBShowSummar
       popularity: show.popularity,
       vote_average: show.vote_average,
       vote_count: show.vote_count,
-      origin_country: show.origin_country,
+      origin_country: show.origin_country || [],
       original_language: show.original_language,
-      genre_ids: show.genre_ids,
-      media_type: show.media_type || 'tv'
+      genre_ids: show.genre_ids || [],
+      media_type: show.media_type || 'tv',
+      video: show.video ?? false
     })) as TTMDBShowSummary[]
   } catch (error: any) {
     console.error(
