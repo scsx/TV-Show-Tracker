@@ -36,7 +36,7 @@ export const fetchAndSaveTrendingShows = async (
  */
 export const getAllShowSummaries = async (req: Request, res: Response): Promise<void> => {
   try {
-    const showSummaries = await ShowSummary.find({})
+    const showSummaries = await ShowSummary.find({}).exec()
     res.status(200).json({
       message: 'Successfully retrieved all show summaries from the database.',
       count: showSummaries.length,
