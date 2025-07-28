@@ -1,8 +1,6 @@
 import { Schema, model } from 'mongoose'
 // Some imports are implicitly used.
-import { TTMDBShow, TTMDBShowSeason } from '@shared/types/show'
-import { TTMDBGenre } from '@shared/types/genre'
-import { TTMDBProductionCompany } from '@shared/types/production-company'
+import { TTMDBShow } from '@shared/types/show'
 
 /**
  * @description Mongoose schema for detailed TV show data, mapping to TTMDBShow.

@@ -4,7 +4,7 @@ import { TTMDBPersonDetails, TTMDBPersonCombinedCredit, TTMDBPopularPersonsRespo
 /**
  * @description Service for interacting with TheMovieDB (TMDb) API.
  */
-class TmdbService {
+export class TmdbService {
   private TMDB_BASE_URL: string | undefined
   private TMDB_API_KEY: string | undefined
 

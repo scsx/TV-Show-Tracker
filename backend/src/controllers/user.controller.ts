@@ -22,7 +22,7 @@ export const toggleFavoriteShow = async (req: Request, res: Response) => {
 
   try {
     // Fetch the user and ensure favoriteShowids is initialized
-    const user = await User.findById(userId).select('username favoriteShowids')
+    const user = await User.findById(userId).select('username favoriteShowids').exec()
 
     if (!user) {
       return res.status(404).json({ msg: 'User not found.' })
@@ -56,7 +56,9 @@ export const toggleFavoriteShow = async (req: Request, res: Response) => {
       userId,
       updateOperation,
       { new: true, runValidators: true } // 'new: true' returns the updated document; 'runValidators: true' ensures Mongoose schema validations are run
-    ).select('favoriteShowids') // Select only the field we want to return, for optimization.
+    )
+      .select('favoriteShowids')
+      .exec() // Select only the field we want to return, for optimization.
 
     if (!updatedUser) {
       return res.status(404).json({ msg: 'User not found after update attempt.' })
