@@ -6,6 +6,7 @@ import { MdOutlineStarOutline } from 'react-icons/md'
 import {
   type TTMDBPersonCombinedCredit,
   type TTMDBShow,
+  type TTMDBShowSearchResult,
   type TTMDBShowSummaryModel,
 } from '@/types'
 
@@ -30,7 +31,11 @@ export type TShowCardDisplayData = {
 }
 
 type ShowCardProps = {
-  show: TTMDBShow | TTMDBShowSummaryModel | TTMDBPersonCombinedCredit
+  show:
+    | TTMDBShow
+    | TTMDBShowSummaryModel
+    | TTMDBPersonCombinedCredit
+    | TTMDBShowSearchResult
   showHeartAsFavorite?: boolean
   isPersonCredit?: boolean
   showAsHot?: boolean
@@ -81,7 +86,7 @@ const ShowCard: React.FC<ShowCardProps> = ({
           <div className="flex-grow">
             <Text
               variant={isPersonCredit ? 'h4' : 'h3'}
-              as='h3'
+              as="h3"
               className="mb-2 leading-none transition-colors duration-300 group-hover:text-primary"
             >
               {dataToDisplay.name}

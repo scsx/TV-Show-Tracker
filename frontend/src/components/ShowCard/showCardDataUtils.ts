@@ -1,6 +1,7 @@
 import {
   type TTMDBPersonCombinedCredit,
   type TTMDBShow,
+  type TTMDBShowSearchResult,
   type TTMDBShowSummaryModel,
 } from '@/types'
 
@@ -47,12 +48,17 @@ export const mapFullShowToSummary = (
     origin_country: show.origin_country,
     original_language: show.original_language,
     genre_ids: show.genres ? show.genres.map((genre) => genre.id) : [],
+    media_type: 'tv',
   }
 }
 
 // Normalizes various show input types to a consistent TShowCardDisplayData format.
 export const normalizeShowData = (
-  show: TTMDBShow | TTMDBShowSummaryModel | TTMDBPersonCombinedCredit,
+  show:
+    | TTMDBShow
+    | TTMDBShowSummaryModel
+    | TTMDBPersonCombinedCredit
+    | TTMDBShowSearchResult,
 ): TShowCardDisplayData => {
   if (isTTMDBPersonCombinedCredit(show) && show.media_type === 'tv') {
     return {
