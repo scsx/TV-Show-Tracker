@@ -20,7 +20,7 @@ const PersonFullCard: React.FC<PersonFullCardProps> = ({ person }) => {
         variant="white"
         className="grow flex flex-col items-center text-center group"
       >
-        <figure className="relative">
+        <figure className="relative w-full">
           <TMDBImage
             path={person.profile_path}
             size="h632"
