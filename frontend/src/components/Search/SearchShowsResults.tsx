@@ -50,14 +50,7 @@ const SearchShowsResults: React.FC<SearchShowsResultsProps> = ({
 
   const isSearchEmpty = currentQuery === '' && currentGenreIds === ''
   const noResultsFound = shows.length === 0 && !isSearchEmpty
-
-  if (noResultsFound) {
-    return (
-      <div className="flex justify-center items-center h-64 text-gray-400 text-lg">
-        No results were found.
-      </div>
-    )
-  }
+  const hasResults = shows.length > 0 && !isSearchEmpty
 
   if (shows.length === 0 && isSearchEmpty) {
     return (
@@ -69,39 +62,63 @@ const SearchShowsResults: React.FC<SearchShowsResultsProps> = ({
 
   return (
     <div className="pt-4">
-      <div className="flex items-center pb-8">
-        <div className="grow">
-          {totalResults > 0 && (
-            <Text color="muted">
-              Showing {shows.length} of {totalResults} results
-              {currentQuery && (
-                <>
-                  {' for "'}
-                  <span className="text-primary">{currentQuery}</span>
-                  {'"'}
-                </>
-              )}
-            </Text>
-          )}
-        </div>
-        <Button variant="ghost" onClick={onClearSearch}>
-          Clear search
-        </Button>
-      </div>
-
-      <div className="grid grid-cols-5 gap-6">
-        {shows.map((show) => (
-          <div key={show.id}>
-            <ShowCard key={show.id} show={show} />
+      {!isSearchEmpty && (
+        <div className="flex items-center pb-8">
+          <div className="grow">
+            {hasResults && (
+              <Text color="muted">
+                Showing {shows.length} of {totalResults} results
+                {currentQuery && (
+                  <>
+                    {' for "'}
+                    <span className="text-primary">{currentQuery}</span>
+                    {'"'}
+                  </>
+                )}
+              </Text>
+            )}
+            {noResultsFound && (
+              <Text color="muted">
+                0 results for
+                {currentQuery && (
+                  <>
+                    {' "'}
+                    <span className="text-primary">{currentQuery}</span>
+                    {'"'}
+                  </>
+                )}
+              </Text>
+            )}
           </div>
-        ))}
-      </div>
+          <Button variant="ghost" onClick={onClearSearch}>
+            Clear search
+          </Button>
+        </div>
+      )}
 
-      <SearchShowsResultsPagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={onPageChange}
-      />
+      {hasResults && (
+        <div className="grid grid-cols-5 gap-6">
+          {shows.map((show) => (
+            <div key={show.id}>
+              <ShowCard key={show.id} show={show} />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {noResultsFound && (
+        <Text variant='paragraphL' className='mt-16 mb-32 text-center'>
+          Please check your spelling or try simpler terms.
+        </Text>
+      )}
+
+      {hasResults && (
+        <SearchShowsResultsPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
+      )}
     </div>
   )
 }
