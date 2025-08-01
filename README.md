@@ -1,5 +1,3 @@
-# TV Show Tracker (Tekever)
-
 # TV Show Tracker
 
 # 🎯 About
