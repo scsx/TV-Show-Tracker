@@ -1,5 +1,6 @@
 # TV Show Tracker
 
+
 # 🎯 About
 
 ## The ask
@@ -83,6 +84,7 @@ We would like you to build a small API that accomplishes the following:
     - HSL: `217 17% 67%`
     - `secondary` borders, buttons, etc
 
+
 # 🚀 Installation & Usage
 
 ## Prerequisites
@@ -109,6 +111,7 @@ We would like you to build a small API that accomplishes the following:
 5. **Run**
    - From root run **`npm run dev`**
    - Most of the app is protected by login
+
 
 # 🏗️ Development / Architecture
 
@@ -157,7 +160,7 @@ This project leveraged various tools and practices to enhance development effici
 - **Security**: The stack uses `bcryptjs` for hashing and securing user passwords
 - **Tests**: `jest`, `jest-environment-jsdom`, `@testing-library/react`
 
-**3. Base de Dados:**
+**3. Databases:**
 
 - **System:** MongoDB
 
@@ -223,6 +226,7 @@ Type names always start with “T”. E.g.:
 
 - Project **TV Show Tracker 2025** at [https://cloud.mongodb.com/](https://cloud.mongodb.com/).
 
+
 # 🛤️ Roadmap
 
 - **Documentation and Planning**
@@ -273,6 +277,7 @@ Type names always start with “T”. E.g.:
 
 ✅ End of day 6
 
+
 # 🧪 Tests
 
 ### Backend
@@ -290,9 +295,11 @@ Type names always start with “T”. E.g.:
 - For coverage at the root of the project run **`npm test --workspace=frontend -- --coverage`**
 - For individual file from **`/frontend`** run **`npm test src/tests/context/AuthContext.test.tsx`**
 
+
 # 📝 Documentation
 
 This is the documentation. It might include personal development notes. Originally it was a Notion page, whose markdown was reused for the GitHub readme.
+
 
 # ✅ Possible Enhancements
 
@@ -302,6 +309,7 @@ This is the documentation. It might include personal development notes. Original
 - Localization
 - Trailers
 - Social media
+
 
 # 🧑‍💻 Author & License
 
