@@ -2,6 +2,7 @@ import React from 'react'
 
 import { type TTMDBProvidersByCountry } from '@/types'
 
+import Hyperlink from '@/components/Hyperlink'
 // Ícones
 import Text from '@/components/Text'
 
@@ -55,15 +56,11 @@ const ProvidersContent: React.FC<CountryProvidersContentProps> = ({
       {renderProviders('flatrate', 'Streaming')}
       {renderProviders('buy', 'Buy')}
       {renderProviders('rent', 'Rent')}
-      {/* TODO: Stay or remove*/}
-      <a
-        href={countryProviders.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-sm text-gray-400 hover:text-white mt-4 block"
-      >
-        More info on TMDb
-      </a>
+      <Text>
+        <Hyperlink href={countryProviders.link} external>
+          More info on TMDb
+        </Hyperlink>
+      </Text>
     </div>
   )
 }
