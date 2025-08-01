@@ -96,7 +96,7 @@ We would like you to build a small API that accomplishes the following:
 1. **Clone the Repository**
 
    ```bash
-   git clone [<https://github.com/scsx/tv-show-tracker.git>](<https://github.com/scsx/tv-show-tracker.git>)
+   git clone https://github.com/scsx/tv-show-tracker.git
    cd tv-show-tracker
    ```
 
