@@ -222,10 +222,6 @@ Type names always start with “T”. E.g.:
 - **`TTMDBShowSummaryModel`** - (TV) show (short version) for the response from Mongo DB; models from DB end with “**`Model`**”
 - **`ShowCardProps`** - for props (component level only) add the suffix “**`Props`**”
 
-## MongoDB
-
-- Project **TV Show Tracker 2025** at [https://cloud.mongodb.com/](https://cloud.mongodb.com/).
-
 
 # 🛤️ Roadmap
 
