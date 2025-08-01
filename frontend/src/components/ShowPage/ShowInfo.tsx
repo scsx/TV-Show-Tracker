@@ -13,7 +13,7 @@ type SeasonsListProps = {
 
 const ShowInfo: React.FC<SeasonsListProps> = ({ show }) => {
   return (
-    <div>
+    <section className='mb-12'>
       <Text variant="h3" as="h3" className="mb-4">
         Info
       </Text>
@@ -65,7 +65,7 @@ const ShowInfo: React.FC<SeasonsListProps> = ({ show }) => {
           </Text>
         </div>
       )}
-    </div>
+    </section>
   )
 }
 

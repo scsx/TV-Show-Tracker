@@ -1,5 +1,5 @@
 /**
- * Re-exports common types from the shared module for convenient access within the frontend.
+ * This barrel file re-exports common types from the shared module for convenient access within the frontend.
  * This centralizes type imports and enhances development experience by improving autocompletion.
  *
  * For a larger monorepo, a more robust solution might involve TypeScript project references
@@ -37,3 +37,8 @@ export type {
   TTMDBShowSummaryModel,
   TTMDBShowSearchResult,
 } from '@shared/types/show'
+export type {
+  TTMDBWatchProvidersResponse,
+  TTMDBProvidersByCountry,
+  TTMDBProvider,
+} from '@shared/types/provider'

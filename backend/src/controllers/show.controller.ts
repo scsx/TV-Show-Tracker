@@ -2,8 +2,10 @@ import { Request, Response } from 'express'
 import { Server as SocketIOServer } from 'socket.io'
 import { showUpdaterTask } from '../services/showUpdater.service'
 import axios from 'axios'
+import { tmdbService } from '../services/tmdb.service'
 import ShowSummary from '../models/ShowSummary'
 import { TTMDBShow, TTMDBShowSeasonDetails } from '@shared/types/show'
+import { TTMDBWatchProvidersResponse } from '@shared/types/provider'
 
 /**
  * @description Fetches trending TV shows from TMDb and saves them (summaries) to the database.
@@ -145,5 +147,83 @@ export const getSeasonDetailsBySeriesIdAndSeasonNumber = async (req: Request, re
     } else {
       res.status(500).json({ message: 'Internal server error.' })
     }
+  }
+}
+
+/**
+ * @route GET /api/shows/:id/providers
+ * @description Fetches watch providers for a specific TV series from TMDb, filtering for desired countries.
+ * @access Private (via auth middleware on the route)
+ *
+ * @param {Request} req The Express request object.
+ * @param {Response} res The Express response object.
+ * @returns {Promise<void>} A promise that resolves once the response is sent.
+ */
+export const getShowProviders = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params
+
+  if (!id || isNaN(Number(id))) {
+    res.status(400).json({ msg: 'A valid TMDB show ID is required.' })
+    return
+  }
+
+  try {
+    const TMDB_API_KEY = process.env.TMDB_API_KEY
+    const TMDB_BASE_URL = process.env.TMDB_BASE_URL
+
+    if (!TMDB_API_KEY || !TMDB_BASE_URL) {
+      console.error('TMDB_API_KEY or TMDB_BASE_URL not configured in environment variables.')
+      res.status(500).json({ msg: 'Server configuration error.' })
+      return
+    }
+
+    const seriesId = Number(id)
+    const tmdbUrl = `${TMDB_BASE_URL}/tv/${seriesId}/watch/providers`
+
+    const response = await axios.get(tmdbUrl, {
+      params: { api_key: TMDB_API_KEY, language: 'en-US' }
+    })
+
+    // Supported countries for filtering - this should be dynamic in a real app.
+    const supportedCountries = ['PT', 'US']
+
+    // PT and US are always sent, even if empty.
+    const finalResults = supportedCountries.reduce(
+      (acc, countryCode) => {
+        const countryData = response.data.results[countryCode] || {}
+        const link = countryData.link || null
+
+        acc[countryCode] = {
+          link,
+          flatrate: countryData.flatrate || [],
+          buy: countryData.buy || [],
+          rent: countryData.rent || [],
+          free: countryData.free || []
+        }
+        return acc
+      },
+      {} as { [key: string]: any }
+    )
+
+    const tmdbResponse = {
+      ...response.data,
+      results: finalResults
+    }
+
+    res.status(200).json(tmdbResponse)
+  } catch (error: any) {
+    console.error(`Error fetching watch providers for TMDB ID ${id}:`, error.message)
+
+    if (axios.isAxiosError(error) && error.response) {
+      if (error.response.status === 404) {
+        res.status(404).json({ msg: 'Watch providers not found for this show.' })
+        return
+      }
+      res
+        .status(error.response.status)
+        .json({ msg: error.response.data.status_message || 'Error from external API.' })
+      return
+    }
+    res.status(500).json({ msg: 'Server Error while fetching watch providers.' })
   }
 }

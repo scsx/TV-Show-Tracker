@@ -1,5 +1,10 @@
 import axios from 'axios'
-import { TTMDBPersonDetails, TTMDBPersonCombinedCredit, TTMDBPopularPersonsResponse } from '@shared/types/person'
+import {
+  TTMDBPersonDetails,
+  TTMDBPersonCombinedCredit,
+  TTMDBPopularPersonsResponse
+} from '@shared/types/person'
+import { TTMDBWatchProvidersResponse } from '@shared/types/provider'
 
 /**
  * @description Service for interacting with TheMovieDB (TMDb) API.
@@ -152,6 +157,43 @@ export class TmdbService {
       }
       // Catch any other unexpected errors
       throw new Error(`Failed to fetch popular persons: ${error.message}`)
+    }
+  }
+
+  /**
+   * @description Fetches watch providers for a specific TV show from TMDb.
+   * @param {number} seriesId - The ID of the TV show.
+   * @returns {Promise<TTMDBWatchProvidersResponse>} - A promise that resolves to the TMDb watch providers response.
+   */
+  public async getWatchProviders(seriesId: number): Promise<TTMDBWatchProvidersResponse> {
+    if (!this.TMDB_API_KEY || !this.TMDB_BASE_URL) {
+      throw new Error('TmdbService not initialized. Call initialize() first.')
+    }
+    try {
+      const url = `${this.TMDB_BASE_URL}/tv/${seriesId}/watch/providers`
+      const params = {
+        api_key: this.TMDB_API_KEY,
+        language: 'en-US'
+      }
+
+      const response = await axios.get<TTMDBWatchProvidersResponse>(url, { params })
+
+      if (!response.data || Object.keys(response.data.results).length === 0) {
+        throw new Error('No watch providers found for this series.')
+      }
+
+      return response.data
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 404) {
+          throw new Error('Watch providers endpoint not found (check series ID).')
+        }
+        if (error.code === 'ECONNABORTED') {
+          throw new Error('Request to external API timed out.')
+        }
+        throw new Error(`TMDb API error fetching watch providers: ${error.message}`)
+      }
+      throw new Error(`Failed to fetch watch providers: ${error.message}`)
     }
   }
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import { FaPeoplePulling } from 'react-icons/fa6'
 
 import { type TTMDBPersonCredit } from '@/types'
 
@@ -10,10 +11,6 @@ type CrewProps = {
 }
 
 const Crew: React.FC<CrewProps> = ({ crew }) => {
-  if (!crew || crew.length === 0) {
-    return <Text className='py-8 italic'>Crew not available.</Text>
-  }
-
   // Helper to get the most relevant role (job or department)
   const getRole = (person: TTMDBPersonCredit): string => {
     return person.job || person.department || ''
@@ -33,35 +30,50 @@ const Crew: React.FC<CrewProps> = ({ crew }) => {
   // Optionally limit the list further for a compact inline display
   const limitedCrew = filteredCrew.slice(0, 15)
 
+  const renderContent = () => {
+    if (!crew || crew.length === 0) {
+      return (
+        <div className="flex items-center">
+          <FaPeoplePulling className="mr-4 text-4xl text-muted-foreground" />
+          <Text className="italic leading-tight" color='muted'>Crew not available.</Text>
+        </div>
+      )
+    }
+
+    if (limitedCrew.length === 0) {
+      return <Text>No major crew members to display.</Text>
+    }
+
+    return (
+      <ul>
+        {limitedCrew.map((person) => (
+          <Text as="li" key={person.credit_id} className="mb-1 flex">
+            <Hyperlink href={`/persons/${person.id}`} variant="white">
+              {person.name}
+            </Hyperlink>
+            ,{' '}
+            {getRole(person) && (
+              <Text as="span" color="muted" className="pl-1">
+                {getRole(person)}
+              </Text>
+            )}
+          </Text>
+        ))}
+        {limitedCrew.length < filteredCrew.length && (
+          <li>
+            <span className="text-gray-600">...</span>
+          </li>
+        )}
+      </ul>
+    )
+  }
+
   return (
     <section className="py-8">
-      <Text variant="h2" as="h2" className="mb-8">
+      <Text as="h3" variant="h3" className="mb-4">
         Crew
       </Text>
-      {limitedCrew.length === 0 ? (
-        <Text>No major crew members to display.</Text>
-      ) : (
-        <ul>
-          {limitedCrew.map((person) => (
-            <Text as="li" key={person.credit_id} className="flex mb-1">
-              <Hyperlink href={`/persons/${person.id}`} variant="white">
-                {person.name}
-              </Hyperlink>
-              ,{' '}
-              {getRole(person) && (
-                <Text color="muted" as="span" className="pl-1">
-                  {getRole(person)}
-                </Text>
-              )}
-            </Text>
-          ))}
-          {limitedCrew.length < filteredCrew.length && (
-            <li>
-              <span className="text-gray-600">...</span>
-            </li>
-          )}
-        </ul>
-      )}
+      {renderContent()}
     </section>
   )
 }

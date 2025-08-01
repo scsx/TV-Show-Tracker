@@ -3,7 +3,8 @@ import {
   fetchAndSaveTrendingShows,
   getAllShowSummaries,
   getShowDetailsByid,
-  getSeasonDetailsBySeriesIdAndSeasonNumber
+  getSeasonDetailsBySeriesIdAndSeasonNumber,
+  getShowProviders
 } from '../../controllers/show.controller'
 import { Server as SocketIOServer } from 'socket.io'
 import authMiddleware from '../../middleware/auth.middleware'
@@ -29,6 +30,13 @@ const createShowRouter = (io: SocketIOServer) => {
    * @access Private (requires authentication)
    */
   router.get('/:id', authMiddleware, getShowDetailsByid)
+
+  /**
+   * @route GET /api/tmdb/shows/:id/providers
+   * @description Fetches watch providers for a specific TV show.
+   * @access Private (requires authentication)
+   */
+  router.get('/:id/providers', authMiddleware, getShowProviders)
 
   /**
    * @route GET /api/tmdb/shows/:seriesId/season/:seasonNumber

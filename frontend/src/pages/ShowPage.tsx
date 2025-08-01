@@ -11,6 +11,7 @@ import Cast from '@/components/ShowPage/Cast'
 import Crew from '@/components/ShowPage/Crew'
 import ShowHero from '@/components/ShowPage/ShowHero'
 import ShowInfo from '@/components/ShowPage/ShowInfo'
+import ShowProviders from '@/components/ShowPage/ShowProviders/ShowProviders'
 
 import { useDynamicDocumentTitle } from '@/hooks/useDynamicDocumentTitle'
 
@@ -69,6 +70,7 @@ const ShowPage = () => {
           <aside className="col-span-1">
             <Crew crew={showData.crew} />
             <ShowInfo show={showData} />
+            <ShowProviders showId={showData.id} />
           </aside>
         </div>
       </div>
