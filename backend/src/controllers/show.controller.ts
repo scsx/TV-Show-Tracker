@@ -5,7 +5,6 @@ import axios from 'axios'
 import { tmdbService } from '../services/tmdb.service'
 import ShowSummary from '../models/ShowSummary'
 import { TTMDBShow, TTMDBShowSeasonDetails } from '@shared/types/show'
-import { TTMDBWatchProvidersResponse } from '@shared/types/provider'
 
 /**
  * @description Fetches trending TV shows from TMDb and saves them (summaries) to the database.
@@ -225,5 +224,20 @@ export const getShowProviders = async (req: Request, res: Response): Promise<voi
       return
     }
     res.status(500).json({ msg: 'Server Error while fetching watch providers.' })
+  }
+}
+
+/**
+ * @route GET /api/tmdb/shows/on-the-air
+ * @description Fetches TV shows currently on the air from TMDb.
+ * @access Private (via auth middleware)
+ */
+export const getOnTheAirShows = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const page = Number(req.query.page) || 1
+    const tmdbResponse = await tmdbService.getOnTheAirShows(page)
+    res.status(200).json(tmdbResponse.results)
+  } catch (error: any) {
+    res.status(500).json({ msg: 'Server Error while fetching on the air shows.' })
   }
 }

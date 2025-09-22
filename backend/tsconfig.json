@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022" /* Specify ECMAScript target version: "ES3" (default), "ES5", "ES2015", "ES2016", "ES2017", "ES2018", "ES2019", "ES2020", "ES2021", "ES2022", or "ESNext". */,
-    "module": "CommonJS" /* Specify module code generation: "None", "CommonJS", "AMD", "System", "UMD", "ES6", "ES2015", "ES2020", "ES2022", "ESNext", "Node16", "NodeNext". */,
+    "module": "Node16" /* Specify module code generation: "None", "CommonJS", "AMD", "System", "UMD", "ES6", "ES2015", "ES2020", "ES2022", "ESNext", "Node16", "NodeNext". */,
     "outDir": "./dist" /* Specify an output folder for all emitted files. */,
     "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
     "forceConsistentCasingInFileNames": true /* Ensure that casing is consistent in imports. */,
@@ -11,7 +11,7 @@
     "allowJs": true /* Allow JavaScript files to be compiled. */,
     "resolveJsonModule": true /* Enable importing .json files */,
     "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
-    "moduleResolution": "node" /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */,
+    "moduleResolution": "node16" /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */,
     "baseUrl": "./" /* Base directory to resolve non-absolute module names. */,
     "paths": {
       "@shared/*": ["../shared/*"]

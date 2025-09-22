@@ -4,7 +4,8 @@ import {
   getAllShowSummaries,
   getShowDetailsByid,
   getSeasonDetailsBySeriesIdAndSeasonNumber,
-  getShowProviders
+  getShowProviders,
+  getOnTheAirShows
 } from '../../controllers/show.controller'
 import { Server as SocketIOServer } from 'socket.io'
 import authMiddleware from '../../middleware/auth.middleware'
@@ -47,7 +48,14 @@ const createShowRouter = (io: SocketIOServer) => {
     '/:seriesId/season/:seasonNumber',
     authMiddleware,
     getSeasonDetailsBySeriesIdAndSeasonNumber
-  ) // Adicione authMiddleware se necessário
+  )
+
+  /**
+   * @route GET /api/tmdb/shows/on-the-air
+   * @description Fetches TV shows currently on the air from TMDb.
+   * @access Private (requires authentication)
+   */
+  router.get('/on-the-air', authMiddleware, getOnTheAirShows)
 
   return router
 }

@@ -196,6 +196,30 @@ export class TmdbService {
       throw new Error(`Failed to fetch watch providers: ${error.message}`)
     }
   }
+
+  /**
+   * @description Fetches TV shows currently on the air from TMDb.
+   * @param {number} page - The page number to fetch.
+   * @returns {Promise<any>} - A promise that resolves to the TMDb response.
+   */
+  public async getOnTheAirShows(page: number = 1): Promise<any> {
+    if (!this.TMDB_API_KEY || !this.TMDB_BASE_URL) {
+      throw new Error('TmdbService not initialized. Call initialize() first.')
+    }
+    try {
+      const response = await axios.get(`${this.TMDB_BASE_URL}/tv/on_the_air`, {
+        params: {
+          api_key: this.TMDB_API_KEY,
+          language: 'en-US',
+          page: page
+        }
+      })
+      return response.data
+    } catch (error: any) {
+      console.error('Error fetching on the air shows from TMDb:', error.message)
+      throw new Error(`Failed to fetch on the air shows: ${error.message}`)
+    }
+  }
 }
 
 export const tmdbService = new TmdbService()
