@@ -26,6 +26,15 @@ const createShowRouter = (io: SocketIOServer) => {
   router.get('/', getAllShowSummaries)
 
   /**
+   * @route GET /api/tmdb/shows/on-the-air
+   * @description Fetches TV shows currently on the air from TMDb.
+   * @access Private (requires authentication)
+   */
+  router.get('/on-the-air', authMiddleware, getOnTheAirShows)
+
+  // DYNAMIC ROUTES. Carefull with order.
+
+  /**
    * @route GET /api/tmdb/shows/:id
    * @description Fetches full details for a specific TV show from TMDb by its ID.
    * @access Private (requires authentication)
@@ -49,13 +58,6 @@ const createShowRouter = (io: SocketIOServer) => {
     authMiddleware,
     getSeasonDetailsBySeriesIdAndSeasonNumber
   )
-
-  /**
-   * @route GET /api/tmdb/shows/on-the-air
-   * @description Fetches TV shows currently on the air from TMDb.
-   * @access Private (requires authentication)
-   */
-  router.get('/on-the-air', authMiddleware, getOnTheAirShows)
 
   return router
 }

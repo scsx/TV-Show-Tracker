@@ -2,6 +2,7 @@ import React, { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@/context/AuthContext'
+import AiringNow from '@/pages/AiringNow'
 import Coverage from '@/pages/Coverage'
 import Favorites from '@/pages/Favorites'
 import HomePage from '@/pages/HomePage'
@@ -79,6 +80,7 @@ const App = () => {
               <Route path="/shows/:id" element={<ShowPage />} />
               <Route path="/persons" element={<Persons />} />
               <Route path="/persons/:id" element={<PersonPage />} />
+              <Route path="/airing-now" element={<AiringNow />} />
               <Route
                 path="/profile/recommendations"
                 element={<Recommendations />}

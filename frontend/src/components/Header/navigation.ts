@@ -36,6 +36,11 @@ export const getMenuItems = (handleLogout: () => void): MenuItem[] => [
     href: '/shows',
   },
   {
+    label: 'Airing Now',
+    type: 'link',
+    href: '/airing-now',
+  },
+  {
     label: 'Profile',
     type: 'dropdown',
     href: '/profile',

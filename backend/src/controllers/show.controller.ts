@@ -236,7 +236,7 @@ export const getOnTheAirShows = async (req: Request, res: Response): Promise<voi
   try {
     const page = Number(req.query.page) || 1
     const tmdbResponse = await tmdbService.getOnTheAirShows(page)
-    res.status(200).json(tmdbResponse.results)
+    res.status(200).json(tmdbResponse)
   } catch (error: any) {
     res.status(500).json({ msg: 'Server Error while fetching on the air shows.' })
   }
